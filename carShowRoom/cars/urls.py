@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.urls import path, include
+from .views import carList
 
 urlpatterns = [
-    path('',include('cars.urls')),
+    path('',carList,name='carList'),
 ]
