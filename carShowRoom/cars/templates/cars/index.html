@@ -7,5 +7,12 @@
 </head>
 <body>
     <h1>halo</h1>
+    {% for car in cars  %}
+    <p>{{ car.nama}}</p>
+    <p>{{car.merek}}</p>
+    <p>{{car.model}}</p>
+    <p>{{car.tahun}}</p>
+    <p>{{car.harga}}</p>
+    {% endfor %}
 </body>
 </html>

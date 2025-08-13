@@ -1,6 +1,10 @@
 from django.shortcuts import render
-
+from .models import Cars
 # Create your views here.
 def carList(request):
 
-    return render(request,'cars/index.html')
+    context = {
+        'cars' : Cars.objects.all()
+    }
+
+    return render(request,'cars/index.html',context)
