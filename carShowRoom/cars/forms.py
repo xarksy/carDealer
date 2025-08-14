@@ -21,3 +21,17 @@ class CarsForm(forms.ModelForm):
                 raise ValidationError("Harga harus lebih dari 0.")
             return harga
  
+class ServiceHistoryForm (forms.ModelForm):
+    def __init__(self, *args, hide_car_field=False, **kwargs):
+        super().__init__(*args, **kwargs)
+        if hide_car_field:
+            self.fields['mobil'].widget = forms.HiddenInput()
+    """
+    Form for creating and updating ServiceHistory instances.
+    """
+    class Meta:
+        model = ServiceHistory
+        fields = ['mobil', 'tanggal_service', 'deskripsi', 'biaya']
+        widgets = {
+            'tanggal_service': forms.DateInput(attrs={'type': 'date'}),
+        }
