@@ -10,3 +10,7 @@ def carList(request):
     }
 
     return render(request,'cars/index.html',context)
+
+def create_car(request):
+
+    return render()
