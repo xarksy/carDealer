@@ -14,6 +14,54 @@
     />
 </head>
 <body>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12 text-center my-4">
+                {% block title_body %}
+                <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                    <a class="navbar-brand" href="{% url 'carList' %}">Car Showroom</a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarNav">
+                        <ul class="navbar-nav ml-auto">
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'carList' %}">Home</a>
+                            </li>                            
+                        </ul>
+                    </div>
+                </nav>
+                {% endblock title_body %}
+            </div>
+        </div>
+
+        {% block content_form %}
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %} {{ form.non_field_errors }}
+            <table class="table table-bordered" style="width: 60%; margin: 0 auto;">
+            <tbody>
+            {% for field in form %}
+            {% if not field.is_hidden %}
+            <tr>
+                <th>{{ field.label }}</th>
+                <td>{{ field }}</td>
+            </tr>
+            {% else %}
+            {{ field }} {# hidden input only #}
+            {% endif %}
+            {% endfor %}
+            </tbody>
+            </table>
+            <div class="mb-3 text-center">
+            <button type="submit" class="btn btn-primary mt-4">Simpan</button>
+            {% if car.id %}
+            <a href="{% url 'detail_car' car.id %}" class="btn btn-success">Kembali</a>           
+            {% endif %}
+            </div>
+        </form>
+        {% endblock content_form %}            
+    </div>
     
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" 
             integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" 
