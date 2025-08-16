@@ -26,3 +26,7 @@ def create_car(request):
     }
 
     return render(request,'cars/car_form.html',context)
+
+def detail_car(request, car_id):
+
+    return render(request, 'cars/detail.html')
