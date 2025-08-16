@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import Cars
 from .forms import CarsForm, ServiceHistoryForm
 
@@ -29,4 +29,13 @@ def create_car(request):
 
 def detail_car(request, car_id):
 
-    return render(request, 'cars/detail.html')
+    car = get_object_or_404(Cars, id=car_id)
+    service_history = car.service_histories.all()
+    total_biaya = sum(service.biaya for service in service_history)
+    context = {
+        'car': car,
+        'service_history': service_history,
+        'total_biaya': total_biaya,
+        'cash': total_biaya + car.harga
+    }
+    return render(request, 'cars/detail.html', context)
