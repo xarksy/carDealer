@@ -90,6 +90,40 @@
                 </div>
         </div>
 
+        <!-- Right Column: Buttons -->
+            <div class="flex-fill" style="border: 1px solid #ccc; padding: 10px; margin-left: 5px">
+                <div class="">
+                    
+                    <h3>Riwayat Servis</h3>                    
+                    <div style="max-height: 450px; overflow-y: auto; border: 1px solid #ccc; padding: 10px;">
+                        {% if service_history|length == 0 %}
+                            <p>Tidak ada riwayat servis.</p>
+                        {% endif %}
+                        {% for service in service_history %}
+                            <strong>Tanggal Servis:</strong> {{ service.tanggal_service }}<br>
+                            <strong>Jenis Servis:</strong> {{ service.deskripsi }}<br>
+                            <strong>Biaya Servis: </strong> Rp{{ service.biaya|floatformat:0|intcomma }}<br>                
+                            <hr>
+                        {% endfor %}
+                        
+                    </div>
+                    {% comment %} <a href="{% url 'update_car' car.id %}" class="btn btn-primary mt-2">Update data mobil</a> {% endcomment %}
+                    
+                        <a href="" class="btn btn-primary mt-2">Update data mobil</a>                                     
+
+
+                    {% comment %} <a href="{% url 'service_history' car.id%}" class="btn btn-warning mt-2">Tambah data Servis</a> {% endcomment %}
+                        <a href="" class="btn btn-warning mt-2">Tambah data Servis</a>
+
+                    {% comment %} <form method="POST" action="{% url 'delete_car' car.id %}" style="display: inline-block;"> {% endcomment %}
+                        <form method="POST" action="" style="display: inline-block;">
+
+                        {% csrf_token %}
+                        <button type="submit" onclick="return confirm('Yakin ingin menghapus mobil ini?')" class="btn btn-danger mt-2">Hapus</button>
+                    </form>   
+                    <a href="{% url 'carList' %}" class="btn btn-secondary mt-2">Kembali</a>
+                </div>
+            </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" 
             integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" 
