@@ -24,25 +24,27 @@
         <div class="d-flex">
                 <!-- Left Column: Image -->
                 <div class="flex-fill text-justify">
-                        <img src="https://images.freeimages.com/images/large-previews/a25/japanes-car-1449114.jpg?fmt=webp&w=500" alt="{{ car.name }}" style="max-width: 100%; max-height: 300px;">
+                        <img src="{{ car.image_url|default:'https://images.freeimages.com/images/large-previews/a25/japanes-car-1449114.jpg?fmt=webp&w=500' }}" alt="{{ car.nama }}" style="max-width: 100%; max-height: 300px;">
 
                         <h4 style="margin-top: 2px;">Simulasi Kredit</h4>
-                <table class="table table-bordered">
-                    <tr>
-                        <td><label for="cash">Dana bank:</label></td>
-                        <td><input type="number" name="cash" id="cash" class="form-control form-control-sm" required></td>
-                    </tr>
-                    <tr>
-                        <td><label for="tenor">Tenor (bulan):</label></td>
-                        <td><input type="number" name="tenor" id="tenor" class="form-control form-control-sm" required></td>
-                    </tr>
-                    <tr>
-                        <td><label for="interest">Bunga (%):</label></td>
-                        <td><input type="number" name="interest" id="interest" class="form-control form-control-sm" required></td>
-                    </tr>
-                </table>
-                <button type="submit" class="btn btn-primary btn-sm" id="hitung">Hitung</button>
-                <button type="reset" class="btn btn-secondary btn-sm" id="reset_hitungan">Reset</button>
+                <form>
+                    <table class="table table-bordered">
+                        <tr>
+                            <td><label for="cash">Dana bank:</label></td>
+                            <td><input type="number" name="cash" id="cash" class="form-control form-control-sm" required></td>
+                        </tr>
+                        <tr>
+                            <td><label for="tenor">Tenor (bulan):</label></td>
+                            <td><input type="number" name="tenor" id="tenor" class="form-control form-control-sm" required></td>
+                        </tr>
+                        <tr>
+                            <td><label for="interest">Bunga (%):</label></td>
+                            <td><input type="number" name="interest" id="interest" class="form-control form-control-sm" required></td>
+                        </tr>
+                    </table>
+                    <button type="submit" class="btn btn-primary btn-sm" id="hitung">Hitung</button>
+                    <button type="reset" class="btn btn-secondary btn-sm" id="reset_hitungan">Reset</button>
+                </form>
                 </div>
 
                 <!-- Middle Column: Car Details -->
