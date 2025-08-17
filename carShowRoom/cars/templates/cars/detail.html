@@ -22,6 +22,7 @@
         </div>
 
         <div class="d-flex">
+                <!-- Left Column: Image -->
                 <div class="flex-fill text-justify">
                         <img src="https://images.freeimages.com/images/large-previews/a25/japanes-car-1449114.jpg?fmt=webp&w=500" alt="{{ car.name }}" style="max-width: 100%; max-height: 300px;">
 
@@ -42,6 +43,48 @@
                 </table>
                 <button type="submit" class="btn btn-primary btn-sm" id="hitung">Hitung</button>
                 <button type="reset" class="btn btn-secondary btn-sm" id="reset_hitungan">Reset</button>
+                </div>
+
+                <!-- Middle Column: Car Details -->
+                
+                <div class="flex-fill" style="margin-left: 5px; border: 1px solid #ccc; padding: 10px;">
+                <div class="mb-3">
+                    <strong>Nama Mobil:</strong> {{ car.nama }}
+                </div>
+                <div class="mb-3">
+                    <strong>Tahun:</strong> {{ car.tahun }}
+                </div>
+                <div class="mb-3">
+                    <strong>Kilometer:</strong> {{ car.kilometer }} km
+                </div>
+                <div class="mb-3">
+                    <strong>Transmisi:</strong> {{ car.transmisi }}
+                </div>
+                <div class="mb-3">
+                    <strong>Jenis Bahan Bakar:</strong> {{ car.jenis_bahan_bakar }}
+                </div>
+                <div class="mb-3">
+                    <strong>Cakupan Mesin:</strong> {{ car.mesin }}
+                </div>
+                <div class="mb-3">
+                    <strong>Penumpang:</strong> {{ car.tempat_duduk }}
+                </div>
+                <div class="mb-3">
+                    <strong>HPP Cash:</strong> Rp{{ cash|floatformat:0|intcomma }}
+                </div>
+                <h3>Hasil:</h3>
+                <div class="mb-2">
+                    <strong>Angsuran Bulanan:</strong> <span id="angsuran_bulanan">-</span>
+                </div>
+                <div class="mb-2">
+                    <p><strong>Total Bunga:</strong> <span id="total_bunga">-</span></p>
+                </div>
+                <div class="mb-2">
+                    <p><strong>Total Pembayaran:</strong> <span id="total_pembayaran">-</span></p>
+                </div>
+                
+                </div>
+
                 </div>
         </div>
 
