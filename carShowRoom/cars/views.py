@@ -50,3 +50,11 @@ def updateCar(request, car_id):
         if form.is_valid():
             form.save()
             return redirect('carList')
+    else:
+        form = CarsForm(instance=car)
+    
+    context = {
+        'form': form
+    }
+
+    return render(request, 'cars/car_form.html',context=context)
