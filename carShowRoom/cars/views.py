@@ -45,3 +45,8 @@ def updateCar(request, car_id):
     View to update the details of a specific car.
     """
     car = get_object_or_404(Cars, id=car_id)
+    if request.method == 'POST':
+        form = CarsForm(request.POST, request.FILES, instance=car)
+        if form.is_valid():
+            form.save()
+            return redirect('carList')
