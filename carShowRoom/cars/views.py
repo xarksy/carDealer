@@ -39,3 +39,9 @@ def detail_car(request, car_id):
         'cash': total_biaya + car.harga
     }
     return render(request, 'cars/detail.html', context)
+
+def updateCar(request, car_id):
+    """
+    View to update the details of a specific car.
+    """
+    car = get_object_or_404(Cars, id=car_id)
