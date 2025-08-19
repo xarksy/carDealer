@@ -107,9 +107,9 @@
                         {% endfor %}
                         
                     </div>
-                    {% comment %} <a href="{% url 'update_car' car.id %}" class="btn btn-primary mt-2">Update data mobil</a> {% endcomment %}
+                    <a href="{% url 'update_car' car.id %}" class="btn btn-primary mt-2">Update data mobil</a>
                     
-                        <a href="" class="btn btn-primary mt-2">Update data mobil</a>                                     
+                        {% comment %} <a href="" class="btn btn-primary mt-2">Update data mobil</a>                                      {% endcomment %}
 
 
                     {% comment %} <a href="{% url 'service_history' car.id%}" class="btn btn-warning mt-2">Tambah data Servis</a> {% endcomment %}

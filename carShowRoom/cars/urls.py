@@ -6,4 +6,5 @@ urlpatterns = [
     path('',carList,name='carList'),
     path('create/',create_car,name='create_car'),
     path('detail/<int:car_id>', detail_car, name='detail_car'),
+    path('update')
 ]
