@@ -108,15 +108,12 @@
                         
                     </div>
                     <a href="{% url 'update_car' car.id %}" class="btn btn-primary mt-2">Update data mobil</a>
-                    
-                        {% comment %} <a href="" class="btn btn-primary mt-2">Update data mobil</a>                                      {% endcomment %}
 
 
                     {% comment %} <a href="{% url 'service_history' car.id%}" class="btn btn-warning mt-2">Tambah data Servis</a> {% endcomment %}
                         <a href="" class="btn btn-warning mt-2">Tambah data Servis</a>
 
-                    {% comment %} <form method="POST" action="{% url 'delete_car' car.id %}" style="display: inline-block;"> {% endcomment %}
-                        <form method="POST" action="" style="display: inline-block;">
+                    <form method="POST" action="{% url 'delete_car' car.id %}" style="display: inline-block;">
 
                         {% csrf_token %}
                         <button type="submit" onclick="return confirm('Yakin ingin menghapus mobil ini?')" class="btn btn-danger mt-2">Hapus</button>
