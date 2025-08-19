@@ -58,3 +58,9 @@ def updateCar(request, car_id):
     }
 
     return render(request, 'cars/car_form.html',context=context)
+
+def deleteCar(request, car_id):
+    car = get_object_or_404(Cars, id=car_id)
+    car.delete()
+
+    return redirect('carList')
