@@ -79,3 +79,22 @@ def car_service_plain(request):
     }
 
     return render(request, 'cars/service_history_form.html', context)
+
+def car_service(request, car_id):
+    car = get_object_or_404(Cars, car_id)
+    if request.method == 'POST':
+        form = ServiceHistoryForm(request.POST, request.FILES, hide_car_field=True)
+        if form.is_valid():
+            service_history = form.save(commit=False)
+            service_history.car = car
+            service_history.save()
+            return redirect('detail_car',car_id=car.id)
+    else:
+        form = ServiceHistoryForm(initial={'mobil': car.id}, hide_car_field=True)
+    
+    context = {
+        'form' : form,
+        'car' : car,
+    }
+
+    return redirect(request,'cars/service_history_form.html', context)
