@@ -64,3 +64,18 @@ def deleteCar(request, car_id):
     car.delete()
 
     return redirect('carList')
+
+def car_service_plain(request):
+    if request.method == 'POST':
+        form = ServiceHistoryForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('carList')
+    else:
+        form = ServiceHistoryForm()
+    
+    context = {
+        'form' : form
+    }
+
+    return render(request, 'cars/service_history_form.html', context)
