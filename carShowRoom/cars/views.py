@@ -78,10 +78,10 @@ def car_service_plain(request):
         'form' : form
     }
 
-    return render(request, 'cars/service_history_form.html', context)
+    return render(request, 'cars/service_history_form.html', context=context)
 
 def car_service(request, car_id):
-    car = get_object_or_404(Cars, car_id)
+    car = get_object_or_404(Cars, id=car_id)
     if request.method == 'POST':
         form = ServiceHistoryForm(request.POST, request.FILES, hide_car_field=True)
         if form.is_valid():
@@ -94,7 +94,7 @@ def car_service(request, car_id):
     
     context = {
         'form' : form,
-        'car' : car,
+        'car' : car
     }
 
-    return redirect(request,'cars/service_history_form.html', context)
+    return render(request,'cars/service_history_form.html', context=context)

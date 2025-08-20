@@ -110,8 +110,7 @@
                     <a href="{% url 'update_car' car.id %}" class="btn btn-primary mt-2">Update data mobil</a>
 
 
-                    {% comment %} <a href="{% url 'service_history' car.id%}" class="btn btn-warning mt-2">Tambah data Servis</a> {% endcomment %}
-                        <a href="" class="btn btn-warning mt-2">Tambah data Servis</a>
+                    <a href="{% url 'service_history' car.id%}" class="btn btn-warning mt-2">Tambah data Servis</a>
 
                     <form method="POST" action="{% url 'delete_car' car.id %}" style="display: inline-block;">
 
