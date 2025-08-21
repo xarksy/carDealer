@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Cars
 from .forms import CarsForm, ServiceHistoryForm
+import logging
+logger = logging.getLogger(__name__)
 
 # Create your views here.
 def carList(request):
@@ -18,6 +20,8 @@ def create_car(request):
         if form.is_valid():
             form.save()
             return redirect('carList')
+        else:
+            logger.error("Form submission failed: %s", form.errors)
     else:
         form = CarsForm()
     
@@ -50,6 +54,8 @@ def updateCar(request, car_id):
         if form.is_valid():
             form.save()
             return redirect('carList')
+        else:
+            logger.error("Form submission failed: %s", form.errors)
     else:
         form = CarsForm(instance=car)
     
