@@ -4,5 +4,8 @@ window.addEventListener('DOMContentLoaded', function () {
     const interestInput = document.getElementById('interest');
 
     const  calculateButton = document.getElementById('hitung');
+    const resetButton = document.getElementById('reset_hitungan');
+
+    const angsuranBulanan = document.getElementById('angsuran_bulanan');
     
 })
