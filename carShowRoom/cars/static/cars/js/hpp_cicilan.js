@@ -3,5 +3,6 @@ window.addEventListener('DOMContentLoaded', function () {
     const tenorInput = document.getElementById('tenor');
     const interestInput = document.getElementById('interest');
 
+    const  calculateButton = document.getElementById('hitung');
     
 })
