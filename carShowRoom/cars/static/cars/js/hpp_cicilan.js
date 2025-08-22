@@ -1,4 +1,5 @@
 window.addEventListener('DOMContentLoaded', function () {
-    const cashInput = this.document.getElementById('cash');
-    
+    const cashInput = document.getElementById('cash');
+    const tenorInput = document.getElementById('tenor');
+
 })
