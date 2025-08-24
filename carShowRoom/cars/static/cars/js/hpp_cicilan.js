@@ -31,5 +31,11 @@ window.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    
+    resetButton.addEventListener('click', function () {
+        cashInput.value = '';
+        tenorInput.value = 12;
+        angsuranBulanan.innerText = '-';
+        totalPembayaran.innerText = '-';
+        totalBunga.innerText = '-';
+    })
 })
