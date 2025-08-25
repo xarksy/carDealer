@@ -37,5 +37,5 @@ window.addEventListener('DOMContentLoaded', function () {
         angsuranBulanan.innerText = '-';
         totalPembayaran.innerText = '-';
         totalBunga.innerText = '-';
-    })
-})
+    });
+});
