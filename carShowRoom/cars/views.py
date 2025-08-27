@@ -5,6 +5,14 @@ from django.http import HttpResponseForbidden
 import logging
 logger = logging.getLogger(__name__)
 
+
+def admin_or_sales_required(view_func):
+    def wrapper(request, *args, **kwargs):
+        if request.user.is_authenticated and request.user.role in ["admi","salesperson"]:
+            return view_func(request, *args, **kwargs)
+        return HttpResponseForbidden("Not allowed")
+    return wrapper
+
 # Create your views here.
 def carList(request):
 
@@ -14,6 +22,7 @@ def carList(request):
 
     return render(request,'cars/index.html',context)
 
+@admin_or_sales_required
 def create_car(request):
 
     if request.method == 'POST':
@@ -106,9 +115,3 @@ def car_service(request, car_id):
 
     return render(request,'cars/service_history_form.html', context=context)
 
-def admin_or_sales_required(view_func):
-    def wrapper(request, *args, **kwargs):
-        if request.user.is_authenticated and request.user.role in ["admi","salesperson"]:
-            return view_func(request, *args, **kwargs)
-        return HttpResponseForbidden("Not allowed")
-    return wrapper
