@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Cars
 from .forms import CarsForm, ServiceHistoryForm
+from django.http import HttpResponseForbidden
 import logging
 logger = logging.getLogger(__name__)
 
@@ -104,3 +105,10 @@ def car_service(request, car_id):
     }
 
     return render(request,'cars/service_history_form.html', context=context)
+
+def admin_or_sales_required(view_func):
+    def wrapper(request, *args, **kwargs):
+        if request.user.is_authenticated and request.user.role in ["admi","salesperson"]:
+            return view_func(request, *args, **kwargs)
+        return HttpResponseForbidden("Not allowed")
+    return wrapper
