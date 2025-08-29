@@ -8,7 +8,7 @@ logger = logging.getLogger(__name__)
 
 def admin_or_sales_required(view_func):
     def wrapper(request, *args, **kwargs):
-        if request.user.is_authenticated and request.user.role in ["admi","salesperson"]:
+        if request.user.is_authenticated and request.user.role in ["admin","salesperson"]:
             return view_func(request, *args, **kwargs)
         return HttpResponseForbidden("Not allowed")
     return wrapper
