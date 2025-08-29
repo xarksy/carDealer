@@ -1,6 +1,7 @@
 # users/tests/test_permissions.py
 from django.test import TestCase
 from django.contrib.auth import get_user_model
+from django.urls import reverse
 
 User = get_user_model()
 
@@ -16,3 +17,9 @@ class RoleTestCase(TestCase):
     def test_users_created_with_roles(self):
         self.assertEqual(self.admin.role, "admin")
         self.assertEqual(self.customer.role, "customer")
+
+    def test_admin_can_add_car(self):
+        self.client.login(username="admin1", password="pass")
+        url = reverse("add_car")
+        response = self.client.get(url)
+        self.assertNotEqual(response.status_code, 403)
