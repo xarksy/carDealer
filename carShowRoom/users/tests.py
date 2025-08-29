@@ -23,3 +23,9 @@ class RoleTestCase(TestCase):
         url = reverse("add_car")
         response = self.client.get(url)
         self.assertNotEqual(response.status_code, 403)
+    
+    def test_customer_cannot_add_car(self):
+        self.client.login(username="cust1", password="pass")
+        url = reverse("add_car")
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 403)
