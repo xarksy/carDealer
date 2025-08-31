@@ -32,7 +32,9 @@ def login_view(request):
     
     return render(request, 'login_form.html')
 
-
+def logout_view(request):
+    logout(request)
+    return redirect("login")
 
 # Create your views here.
 def carList(request):
