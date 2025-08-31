@@ -2,6 +2,9 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import Cars
 from .forms import CarsForm, ServiceHistoryForm
 from django.http import HttpResponseForbidden
+from django.contrib.auth import authenticate, login, logout
+from django.contrib import messages
+
 import logging
 logger = logging.getLogger(__name__)
 
@@ -12,6 +15,24 @@ def admin_or_sales_required(view_func):
             return view_func(request, *args, **kwargs)
         return HttpResponseForbidden("Not allowed")
     return wrapper
+
+
+def login_view(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            login(request, user)
+            return redirect('carList')
+        else:
+            messages.error(request, "Invalid username or password")
+    
+    return render(request, 'login_form.html')
+
+
 
 # Create your views here.
 def carList(request):
