@@ -59,16 +59,107 @@
 					{% endfor %}
 				</a>
 			</div>
-			<a href="" class="text-decoration-none text-dark" style="font-weight: normal; text-decoration: none;">
-			</a>
+			<div class="row mt-5">
+				<div class="col-lg-8 offset-lg-2">
+					<div class="card shadow-lg border-0">
+						<div class="card-header bg-success text-white">
+							<h3 class="mb-0">Trade-In Car Form</h3>
+						</div>
+						<div class="card-body bg-light">
+							<form id="tradeInForm">
+								
+								<!-- Step 1: Vehicle Info -->
+								<div id="step1">
+									<h5 class="mb-3">Vehicle Information</h5>
+									<div class="row g-3">
+										<div class="col-md-6">
+											<label for="carModel" class="form-label">Model</label>
+											<input type="text" class="form-control" id="carModel" required="">
+										</div>
+										<div class="col-md-6">
+											<label for="carYear" class="form-label">Year</label>
+											<input type="number" class="form-control" id="carYear" required="">
+										</div>
+										<div class="col-md-6">
+											<label for="carKilometers" class="form-label">Kilometers</label>
+											<input type="number" class="form-control" id="carKilometers" required="">
+										</div>
+										<div class="col-md-6">
+											<label for="carColor" class="form-label">Color</label>
+											<input type="text" class="form-control" id="carColor">
+										</div>
+										<div class="col-md-6">
+											<label for="carTransmission" class="form-label">Transmission</label>
+											<select id="carTransmission" class="form-select">
+												<option>Automatic</option>
+												<option>Manual</option>
+											</select>
+										</div>
+										<div class="col-md-6">
+											<label for="carFuel" class="form-label">Fuel Type</label>
+											<select id="carFuel" class="form-select">
+												<option>Petrol</option>
+												<option>Diesel</option>
+												<option>Hybrid</option>
+												<option>Electric</option>
+											</select>
+										</div>
+										<div class="col-md-6">
+											<label for="carVIN" class="form-label">VIN (optional)</label>
+											<input type="text" class="form-control" id="carVIN">
+										</div>
+										<div class="col-md-6">
+											<label for="carCondition" class="form-label">Condition</label>
+											<select id="carCondition" class="form-select">
+												<option>Excellent</option>
+												<option>Good</option>
+												<option>Fair</option>
+												<option>Poor</option>
+											</select>
+										</div>
+									</div>
+									<div class="d-flex justify-content-end mt-4">
+										<button type="button" class="btn btn-success" onclick="nextStep()">Next</button>
+									</div>
+								</div>
+								
+								<!-- Step 2: Customer Info -->
+								<div id="step2" style="display: none;">
+									<h5 class="mb-3">Customer Contact Information</h5>
+									<div class="row g-3">
+										<div class="col-md-6">
+											<label for="custName" class="form-label">Full Name</label>
+											<input type="text" class="form-control" id="custName" required="">
+										</div>
+										<div class="col-md-6">
+											<label for="custPhone" class="form-label">Phone Number</label>
+											<input type="tel" class="form-control" id="custPhone" required="">
+										</div>
+										<div class="col-md-6">
+											<label for="custEmail" class="form-label">Email</label>
+											<input type="email" class="form-control" id="custEmail" required="">
+										</div>
+										<div class="col-md-6">
+											<label for="custAddress" class="form-label">Address</label>
+											<textarea class="form-control" id="custAddress" rows="2"></textarea>
+										</div>
+									</div>
+									<div class="d-flex justify-content-between mt-4">
+										<button type="button" class="btn btn-secondary" onclick="prevStep()">Previous</button>
+										<button type="submit" class="btn btn-success">Submit</button>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
-		<a href="" class="text-decoration-none text-dark" style="font-weight: normal; text-decoration: none;">
-			<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-			<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-			<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-			{% comment %}
-			<script src="{% static " cars="" js="" custom.js"="" %}"=""></script>
-			{% endcomment %}
-		</a>
+		<a href="" class="text-decoration-none text-dark" style="font-weight: normal; text-decoration: none;"></a>
+		<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+		<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+		
+		<script src="{% static 'cars/js/custom.js' %}"></script>
 	</body>
 </html>

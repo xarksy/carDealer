@@ -1,3 +1,6 @@
+console.log("custom.js loaded ✅");
+
+
 document.getElementById('view-grid').addEventListener('click', function() {
 document.getElementById('car-container').setAttribute('data-view', 'grid');
 document.querySelectorAll('.car-item').forEach(function(item) {
@@ -27,10 +30,21 @@ function attachListeners() {
     });        
 }
 
+function nextStep() {
+  document.getElementById("step1").style.display = "none";
+  document.getElementById("step2").style.display = "block";
+}
+
+function prevStep() {
+  document.getElementById("step2").style.display = "none";
+  document.getElementById("step1").style.display = "block";
+}
 
 
 window.onload = function() {
-    attachListeners();      
+    attachListeners();
+    console.log("js loaded");
+      
 }
 
     
