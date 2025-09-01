@@ -19,7 +19,7 @@ def login_view(request):
         else:
             messages.error(request, "Invalid username or password")
     
-    return render(request, 'cars/login_form.html')
+    return render(request, 'login_form.html')
 
 def logout_view(request):
     logout(request)
