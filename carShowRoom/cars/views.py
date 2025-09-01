@@ -18,8 +18,19 @@ def admin_or_sales_required(view_func):
 # Create your views here.
 def carList(request):
 
+    if request.method == 'POST':
+        form = CustomerForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('carList')
+        else:
+            logger.error("Form submission failed: %s", form.errors)
+    else:
+        form = CustomerForm()
+
     context = {
-        'cars' : Cars.objects.all()
+        'cars' : Cars.objects.all(),
+        'trade_in_forms' : form
     }
 
     return render(request,'cars/index.html',context)
