@@ -1,84 +1,74 @@
-{% load static %}
-{% load humanize %}
-<!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Car Showroom</title>
-
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" 
-          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" 
-          crossorigin="anonymous">
-</head>
-<body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container">
-            <a class="navbar-brand" href="#">Car Showroom</a>
-            <div class="ml-auto">
-
-                {% comment %} ----- Here {% endcomment %}
-                {% if user.is_authenticated and user.role == "admin" %}
-                <a href="{% url 'create_car' %}" class="btn btn-success mr-2">Tambah Mobil</a>
-                {% endif %}
-                <a href="{% url 'car_service' %}" class="btn btn-warning">Tambah data Servis Mobil</a>
-
-            </div>
-        </div>
-    </nav>
-    <div class="container-fluid mt-4">
-        <div class="row" id="car-container" data-view="list">
-            {% for car in cars %}
-            <div class="col-md-6 offset-md-3 mb-4 car-item list-view">               
-                <div class="card position-relative">
-
-                    {% comment %} ----- Here {% endcomment %}
-                    <form method="POST" action="{% url 'delete_car' car.id %}" style="position: absolute; top: 10px; right: 10px; z-index: 10;">
-
-                    <form method="POST" action="" style="position: absolute; top: 10px; right: 10px; z-index: 10;">
-
-                        {% csrf_token %}
-                        <button type="submit" onclick="return confirm('Yakin ingin menghapus mobil ini?')" class="btn btn-link text-danger p-0" style="font-size: 1.5rem;">&times;</button>
-                    </form>
-
-                    {% comment %} ----- Here {% endcomment %}
-                    <a href="{% url 'detail_car' car.id %}" class="text-decoration-none text-dark" style="font-weight: normal; text-decoration: none;">
-                        
-                    {% comment %} <a href="" class="text-decoration-none text-dark" style="font-weight: normal; text-decoration: none;">                 {% endcomment %}
-
-                <div class="row no-gutters">
-                    <div class="col-md-4">
-                    {% comment %} <img src="{{ car.image.url }}" class="card-img" alt="{{ car.name }}"> {% endcomment %}
-                    <img src='https://images.freeimages.com/images/large-previews/a25/japanes-car-1449114.jpg?fmt=webp&w=500' class="card-img h-100 d-block mx-auto" alt="{{ car.nama }}" style="object-fit: cover;">
-
-                    </div>
-                    <div class="col-md-8">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ car.nama }}</h5>
-                        <p class="card-text mb-1">Id: {{ car.id }}</p>
-                        <p class="card-text mb-1">Merek: {{ car.merek }}</p>
-                        <p class="card-text mb-1">Model: {{ car.model }}</p>
-                        <p class="card-text mb-1">Tahun: {{ car.tahun }}</p>
-                        <p class="card-text mb-1">Harga: Rp.{{ car.harga|floatformat:0|intcomma }}</p>
-                    </div>
-                    </div>
-                </div>
-                </div>
-            </div>            
-            {% endfor %}
-        </div>
-    </div>
-
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" 
-            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" 
-            crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" 
-            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" 
-            crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" 
-            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" 
-            crossorigin="anonymous"></script>
-    
-    {% comment %} <script src="{% static "cars/js/custom.js" %}"></script> {% endcomment %}
-</body>
+	<head></head>
+	<body>{% load static %} {% load humanize %}
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Car Showroom</title>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+		<nav class="navbar navbar-expand-lg navbar-light bg-light">
+			<div class="container">
+				<a class="navbar-brand" href="#">Car Showroom</a>
+				<div class="ml-auto">
+					{% comment %} ----- Here {% endcomment %}                 {% if user.is_authenticated and user.role == "admin" %}
+					<a href="{% url 'create_car' %}" class="btn btn-success mr-2">Tambah Mobil</a>
+					{% endif %}
+					<a href="{% url 'car_service' %}" class="btn btn-warning">Tambah data Servis Mobil</a>
+				</div>
+			</div>
+		</nav>
+		<div class="container-fluid mt-4">
+			<div class="row" id="car-container" data-view="list">
+				{% for car in cars %}
+				<div class="col-md-6 offset-md-3 mb-4 car-item list-view">
+					<div class="card position-relative">
+						{% comment %} ----- Here {% endcomment %}
+						<form method="POST" action="{% url 'delete_car' car.id %}" style="position: absolute; top: 10px; right: 10px; z-index: 10;">
+							{% csrf_token %}
+							<button type="submit" onclick="return confirm('Yakin ingin menghapus mobil ini?')" class="btn btn-link text-danger p-0" style="font-size: 1.5rem;">×</button>
+						</form>
+						{% comment %} ----- Here {% endcomment %}
+						<a href="{% url 'detail_car' car.id %}" class="text-decoration-none text-dark" style="font-weight: normal; text-decoration: none;">
+							{% comment %}
+						</a>
+						<a href="" class="text-decoration-none text-dark" style="font-weight: normal; text-decoration: none;">
+							{% endcomment %}
+							<div class="row no-gutters">
+								<div class="col-md-4">
+									{% comment %}
+									<img src="{{ car.image.url }}" class="card-img" alt="{{ car.name }}">
+									{% endcomment %}
+									<img src="https://images.freeimages.com/images/large-previews/a25/japanes-car-1449114.jpg?fmt=webp&amp;w=500" class="card-img h-100 d-block mx-auto" alt="{{ car.nama }}" style="object-fit: cover;">
+								</div>
+								<div class="col-md-8">
+									<div class="card-body">
+										<h5 class="card-title">{{ car.nama }}</h5>
+										<p class="card-text mb-1">Id: {{ car.id }}</p>
+										<p class="card-text mb-1">Merek: {{ car.merek }}</p>
+										<p class="card-text mb-1">Model: {{ car.model }}</p>
+										<p class="card-text mb-1">Tahun: {{ car.tahun }}</p>
+										<p class="card-text mb-1">Harga: Rp.{{ car.harga|floatformat:0|intcomma }}</p>
+									</div>
+								</div>
+							</div>
+						</a>
+					</div>
+					<a href="" class="text-decoration-none text-dark" style="font-weight: normal; text-decoration: none;">
+					</a>
+				</div>
+				<a href="" class="text-decoration-none text-dark" style="font-weight: normal; text-decoration: none;">
+					{% endfor %}
+				</a>
+			</div>
+			<a href="" class="text-decoration-none text-dark" style="font-weight: normal; text-decoration: none;">
+			</a>
+		</div>
+		<a href="" class="text-decoration-none text-dark" style="font-weight: normal; text-decoration: none;">
+			<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+			<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+			<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+			{% comment %}
+			<script src="{% static " cars="" js="" custom.js"="" %}"=""></script>
+			{% endcomment %}
+		</a>
+	</body>
 </html>
