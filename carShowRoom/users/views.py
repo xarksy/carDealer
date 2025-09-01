@@ -50,7 +50,7 @@ def update_user_view(request, user_id):
     return render(request, 'users/register.html',context=context)
 
 def delete_user_view(request, user_id):
-    user = get_object_or_404(user, id=user_id)
+    user = get_object_or_404(User, id=user_id)
     user.delete()
 
     return redirect('user_list')
