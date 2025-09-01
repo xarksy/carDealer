@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.urls import path, include
-from .views import carList, create_car, detail_car, updateCar, deleteCar, car_service_plain, car_service
+from .views import carList, create_car, detail_car, updateCar, deleteCar, car_service_plain, car_service, dashboard_car_list
 
 urlpatterns = [
     path('',carList,name='carList'),
@@ -10,4 +10,5 @@ urlpatterns = [
     path('delete/<int:car_id>/', deleteCar, name='delete_car'),
     path('service/',car_service_plain,name='car_service'),
     path('service/<int:car_id>/', car_service, name='service_history'),
+    path('dashboard/car_list/',dashboard_car_list, name='dashboard_car_list'),
 ]

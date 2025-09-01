@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>🚗 Mobil</h2>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Nama mobil</th>
+      <th>Harga</th>
+      <th>Update</th>
+      <th>Delete</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for car in cars %}
+    <tr>
+      <td>{{ car.nama }}</td>
+      <td>{{ car.harga }}</td>
+      <td><a href="" class="btn btn-warning">Update</td>
+      <td><a href="" class="btn btn-danger">Delete</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+<a href="{% url 'create_car'%}" class="btn btn-primary mt-2">Tambah mobil</a>                                     
+
+{% endblock content %}
+

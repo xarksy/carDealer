@@ -23,6 +23,14 @@ def carList(request):
 
     return render(request,'cars/index.html',context)
 
+def dashboard_car_list(request):
+
+    context = {
+        'cars' : Cars.objects.all()
+    }
+
+    return render(request,'cars/dashboard/car_list.html',context)
+
 @admin_or_sales_required
 def create_car(request):
 
