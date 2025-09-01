@@ -25,10 +25,13 @@ class Customer(models.Model):
     notes = models.TextField(blank=True, null=True)
 
     # info tambahan
-    car_condition = models.CharField(max_length=50, blank=True, null=True)
-    offer_price = models.DecimalField(max_digits=15, decimal_places=2, blank=True, null=True)
-
-    budget = models.DecimalField(max_digits=15, decimal_places=2, blank=True, null=True)
+    merek = models.CharField(max_length=50)
+    model = models.CharField(max_length=50)
+    tahun = models.IntegerField(max_length=4)
+    transmisi = models.CharField(max_length=20, choices=[('auto','Otomatis'), ('manual', 'Manual')])
+    varian = models.CharField(max_length=50)
+    provinsi = models.CharField(max_length=50)        
+    kilometer = models.IntegerField(max_length=6)
 
     # tracking waktu
     created_at = models.DateTimeField(auto_now_add=True)
