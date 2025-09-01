@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import Cars
 from .forms import CarsForm, ServiceHistoryForm
 from django.http import HttpResponseForbidden
+from customer.forms import CustomerForm
 
 import logging
 logger = logging.getLogger(__name__)
