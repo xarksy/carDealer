@@ -76,36 +76,47 @@
 							<h3 class="mb-0">Trade-In Car Form</h3>
 						</div>
 						<div class="card-body bg-light">
-							<form id="tradeInForm">
-								
+							<form method="POST" id="tradeInForm">
+								{% csrf_token %}
+								{{ trade_in_forms.non_field_errors }}
 								<!-- Step 1: Vehicle Info -->
 								<div id="step1">
 									<h5 class="mb-3">Vehicle Information</h5>
 									<div class="row g-3">
 										<div class="col-md-6">
-											<label for="carModel" class="form-label">Model</label>
-											<input type="text" class="form-control" id="carModel" required="">
+											{% comment %} <label for="carModel" class="form-label">Model</label>
+											<input type="text" class="form-control" id="carModel" required=""> {% endcomment %}
+											{{ trade_in_forms.model.label_tag }}
+											{{ trade_in_forms.model }}
 										</div>
 										<div class="col-md-6">
-											<label for="carYear" class="form-label">Year</label>
-											<input type="number" class="form-control" id="carYear" required="">
+											{% comment %} <label for="carYear" class="form-label">Year</label>
+											<input type="number" class="form-control" id="carYear" required=""> {% endcomment %}
+											{{ trade_in_forms.tahun.label_tag }}
+											{{ trade_in_forms.tahun }}
 										</div>
 										<div class="col-md-6">
-											<label for="carKilometers" class="form-label">Kilometers</label>
-											<input type="number" class="form-control" id="carKilometers" required="">
+											{% comment %} <label for="carKilometers" class="form-label">Kilometers</label>
+											<input type="number" class="form-control" id="carKilometers" required=""> {% endcomment %}
+											{{ trade_in_forms.kilometer.label_tag }}
+											{{ trade_in_forms.kilometer }}
 										</div>
 										<div class="col-md-6">
-											<label for="carColor" class="form-label">Color</label>
-											<input type="text" class="form-control" id="carColor">
+											{% comment %} <label for="carColor" class="form-label">Color</label>
+											<input type="text" class="form-control" id="carColor"> {% endcomment %}
+											{{ trade_in_forms.varian.label_tag }}
+											{{ trade_in_forms.varian }}
 										</div>
 										<div class="col-md-6">
-											<label for="carTransmission" class="form-label">Transmission</label>
+											{% comment %} <label for="carTransmission" class="form-label">Transmission</label>
 											<select id="carTransmission" class="form-select">
 												<option>Automatic</option>
 												<option>Manual</option>
-											</select>
+											</select> {% endcomment %}
+											{{ trade_in_forms.transmisi.label_tag }}
+											{{ trade_in_forms.transmisi }}
 										</div>
-										<div class="col-md-6">
+										{% comment %} <div class="col-md-6">
 											<label for="carFuel" class="form-label">Fuel Type</label>
 											<select id="carFuel" class="form-select">
 												<option>Petrol</option>
@@ -113,20 +124,14 @@
 												<option>Hybrid</option>
 												<option>Electric</option>
 											</select>
-										</div>
+										</div> {% endcomment %}
 										<div class="col-md-6">
-											<label for="carVIN" class="form-label">VIN (optional)</label>
-											<input type="text" class="form-control" id="carVIN">
+											{% comment %} <label for="carVIN" class="form-label">VIN (optional)</label>
+											<input type="text" class="form-control" id="carVIN"> {% endcomment %}
+											{{ trade_in_forms.provinsi.label_tag }}
+											{{ trade_in_forms.provinsi }}
 										</div>
-										<div class="col-md-6">
-											<label for="carCondition" class="form-label">Condition</label>
-											<select id="carCondition" class="form-select">
-												<option>Excellent</option>
-												<option>Good</option>
-												<option>Fair</option>
-												<option>Poor</option>
-											</select>
-										</div>
+										
 									</div>
 									<div class="d-flex justify-content-end mt-4">
 										<button type="button" class="btn btn-success" onclick="nextStep()">Next</button>
@@ -138,20 +143,28 @@
 									<h5 class="mb-3">Customer Contact Information</h5>
 									<div class="row g-3">
 										<div class="col-md-6">
-											<label for="custName" class="form-label">Full Name</label>
-											<input type="text" class="form-control" id="custName" required="">
+											{% comment %} <label for="custName" class="form-label">Full Name</label>
+											<input type="text" class="form-control" id="custName" required=""> {% endcomment %}
+											{{ trade_in_forms.name.label_tag }}
+											{{ trade_in_forms.name }}
 										</div>
 										<div class="col-md-6">
-											<label for="custPhone" class="form-label">Phone Number</label>
-											<input type="tel" class="form-control" id="custPhone" required="">
+											{% comment %} <label for="custPhone" class="form-label">Phone Number</label>
+											<input type="tel" class="form-control" id="custPhone" required=""> {% endcomment %}
+											{{ trade_in_forms.phone_number.label_tag }}
+											{{ trade_in_forms.phone_number }}
 										</div>
 										<div class="col-md-6">
-											<label for="custEmail" class="form-label">Email</label>
-											<input type="email" class="form-control" id="custEmail" required="">
+											{% comment %} <label for="custEmail" class="form-label">Email</label>
+											<input type="email" class="form-control" id="custEmail" required=""> {% endcomment %}
+											{{ trade_in_forms.email.label_tag }}
+											{{ trade_in_forms.email }}
 										</div>
 										<div class="col-md-6">
-											<label for="custAddress" class="form-label">Address</label>
-											<textarea class="form-control" id="custAddress" rows="2"></textarea>
+											{% comment %} <label for="custAddress" class="form-label">Address</label>
+											<textarea class="form-control" id="custAddress" rows="2"></textarea> {% endcomment %}
+											{{ trade_in_forms.address.label_tag }}
+											{{ trade_in_forms.address }}
 										</div>
 									</div>
 									<div class="d-flex justify-content-between mt-4">
