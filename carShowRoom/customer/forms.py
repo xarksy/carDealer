@@ -4,4 +4,5 @@ from .models import Customer
 class CustomerForm(forms.ModelForm):
     class Meta:
         model = Customer
-        fields = ['name','phone_number','email','address','customer_type','status','notes','merek','model','tahun','transmisi','varian','provinsi','kilometer']
+        # exclude = ['customer_type']
+        fields = ['name','phone_number','email','address','notes','model','tahun','transmisi','varian','provinsi','kilometer']
