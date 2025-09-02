@@ -69,13 +69,29 @@ def detail_car(request, car_id):
 
     car = get_object_or_404(Cars, id=car_id)
     service_history = car.service_histories.all()
-    total_biaya = sum(service.biaya for service in service_history)
+    total_biaya = sum(service.biaya for service in service_history)    
+
+    if request.method == 'POST':
+        form = CustomerForm(request.POST, request.FILES)
+        if form.is_valid():
+            customer = form.save(commit=False)
+            customer.customer_type = 'seller'
+            customer.save()
+            # form.save()
+            return redirect('carList')
+        else:
+            logger.error("Form submission failed: %s", form.errors)
+    else:
+        form = CustomerForm()
+
     context = {
         'car': car,
         'service_history': service_history,
         'total_biaya': total_biaya,
-        'cash': total_biaya + car.harga
+        'cash': total_biaya + car.harga,
+        'trade_in_forms': form
     }
+
     return render(request, 'cars/detail.html', context)
 
 def updateCar(request, car_id):
