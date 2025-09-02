@@ -21,7 +21,10 @@ def carList(request):
     if request.method == 'POST':
         form = CustomerForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
+            customer = form.save(commit=False)
+            customer.customer_type = 'seller'
+            customer.save()
+            # form.save()
             return redirect('carList')
         else:
             logger.error("Form submission failed: %s", form.errors)
