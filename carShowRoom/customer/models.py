@@ -22,17 +22,7 @@ class Customer(models.Model):
 
     customer_type = models.CharField(max_length=20, choices=CUSTOMER_TYPE_CHOICES)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="uncontacted")
-    notes = models.TextField(blank=True, null=True)
-
-    # info tambahan
-    merek = models.CharField(max_length=50)
-    model = models.CharField(max_length=50)
-    tahun = models.IntegerField()
-    transmisi = models.CharField(max_length=20, choices=[('auto','Otomatis'), ('manual', 'Manual')])
-    varian = models.CharField(max_length=50)
-    provinsi = models.CharField(max_length=50)        
-    kilometer = models.IntegerField()
-
+    
     # tracking waktu
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

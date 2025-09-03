@@ -19,4 +19,6 @@ class Order(models.Model):
     offered_vehicle_province = models.CharField(max_length=50, blank=True, null=True)
     offered_vehicle_year = models.IntegerField(blank=True, null=True)
     offered_vehicle_kilometers = models.IntegerField(blank=True, null=True)
+    offered_vehicle_notes = models.TextField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
 
