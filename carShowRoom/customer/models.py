@@ -1,12 +1,6 @@
 from django.db import models
 
 class Customer(models.Model):
-    CUSTOMER_TYPE_CHOICES = [
-        ("seller", "Seller"),
-        ("trade_in", "Trade-In"),
-        ("buyer", "Buyer"),
-    ]
-
     STATUS_CHOICES = [
         ("deal","Deal"),
         ("negotiating","Negotiating"),
@@ -20,7 +14,6 @@ class Customer(models.Model):
     email = models.EmailField(blank=True, null=True)
     address = models.TextField(blank=True, null=True)
 
-    customer_type = models.CharField(max_length=20, choices=CUSTOMER_TYPE_CHOICES)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="uncontacted")
     
     # tracking waktu
