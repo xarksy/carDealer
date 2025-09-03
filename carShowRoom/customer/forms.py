@@ -5,4 +5,4 @@ class CustomerForm(forms.ModelForm):
     class Meta:
         model = Customer
         # exclude = ['customer_type']
-        fields = ['name','phone_number','email','address','notes','model','tahun','transmisi','varian','provinsi','kilometer']
+        fields = ['name','phone_number','email','address']

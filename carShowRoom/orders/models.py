@@ -1,6 +1,6 @@
 from django.db import models
 from customer.models import Customer
-from cars.models import Car
+from cars.models import Cars
 
 # Create your models here.
 class Order(models.Model):
@@ -11,7 +11,7 @@ class Order(models.Model):
     ]
 
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
-    showroom_car = models.ForeignKey(Car, on_delete=models.CASCADE, null=True, blank=True)
+    showroom_car = models.ForeignKey(Cars, on_delete=models.CASCADE, null=True, blank=True)
     offer_type = models.CharField(max_length=10, choices=ORDER_TYPE_CHOICES)
     offered_vehicle_model = models.CharField(max_length=100, blank=True, null=True)    
     offered_vehicle_varian = models.CharField(max_length=100, blank=True, null=True)
