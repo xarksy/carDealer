@@ -10,4 +10,5 @@ class Order(models.Model):
         ("buy","Buy"),
     ]
 
-    
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    showroom_car = models.ForeignKey(Car, on_delete=models.CASCADE, null=True, blank=True)
