@@ -6,5 +6,15 @@ from customer.forms import CustomerForm
 
 # Create your views here.
 def placing_order_view(request):
+    action = request.GET.get("action",None)
 
-    return render(request,'orders/order_form.html')
+    if action == 'A':
+        context = {
+            'teksnya' : 'Halo A',
+        }
+    elif action == 'B':
+        context = {
+            'teksnya' : 'halo B',
+        }
+    
+    return render(request,'orders/order_form.html', context)
