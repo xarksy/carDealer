@@ -102,9 +102,9 @@
                         {% endfor %}
                         
                     </div>
-                    <form method="get" action="{% url 'my_view' %}">
-                        <button type="submit" name="action" value="A">Button A</button>
-                        <button type="submit" name="action" value="B">Button B</button>
+                    <form method="get" action="{% url 'orders' %}">
+                        <button type="submit" name="action" value="Buy">Buy</button>
+                        <button type="submit" name="action" value="Trade">Trade</button>
                     </form>
                     <a href="{% url 'update_car' car.id %}" class="btn btn-primary mt-2">Update data mobil</a>                                     
                     <a href="{% url 'service_history' car.id%}" class="btn btn-warning mt-2">Tambah data Servis</a>
