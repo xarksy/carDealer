@@ -3,6 +3,7 @@ from .models import Cars
 from .forms import CarsForm, ServiceHistoryForm
 from django.http import HttpResponseForbidden
 from customer.forms import CustomerForm
+from orders.forms import OrderForm
 
 import logging
 logger = logging.getLogger(__name__)
@@ -19,21 +20,28 @@ def admin_or_sales_required(view_func):
 def carList(request):
 
     if request.method == 'POST':
-        form = CustomerForm(request.POST, request.FILES)
-        if form.is_valid():
-            customer = form.save(commit=False)
-            customer.customer_type = 'seller'
-            customer.save()
+        customer_form = CustomerForm(request.POST, request.FILES)
+        order_form = OrderForm(request.POST)
+
+        if customer_form.is_valid() and order_form.is_valid():
+            customer = customer_form.save()
+            order =order_form.save(commit=False)
+            order.customer = customer
+            order.offer_type = "sell"
+            order.save()
             # form.save()
             return redirect('carList')
         else:
-            logger.error("Form submission failed: %s", form.errors)
+            logger.error("Form submission failed with errors: %s", {"customer_form": customer_form.errors, "order_form": order_form.errors})
+
     else:
-        form = CustomerForm()
+        customer_form = CustomerForm()
+        order_form = OrderForm()
 
     context = {
         'cars' : Cars.objects.all(),
-        'trade_in_forms' : form
+        "customer_form": customer_form,
+        "order_form": order_form,
     }
 
     return render(request,'cars/index.html',context)
