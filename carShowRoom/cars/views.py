@@ -25,7 +25,7 @@ def carList(request):
 
         if customer_form.is_valid() and order_form.is_valid():
             customer = customer_form.save()
-            order =order_form.save(commit=False)
+            order = order_form.save(commit=False)
             order.customer = customer
             order.offer_type = "sell"
             order.save()
