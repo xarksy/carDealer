@@ -24,5 +24,15 @@ def placing_order_view(request):
             customer_form = CustomerForm(request.POST)
             if customer_form.is_valid():
                 pass
+    
+    else:
+        customer_form = CustomerForm()
+        order_form = OrderForm()
 
-    return render(request,'orders/order_form.html', )
+    context = {
+        "customer_form": customer_form,
+        "order_form": order_form,
+        "action": action
+    }
+
+    return render(request,'orders/order_form.html', context)
