@@ -19,7 +19,10 @@ def placing_order_view(request):
                 order.customer = customer
                 order.offer_type = "trade"
                 order.save()
-                return redirect('detail')
-                
+                return redirect('detail')        
+        elif action == "Buy":
+            customer_form = CustomerForm(request.POST)
+            if customer_form.is_valid():
+                pass
 
-    return render(request,'orders/order_form.html', context)
+    return render(request,'orders/order_form.html', )
