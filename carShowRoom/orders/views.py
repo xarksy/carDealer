@@ -24,17 +24,18 @@ def placing_order_view(request):
                 order.showroom_car = car
                 order.offer_type = "trade"
                 order.save()
-                return redirect('detail')        
+                return redirect('detail_car')        
         elif action == "Buy":
             customer_form = CustomerForm(request.POST)
-            if customer_form.is_valid():
+            order_form = OrderForm(request.POST)
+            if order_form.is_valid() and customer_form.is_valid():
                 customer = customer_form.save()
                 order = order_form.save(commit=False)
                 order.customer = customer
                 order.showroom_car = car
                 order.offer_type = "buy"
                 order.save()
-                return redirect('detail') 
+                return redirect('detail_car') 
     
     else:
         customer_form = CustomerForm()
