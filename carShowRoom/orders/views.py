@@ -40,7 +40,8 @@ def placing_order_view(request):
     context = {
         "customer_form": customer_form,
         "order_form": order_form,
-        "action": action
+        "action": action,
+        "car_id": car_id
     }
 
     return render(request,'orders/order_form.html', context)
