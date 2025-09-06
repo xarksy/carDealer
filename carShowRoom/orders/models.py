@@ -13,7 +13,6 @@ class TradeInCar(models.Model):
     offered_vehicle_kilometers = models.IntegerField(blank=True, null=True)
     offered_vehicle_notes = models.TextField(blank=True, null=True) 
 
-
 class Order(models.Model):
     ORDER_TYPE_CHOICES = [
         ("sell","Sell"),
