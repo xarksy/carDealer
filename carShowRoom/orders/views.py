@@ -1,5 +1,6 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import Order
+from cars.models import Cars
 from customer.models import Customer
 from .forms import OrderForm
 from customer.forms import CustomerForm
@@ -8,6 +9,8 @@ from customer.forms import CustomerForm
 def placing_order_view(request):
     action = request.GET.get("action",None)
     car_id = request.GET.get("car_id") or request.POST.get("car_id")
+    car = get_object_or_404(Cars, id=car_id) if car_id else None
+
     order_form, customer_form = None, None
 
     if request.method == "POST":
@@ -18,7 +21,7 @@ def placing_order_view(request):
                 customer = customer_form.save()
                 order = order_form.save(commit=False)
                 order.customer = customer
-                order.showroom_car = car_id
+                order.showroom_car = car
                 order.offer_type = "trade"
                 order.save()
                 return redirect('detail')        
@@ -28,7 +31,7 @@ def placing_order_view(request):
                 customer = customer_form.save()
                 order = order_form.save(commit=False)
                 order.customer = customer
-                order.showroom_car = car_id
+                order.showroom_car = car
                 order.offer_type = "buy"
                 order.save()
                 return redirect('detail') 
