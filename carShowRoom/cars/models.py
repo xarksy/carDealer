@@ -15,6 +15,8 @@ class Cars(models.Model):
     tempat_duduk = models.IntegerField()
     deskripsi = models.TextField()
     gambar = models.ImageField(upload_to='cars/images/',blank=True, null=True)
+    status = models.CharField(max_length=20,
+                              choices=[('available','Available'),('sold','Sold'),('booked','Booked')],default='available')
 
     def __str__(self):
         return self.nama
