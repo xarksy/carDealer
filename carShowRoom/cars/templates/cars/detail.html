@@ -103,6 +103,7 @@
                         
                     </div>
                     <form method="get" action="{% url 'orders' %}">
+                        <input type="hidden" name="car_id" value=" {{ car.id }}">
                         <button type="submit" name="action" value="Buy">Buy</button>
                         <button type="submit" name="action" value="Trade">Trade</button>
                     </form>
