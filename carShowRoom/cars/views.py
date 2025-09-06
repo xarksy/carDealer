@@ -4,6 +4,7 @@ from .forms import CarsForm, ServiceHistoryForm
 from django.http import HttpResponseForbidden
 from customer.forms import CustomerForm
 from orders.forms import TradeinForm
+from orders.models import Order
 
 import logging
 logger = logging.getLogger(__name__)
@@ -20,17 +21,18 @@ def admin_or_sales_required(view_func):
 def carList(request):
 
     if request.method == 'POST':
-        customer_form = CustomerForm(request.POST, request.FILES)
-        order_form = TradeinForm(request.POST)
+        customer_form = CustomerForm(request.POST or None)
+        order_form = TradeinForm(request.POST or None)
 
         if customer_form.is_valid() and order_form.is_valid():
             customer = customer_form.save()
-            order = order_form.save(commit=False)
-            order.customer = customer
-            order.offer_type = "sell"
+            order = Order(customer=customer, offer_type="sell") 
+            placing_order = order_form.save(commit=False)
+            placing_order.customer = customer
+            placing_order.save()
+            order.trade_in_car = placing_order
             order.save()
-            # form.save()
-            return redirect('carList')
+            redirect('carList')
         else:
             logger.error("Form submission failed with errors: %s", {"customer_form": customer_form.errors, "order_form": order_form.errors})
 
@@ -82,9 +84,10 @@ def detail_car(request, car_id):
     if request.method == 'POST':
         form = CustomerForm(request.POST, request.FILES)
         if form.is_valid():
-            customer = form.save(commit=False)
-            customer.customer_type = 'seller'
-            customer.save()
+            customer = form.save()
+            order = Order(customer=customer, offer_type="buy")
+            order.showroom_car = car
+            order.save()
             # form.save()
             return redirect('carList')
         else:
