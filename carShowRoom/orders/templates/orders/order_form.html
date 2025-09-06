@@ -12,6 +12,7 @@
 		<h3>Form untuk Trade</h3>
 		<form method="post">
 			{% csrf_token %}
+			<input type="hidden" name="car_id" value="{{ car.id }}">
                         {{ order_form.as_p }}
                         {{ customer_form.as_p }}
 			<button type="submit">Submit</button>
@@ -20,6 +21,7 @@
 		<h3>Form untuk Buy</h3>
 		<form method="post">
 			{% csrf_token %}
+			<input type="hidden" name="car_id" value="{{ car.id }}">
                         {{ customer_form.as_p }}
 			<button type="submit">Submit</button>
 		</form>
