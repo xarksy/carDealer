@@ -1,5 +1,4 @@
 from django.db import models
-from cars.models import Cars
 
 class Customer(models.Model):
     STATUS_CHOICES = [
@@ -14,7 +13,6 @@ class Customer(models.Model):
     phone_number = models.CharField(max_length=20, unique=True)
     email = models.EmailField(blank=True, null=True)
     address = models.TextField(blank=True, null=True)
-    car_wishlist = models.ForeignKey(Cars, on_delete=models.CASCADE, related_name="customers", blank=True, null=True)
 
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="uncontacted")
     
