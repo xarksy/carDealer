@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import Order
 from cars.models import Cars
 from customer.models import Customer
-from .forms import OrderForm
+from .forms import TradeinForm
 from customer.forms import CustomerForm
 
 # Create your views here.
@@ -15,7 +15,7 @@ def placing_order_view(request):
 
     if request.method == "POST":
         if action == "Trade":
-            order_form = OrderForm(request.POST)
+            order_form = TradeinForm(request.POST)
             customer_form = CustomerForm(request.POST)
             if order_form.is_valid() and customer_form.is_valid():                
                 customer = customer_form.save()
@@ -27,7 +27,7 @@ def placing_order_view(request):
                 return redirect('detail_car')        
         elif action == "Buy":
             customer_form = CustomerForm(request.POST)
-            order_form = OrderForm(request.POST)
+            order_form = TradeinForm(request.POST)
             if order_form.is_valid() and customer_form.is_valid():
                 customer = customer_form.save()
                 order = order_form.save(commit=False)
@@ -39,7 +39,7 @@ def placing_order_view(request):
     
     else:
         customer_form = CustomerForm()
-        order_form = OrderForm()
+        order_form = TradeinForm()
 
     context = {
         "customer_form": customer_form,

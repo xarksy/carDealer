@@ -1,9 +1,9 @@
 from django import forms
-from .models import Order
+from .models import TradeInCar
 
-class OrderForm(forms.ModelForm):
+class TradeinForm(forms.ModelForm):
     class Meta:
-        model = Order
+        model = TradeInCar
         fields = [
             "offered_vehicle_model",
             "offered_vehicle_varian",

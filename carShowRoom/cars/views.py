@@ -3,7 +3,7 @@ from .models import Cars
 from .forms import CarsForm, ServiceHistoryForm
 from django.http import HttpResponseForbidden
 from customer.forms import CustomerForm
-from orders.forms import OrderForm
+from orders.forms import TradeinForm
 
 import logging
 logger = logging.getLogger(__name__)
@@ -21,7 +21,7 @@ def carList(request):
 
     if request.method == 'POST':
         customer_form = CustomerForm(request.POST, request.FILES)
-        order_form = OrderForm(request.POST)
+        order_form = TradeinForm(request.POST)
 
         if customer_form.is_valid() and order_form.is_valid():
             customer = customer_form.save()
@@ -36,7 +36,7 @@ def carList(request):
 
     else:
         customer_form = CustomerForm()
-        order_form = OrderForm()
+        order_form = TradeinForm()
 
     context = {
         'cars' : Cars.objects.all(),
