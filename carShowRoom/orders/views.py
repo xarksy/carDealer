@@ -7,16 +7,18 @@ from customer.forms import CustomerForm
 # Create your views here.
 def placing_order_view(request):
     action = request.GET.get("action",None)
+    car_id = request.GET.get("car_id") or request.POST.get("car_id")
     order_form, customer_form = None, None
 
     if request.method == "POST":
         if action == "Trade":
             order_form = OrderForm(request.POST)
             customer_form = CustomerForm(request.POST)
-            if order_form.is_valid() and customer_form.is_valid():
+            if order_form.is_valid() and customer_form.is_valid():                
                 customer = customer_form.save()
                 order = order_form.save(commit=False)
                 order.customer = customer
+                order.showroom_car = car_id
                 order.offer_type = "trade"
                 order.save()
                 return redirect('detail')        
