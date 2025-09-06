@@ -24,5 +24,6 @@ class Order(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
     showroom_car = models.ForeignKey(Cars, on_delete=models.CASCADE, null=True, blank=True)
     offer_type = models.CharField(max_length=10, choices=ORDER_TYPE_CHOICES)
+    trade_in_car = models.OneToOneField(TradeInCar, on_delete=models.SET_NULL, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
