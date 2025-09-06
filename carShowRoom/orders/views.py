@@ -25,7 +25,13 @@ def placing_order_view(request):
         elif action == "Buy":
             customer_form = CustomerForm(request.POST)
             if customer_form.is_valid():
-                pass
+                customer = customer_form.save()
+                order = order_form.save(commit=False)
+                order.customer = customer
+                order.showroom_car = car_id
+                order.offer_type = "buy"
+                order.save()
+                return redirect('detail') 
     
     else:
         customer_form = CustomerForm()
