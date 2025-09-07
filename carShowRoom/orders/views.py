@@ -14,9 +14,9 @@ def placing_order_view(request):
     order_form, customer_form = None, None
 
     if request.method == "POST":
-        if action == "Trade":
-            order_form = TradeinForm(request.POST)
-            customer_form = CustomerForm(request.POST)
+        order_form = TradeinForm(request.POST)
+        customer_form = CustomerForm(request.POST)
+        if action == "Trade":            
             if order_form.is_valid() and customer_form.is_valid():                
                 customer = customer_form.save()
                 order = Order(customer=customer, offer_type="trade") 
@@ -28,14 +28,13 @@ def placing_order_view(request):
                 order.save()
                 return redirect('detail_car')        
         elif action == "Buy":
-            customer_form = CustomerForm(request.POST)
-            order_form = TradeinForm(request.POST)
             if order_form.is_valid() and customer_form.is_valid():
                 customer = customer_form.save()
-                order = order_form.save(commit=False)
-                order.customer = customer
+                order = Order(customer=customer, offer_type="buy") 
+                placing_order = order_form.save(commit=False)
+                placing_order.customer = customer
+                placing_order.save()
                 order.showroom_car = car
-                order.offer_type = "buy"
                 order.save()
                 return redirect('detail_car') 
     
