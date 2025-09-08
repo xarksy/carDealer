@@ -7,7 +7,7 @@ class TradeInCar(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
     offered_vehicle_model = models.CharField(max_length=100, blank=True, null=True)    
     offered_vehicle_varian = models.CharField(max_length=100, blank=True, null=True)
-    offered_vehicle_transmission = models.CharField(max_length=20, choices=[('auto','Otomatis'), ('manual', 'Manual')])
+    offered_vehicle_transmission = models.CharField(max_length=20, choices=[('auto','Otomatis'), ('manual', 'Manual')], blank=True, null=True)
     offered_vehicle_province = models.CharField(max_length=50, blank=True, null=True)
     offered_vehicle_year = models.IntegerField(blank=True, null=True)
     offered_vehicle_kilometers = models.IntegerField(blank=True, null=True)

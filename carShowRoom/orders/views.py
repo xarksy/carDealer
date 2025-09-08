@@ -5,17 +5,20 @@ from customer.models import Customer
 from .forms import TradeinForm
 from customer.forms import CustomerForm
 
+import logging
+logger = logging.getLogger(__name__)
+
 # Create your views here.
 def placing_order_view(request):
     action = request.GET.get("action",None)
     car_id = request.GET.get("car_id") or request.POST.get("car_id")
     car = get_object_or_404(Cars, id=car_id) if car_id else None
 
-    order_form, customer_form = None, None
+    # order_form, customer_form = None, None
 
     if request.method == "POST":
-        order_form = TradeinForm(request.POST)
-        customer_form = CustomerForm(request.POST)
+        order_form = TradeinForm(request.POST or None)
+        customer_form = CustomerForm(request.POST or None)
         if action == "Trade":            
             if order_form.is_valid() and customer_form.is_valid():                
                 customer = customer_form.save()
@@ -26,19 +29,26 @@ def placing_order_view(request):
                 order.trade_in_car = placing_order
                 order.showroom_car = car
                 order.save()
-                return redirect('detail_car')        
+                return redirect(request.META.get('HTTP_REFERER', '/'))   
+            else:
+                logger.error("Form submission failed with errors: %s", {"customer_form": customer_form.errors, "order_form": order_form.errors})     
         elif action == "Buy":
-            if order_form.is_valid() and customer_form.is_valid():
-                customer = customer_form.save()
-                order = Order(customer=customer, offer_type="buy") 
-                placing_order = order_form.save(commit=False)
-                placing_order.customer = customer
-                placing_order.save()
-                order.trade_in_car = placing_order
-                order.showroom_car = car
-                order.save()
-                return redirect('detail_car') 
-    
+            if order_form.is_valid() and customer_form.is_valid():                
+                customer = customer_form.save(commit=False)
+                customer.offer_type = "buy"
+                customer.showroom_car = car
+                customer.save()
+                # order = Order(customer=customer, offer_type="buy") 
+                # placing_order = order_form.save(commit=False)
+                # placing_order.customer = customer
+                # placing_order.save()
+                # order.trade_in_car = placing_order
+                # order.showroom_car = car
+                # order.save()
+                return redirect(request.META.get('HTTP_REFERER', '/'))
+            else:
+                logger.error("Form submission failed with errors: %s", {"customer_form": customer_form.errors, "order_form": order_form.errors})
+                
     else:
         customer_form = CustomerForm()
         order_form = TradeinForm()
