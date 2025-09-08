@@ -22,12 +22,12 @@ def carList(request):
 
     if request.method == 'POST':
         customer_form = CustomerForm(request.POST or None)
-        order_form = TradeinForm(request.POST or None)
+        trading_order_form = TradeinForm(request.POST or None)
 
-        if customer_form.is_valid() and order_form.is_valid():
+        if customer_form.is_valid() and trading_order_form.is_valid():
             customer = customer_form.save()
             order = Order(customer=customer, offer_type="sell") 
-            placing_order = order_form.save(commit=False)
+            placing_order = trading_order_form.save(commit=False)
             placing_order.customer = customer
             placing_order.save()
             order.trade_in_car = placing_order
