@@ -17,13 +17,13 @@ def placing_order_view(request):
     # order_form, customer_form = None, None
 
     if request.method == "POST":
-        order_form = TradeinForm(request.POST or None)
+        trade_form = TradeinForm(request.POST or None)
         customer_form = CustomerForm(request.POST or None)
         if action == "Trade":            
-            if order_form.is_valid() and customer_form.is_valid():                
+            if trade_form.is_valid() and customer_form.is_valid():                
                 customer = customer_form.save()
                 order = Order(customer=customer, offer_type="trade") 
-                placing_order = order_form.save(commit=False)
+                placing_order = trade_form.save(commit=False)
                 placing_order.customer = customer
                 placing_order.save()
                 order.trade_in_car = placing_order
@@ -31,9 +31,9 @@ def placing_order_view(request):
                 order.save()
                 return redirect('detail_car',car_id=id_nya)   
             else:
-                logger.error("Form submission failed with errors: %s", {"customer_form": customer_form.errors, "order_form": order_form.errors})     
+                logger.error("Form submission failed with errors: %s", {"customer_form": customer_form.errors, "trade_form": trade_form.errors})     
         elif action == "Buy":
-            if order_form.is_valid() and customer_form.is_valid():                
+            if trade_form.is_valid() and customer_form.is_valid():                
                 customer = customer_form.save()
                 order = Order(customer=customer, offer_type="buy")                 
                 order.showroom_car = car
