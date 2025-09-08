@@ -13,7 +13,7 @@ def placing_order_view(request):
     action = request.GET.get("action",None)
     car_id = request.GET.get("car_id") or request.POST.get("car_id")
     car = get_object_or_404(Cars, id=car_id) if car_id else None
-
+    id_nya = int(car_id.strip())
     # order_form, customer_form = None, None
 
     if request.method == "POST":
@@ -29,7 +29,7 @@ def placing_order_view(request):
                 order.trade_in_car = placing_order
                 order.showroom_car = car
                 order.save()
-                return redirect(request.META.get('HTTP_REFERER', '/'))   
+                return redirect('detail_car',car_id=id_nya)   
             else:
                 logger.error("Form submission failed with errors: %s", {"customer_form": customer_form.errors, "order_form": order_form.errors})     
         elif action == "Buy":
@@ -38,7 +38,8 @@ def placing_order_view(request):
                 order = Order(customer=customer, offer_type="buy")                 
                 order.showroom_car = car
                 order.save()
-                return redirect(request.META.get('HTTP_REFERER', '/'))
+                return redirect('detail_car',car_id=id_nya)   
+
             else:
                 logger.error("Form submission failed with errors: %s", {"customer_form": customer_form.errors, "order_form": order_form.errors})
                 
