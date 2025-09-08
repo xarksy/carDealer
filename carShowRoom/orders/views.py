@@ -34,17 +34,10 @@ def placing_order_view(request):
                 logger.error("Form submission failed with errors: %s", {"customer_form": customer_form.errors, "order_form": order_form.errors})     
         elif action == "Buy":
             if order_form.is_valid() and customer_form.is_valid():                
-                customer = customer_form.save(commit=False)
-                customer.offer_type = "buy"
-                customer.showroom_car = car
-                customer.save()
-                # order = Order(customer=customer, offer_type="buy") 
-                # placing_order = order_form.save(commit=False)
-                # placing_order.customer = customer
-                # placing_order.save()
-                # order.trade_in_car = placing_order
-                # order.showroom_car = car
-                # order.save()
+                customer = customer_form.save()
+                order = Order(customer=customer, offer_type="buy")                 
+                order.showroom_car = car
+                order.save()
                 return redirect(request.META.get('HTTP_REFERER', '/'))
             else:
                 logger.error("Form submission failed with errors: %s", {"customer_form": customer_form.errors, "order_form": order_form.errors})
