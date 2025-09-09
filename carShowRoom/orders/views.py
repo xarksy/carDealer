@@ -14,7 +14,7 @@ def placing_order_view(request):
     car_id = request.GET.get("car_id") or request.POST.get("car_id")
     car = get_object_or_404(Cars, id=car_id) if car_id else None
     id_nya = int(car_id.strip())
-    # order_form, customer_form = None, None
+    # trade_form, customer_form = None, None
 
     if request.method == "POST":
         trade_form = TradeinForm(request.POST or None)
@@ -41,7 +41,7 @@ def placing_order_view(request):
                 return redirect('detail_car',car_id=id_nya)   
 
             else:
-                logger.error("Form submission failed with errors: %s", {"customer_form": customer_form.errors, "order_form": trade_form.errors})
+                logger.error("Form submission failed with errors: %s", {"customer_form": customer_form.errors, "trade_form": trade_form.errors})
                 
     else:
         customer_form = CustomerForm()
@@ -54,4 +54,4 @@ def placing_order_view(request):
         "car_id": car_id
     }
 
-    return render(request,'orders/order_form.html', context)
+    return render(request,'orders/trade_form.html', context)

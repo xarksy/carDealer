@@ -26,19 +26,13 @@ def carList(request):
         trade_form = TradeinForm(request.POST or None)
 
         if customer_form.is_valid() and trade_form.is_valid():
-            # Use get_or_create instead of always saving a new customer
-            phone = customer_form.cleaned_data.get("phone_number")
-            name = customer_form.cleaned_data.get("name")
-
-            customer, created = Customer.objects.get_or_create(
-                phone_number=phone,
-                defaults={"name": name}
-            )
+            customer = customer_form.save()
             order = Order(customer=customer, offer_type="sell") 
             placing_order = trade_form.save(commit=False)
             placing_order.customer = customer
             placing_order.save()
             order.trade_in_car = placing_order
+            
             order.save()
             redirect('carList')
         else:
