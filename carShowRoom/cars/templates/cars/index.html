@@ -78,7 +78,7 @@
 						<div class="card-body bg-light">
 							<form method="POST" id="tradeInForm">
 								{% csrf_token %}
-								{{ order_form.non_field_errors }}
+								{{ trade_form.non_field_errors }}
 								<!-- Step 1: Vehicle Info -->
 								<div id="step1">
 									<h5 class="mb-3">Vehicle Information</h5>
@@ -86,26 +86,26 @@
 										<div class="col-md-6">
 											{% comment %} <label for="carModel" class="form-label">Model</label>
 											<input type="text" class="form-control" id="carModel" required=""> {% endcomment %}
-											{{ order_form.offered_vehicle_model.label_tag }}
-											{{ order_form.offered_vehicle_model }}
+											{{ trade_form.offered_vehicle_model.label_tag }}
+											{{ trade_form.offered_vehicle_model }}
 										</div>
 										<div class="col-md-6">
 											{% comment %} <label for="carYear" class="form-label">Year</label>
 											<input type="number" class="form-control" id="carYear" required=""> {% endcomment %}
-											{{ order_form.offered_vehicle_varian.label_tag }}
-											{{ order_form.offered_vehicle_varian }}
+											{{ trade_form.offered_vehicle_varian.label_tag }}
+											{{ trade_form.offered_vehicle_varian }}
 										</div>
 										<div class="col-md-6">
 											{% comment %} <label for="carKilometers" class="form-label">Kilometers</label>
 											<input type="number" class="form-control" id="carKilometers" required=""> {% endcomment %}
-											{{ order_form.offered_vehicle_transmission.label_tag }}
-											{{ order_form.offered_vehicle_transmission }}
+											{{ trade_form.offered_vehicle_transmission.label_tag }}
+											{{ trade_form.offered_vehicle_transmission }}
 										</div>
 										<div class="col-md-6">
 											{% comment %} <label for="carColor" class="form-label">Color</label>
 											<input type="text" class="form-control" id="carColor"> {% endcomment %}
-											{{ order_form.offered_vehicle_province.label_tag }}
-											{{ order_form.offered_vehicle_province }}
+											{{ trade_form.offered_vehicle_province.label_tag }}
+											{{ trade_form.offered_vehicle_province }}
 										</div>
 										<div class="col-md-6">
 											{% comment %} <label for="carTransmission" class="form-label">Transmission</label>
@@ -113,12 +113,12 @@
 												<option>Automatic</option>
 												<option>Manual</option>
 											</select> {% endcomment %}
-											{{ order_form.offered_vehicle_year.label_tag }}
-											{{ order_form.offered_vehicle_year }}
+											{{ trade_form.offered_vehicle_year.label_tag }}
+											{{ trade_form.offered_vehicle_year }}
 										</div>
 										<div class="col-md-6">											
-											{{ order_form.offered_vehicle_kilometers.label_tag }}
-											{{ order_form.offered_vehicle_kilometers }}
+											{{ trade_form.offered_vehicle_kilometers.label_tag }}
+											{{ trade_form.offered_vehicle_kilometers }}
 										</div>
 										{% comment %} <div class="col-md-6">
 											<label for="carFuel" class="form-label">Fuel Type</label>
@@ -132,8 +132,8 @@
 										<div class="col-md-6">
 											{% comment %} <label for="carVIN" class="form-label">VIN (optional)</label>
 											<input type="text" class="form-control" id="carVIN"> {% endcomment %}
-											{{ order_form.offered_vehicle_notes.label_tag }}
-											{{ order_form.offered_vehicle_notes }}
+											{{ trade_form.offered_vehicle_notes.label_tag }}
+											{{ trade_form.offered_vehicle_notes }}
 										</div>
 										
 									</div>
