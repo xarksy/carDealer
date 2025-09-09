@@ -22,28 +22,28 @@ def carList(request):
 
     if request.method == 'POST':
         customer_form = CustomerForm(request.POST or None)
-        trading_order_form = TradeinForm(request.POST or None)
+        trade_form = TradeinForm(request.POST or None)
 
-        if customer_form.is_valid() and trading_order_form.is_valid():
+        if customer_form.is_valid() and trade_form.is_valid():
             customer = customer_form.save()
             order = Order(customer=customer, offer_type="sell") 
-            placing_order = trading_order_form.save(commit=False)
+            placing_order = trade_form.save(commit=False)
             placing_order.customer = customer
             placing_order.save()
             order.trade_in_car = placing_order
             order.save()
             redirect('carList')
         else:
-            logger.error("Form submission failed with errors: %s", {"customer_form": customer_form.errors, "order_form": order_form.errors})
+            logger.error("Form submission failed with errors: %s", {"customer_form": customer_form.errors, "trade_form": trade_form.errors})
 
     else:
         customer_form = CustomerForm()
-        order_form = TradeinForm()
+        trade_form = TradeinForm()
 
     context = {
         'cars' : Cars.objects.all(),
         "customer_form": customer_form,
-        "order_form": order_form,
+        "trade_form": trade_form,
     }
 
     return render(request,'cars/index.html',context)
