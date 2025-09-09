@@ -5,6 +5,7 @@ from django.http import HttpResponseForbidden
 from customer.forms import CustomerForm
 from orders.forms import TradeinForm
 from orders.models import Order
+from customer.models import Customer
 
 import logging
 logger = logging.getLogger(__name__)
@@ -25,7 +26,14 @@ def carList(request):
         trade_form = TradeinForm(request.POST or None)
 
         if customer_form.is_valid() and trade_form.is_valid():
-            customer = customer_form.save()
+            # Use get_or_create instead of always saving a new customer
+            phone = customer_form.cleaned_data.get("phone_number")
+            name = customer_form.cleaned_data.get("name")
+
+            customer, created = Customer.objects.get_or_create(
+                phone_number=phone,
+                defaults={"name": name}
+            )
             order = Order(customer=customer, offer_type="sell") 
             placing_order = trade_form.save(commit=False)
             placing_order.customer = customer
