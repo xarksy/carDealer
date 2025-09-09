@@ -41,15 +41,15 @@ def placing_order_view(request):
                 return redirect('detail_car',car_id=id_nya)   
 
             else:
-                logger.error("Form submission failed with errors: %s", {"customer_form": customer_form.errors, "order_form": order_form.errors})
+                logger.error("Form submission failed with errors: %s", {"customer_form": customer_form.errors, "order_form": trade_form.errors})
                 
     else:
         customer_form = CustomerForm()
-        order_form = TradeinForm()
+        trade_form = TradeinForm()
 
     context = {
         "customer_form": customer_form,
-        "order_form": order_form,
+        "trade_form": trade_form,
         "action": action,
         "car_id": car_id
     }
