@@ -16,9 +16,10 @@
 			<div class="container">
 				<a class="navbar-brand" href="#">Car Showroom</a>
 				<div class="ml-auto">
-					{% comment %} ----- Here {% endcomment %}                 {% if user.is_authenticated and user.role == "admin" %}
+					{% comment %} ----- Here {% endcomment %}
+					{% comment %} {% if user.is_authenticated and user.role == "admin" %} {% endcomment %}
 					<a href="{% url 'create_car' %}" class="btn btn-success mr-2">Tambah Mobil</a>
-					{% endif %}
+					{% comment %} {% endif %} {% endcomment %}
 					<a href="#trade-in-section" class="btn btn-outline-success ml-2">Trade-In</a>
 
 
