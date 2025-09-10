@@ -11,12 +11,12 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-def admin_or_sales_required(view_func):
-    def wrapper(request, *args, **kwargs):
-        if request.user.is_authenticated and (request.user.is_superuser or request.user.role in ["admin","salesperson"]):
-            return view_func(request, *args, **kwargs)
-        return HttpResponseForbidden("Not allowed")
-    return wrapper
+# def admin_or_sales_required(view_func):
+#     def wrapper(request, *args, **kwargs):
+#         if request.user.is_authenticated and (request.user.is_superuser or request.user.role in ["admin","salesperson"]):
+#             return view_func(request, *args, **kwargs)
+#         return HttpResponseForbidden("Not allowed")
+#     return wrapper
 
 # Create your views here.
 def carList(request):
@@ -58,7 +58,7 @@ def dashboard_car_list(request):
 
     return render(request,'cars/dashboard/car_list.html',context)
 
-@admin_or_sales_required
+# @admin_or_sales_required
 def create_car(request):
 
     if request.method == 'POST':
