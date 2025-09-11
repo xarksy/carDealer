@@ -1,11 +1,6 @@
 <html lang="en">
 	<head>
-		<style>
-		html {
-			scroll-behavior: smooth;
-		}
-		</style>
-
+		<link rel="stylesheet" href="style.css">
 	</head>
 	<body>{% load static %} {% load humanize %}
 		<meta charset="UTF-8">
@@ -181,6 +176,13 @@
 						</div>
 					</div>
 				</div>
+			</div>
+		</div>
+		<div id="popup" class="modal-overlay">
+			<div class="modal">
+			<h2>Hello!</h2>
+			<p>This is a popup message.</p>
+			<button id="closeBtn">Close</button>
 			</div>
 		</div>
 		<a href="" class="text-decoration-none text-dark" style="font-weight: normal; text-decoration: none;"></a>
