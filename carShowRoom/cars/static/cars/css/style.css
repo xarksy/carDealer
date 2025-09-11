@@ -33,3 +33,7 @@ scroll-behavior: smooth;
     border-radius: 4px;
     cursor: pointer;
 }
+
+.modal button:hover {
+    background: #0056b3;
+}
