@@ -23,3 +23,13 @@ scroll-behavior: smooth;
     text-align: center;
     box-shadow: 0 5px 10px rgba(0,0,0,0.3);
 }
+
+.modal button {
+    margin-top: 15px;
+    padding: 8px 16px;
+    border: none;
+    background: #007bff;
+    color: #fff;
+    border-radius: 4px;
+    cursor: pointer;
+}
