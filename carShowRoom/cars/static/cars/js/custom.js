@@ -17,7 +17,11 @@
 // }
 // });
 // });
-    
+const openBtn = document.getElementById("openBtn");
+const closeBtn = document.getElementById("closeBtn");
+const popup = document.getElementById("popup");
+
+
 function attachListeners() {        
     document.querySelectorAll('.close').forEach(function(button) {
         button.addEventListener('click', function() {
