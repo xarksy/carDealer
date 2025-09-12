@@ -25,6 +25,10 @@ openBtn.addEventListener("click", () => {
   popup.style.display = "flex";
 });
 
+closeBtn.addEventListener("click", () => {
+  popup.style.display = "none";
+});
+
 function attachListeners() {        
     document.querySelectorAll('.close').forEach(function(button) {
         button.addEventListener('click', function() {
