@@ -1,8 +1,8 @@
 <html lang="en">
-	<head>
-		<link rel="stylesheet" href="style.css">
+	<head> {% load static %} {% load humanize %}
+		<link rel="stylesheet" href="{% static 'cars/css/style.css' %}">
 	</head>
-	<body>{% load static %} {% load humanize %}
+	<body>
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<title>Car Showroom</title>
@@ -169,7 +169,14 @@
 									</div>
 									<div class="d-flex justify-content-between mt-4">
 										<button type="button" class="btn btn-secondary" onclick="prevStep()">Previous</button>
-										<button type="submit" class="btn btn-success">Submit</button>
+										<button type="submit" class="btn btn-success" Id="openBtn">Submit</button>
+									</div>
+									<div id="popup" class="modal-overlay">
+										<div class="modal">
+											<h2>Hello!</h2>
+											<p>This is a pop message.</p>
+											<button id="closeBtn">Close</button>
+										</div>
 									</div>
 								</div>
 							</form>
