@@ -168,3 +168,7 @@ def car_service(request, car_id):
 
     return render(request,'cars/service_history_form.html', context=context)
 
+
+def success_page(request):
+
+    return render(request, 'cars/success_page.html')
