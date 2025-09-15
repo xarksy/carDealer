@@ -34,7 +34,7 @@ def carList(request):
             order.trade_in_car = placing_order
             
             order.save()
-            redirect('carList')
+            return redirect('success_page')
         else:
             logger.error("Form submission failed with errors: %s", {"customer_form": customer_form.errors, "trade_form": trade_form.errors})
 
