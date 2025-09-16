@@ -60,7 +60,7 @@ def dashboard_car_list(request):
 
 def dashboard_customer_list(request):
     context = {
-
+            Order.objects.select_related.all("customer","TradeInCar").all()
     }
 
     return render(request,'cars/dashboard/customer_list.html',context)
