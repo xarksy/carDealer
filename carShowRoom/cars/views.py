@@ -63,7 +63,7 @@ def dashboard_customer_list(request):
 
     }
 
-    return render(request,'cars/dashboard/customer-list.html',context)
+    return render(request,'cars/dashboard/customer_list.html',context)
 
 # @admin_or_sales_required
 def create_car(request):
