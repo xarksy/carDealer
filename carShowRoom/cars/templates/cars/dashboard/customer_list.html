@@ -2,5 +2,18 @@
 
 {% block content %}
 <h1>ini customer list content</h1>
+{% for order in orders %}
+    <p><strong>Customer:</strong> {{ order.customer.name }} ({{ order.customer.phone_number }})</p>
+    <p><strong>Offer Type:</strong> {{ order.offer_type }}</p>
+    <p><strong>Trade-in:</strong> 
+       {% if order.trade_in_car %}
+           {{ order.trade_in_car.car_model }} ({{ order.trade_in_car.year }})
+       {% else %}
+           No trade-in
+       {% endif %}
+    </p>
+    <hr>
+{% endfor %}
+
 {% endblock content %}
 
