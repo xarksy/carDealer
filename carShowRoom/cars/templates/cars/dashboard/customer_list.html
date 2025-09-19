@@ -5,6 +5,7 @@
 {% for order in orders %}
     <p><strong>Customer:</strong> {{ order.customer.name }} ({{ order.customer.phone_number }})</p>
     <p><strong>Offer Type:</strong> {{ order.offer_type }}</p>
+    <p><strong>Status:</strong> {{ order.customer.status}} </p>
     {% if order.offer_type == "sell" %}
     <p><strong>Car:</strong>
     {{ order.trade_in_car.offered_vehicle_model }} ({{ order.trade_in_car.offered_vehicle_year }})
