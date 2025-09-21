@@ -20,6 +20,7 @@ logger = logging.getLogger(__name__)
 
 # Create your views here.
 def carList(request):
+    print(request.user)
 
     if request.method == 'POST':
         customer_form = CustomerForm(request.POST or None)
