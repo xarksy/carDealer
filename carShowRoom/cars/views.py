@@ -11,12 +11,14 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-# def admin_or_sales_required(view_func):
-#     def wrapper(request, *args, **kwargs):
-#         if request.user.is_authenticated and (request.user.is_superuser or request.user.role in ["admin","salesperson"]):
-#             return view_func(request, *args, **kwargs)
-#         return HttpResponseForbidden("Not allowed")
-#     return wrapper
+def admin_required(view_func):
+    def wrapper(request, *args, **kwargs):
+        if request.user.is_authenticated and (request.user.is_superuser or request.user.role in ["admin"]):
+            return view_func(request, *args, **kwargs)
+        # return HttpResponseForbidden("Not allowed")
+        return redirect("carList")
+
+    return wrapper
 
 # Create your views here.
 def carList(request):
@@ -66,7 +68,7 @@ def dashboard_customer_list(request):
 
     return render(request,'cars/dashboard/customer_list.html',context)
 
-# @admin_or_sales_required
+@admin_required
 def create_car(request):
 
     if request.method == 'POST':
@@ -115,6 +117,7 @@ def detail_car(request, car_id):
 
     return render(request, 'cars/detail.html', context)
 
+@admin_required
 def updateCar(request, car_id):
     """
     View to update the details of a specific car.
@@ -136,12 +139,14 @@ def updateCar(request, car_id):
 
     return render(request, 'cars/car_form.html',context=context)
 
+@admin_required
 def deleteCar(request, car_id):
     car = get_object_or_404(Cars, id=car_id)
     car.delete()
 
     return redirect('carList')
 
+@admin_required
 def car_service_plain(request):
     if request.method == 'POST':
         form = ServiceHistoryForm(request.POST)
@@ -157,6 +162,7 @@ def car_service_plain(request):
 
     return render(request, 'cars/service_history_form.html', context=context)
 
+@admin_required
 def car_service(request, car_id):
     car = get_object_or_404(Cars, id=car_id)
     if request.method == 'POST':
