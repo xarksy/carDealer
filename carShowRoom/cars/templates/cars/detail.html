@@ -107,13 +107,20 @@
                         <button type="submit" name="action" value="Buy">Buy</button>
                         <button type="submit" name="action" value="Trade">Trade</button>
                     </form>
+
+                    {% if user.role == "admin" %}
                     <a href="{% url 'update_car' car.id %}" class="btn btn-primary mt-2">Update data mobil</a>                                     
                     <a href="{% url 'service_history' car.id%}" class="btn btn-warning mt-2">Tambah data Servis</a>
                     <form method="POST" action="{% url 'delete_car' car.id %}" style="display: inline-block;">
                         {% csrf_token %}
                         <button type="submit" onclick="return confirm('Yakin ingin menghapus mobil ini?')" class="btn btn-danger mt-2">Hapus</button>
-                    </form>   
+                    </form>
+                    {% endif %}
+                    
                     <a href="{% url 'carList' %}" class="btn btn-secondary mt-2">Kembali</a>
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'logout'%}" class="btn btn-dark mt-2">Logout</a>
+                    {% endif %}
                 </div>
             </div>
         </div>
