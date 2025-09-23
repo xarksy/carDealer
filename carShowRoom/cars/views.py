@@ -73,7 +73,7 @@ def dashboard_of_dashboard(request):
 
     }
 
-    return render()
+    return render(request, 'cars/dashboard/dashboard.html',context)
 
 @admin_required
 def create_car(request):
