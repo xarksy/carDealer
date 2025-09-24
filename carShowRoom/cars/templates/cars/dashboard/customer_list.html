@@ -35,25 +35,6 @@
   </tbody>
 </table>
 
-{% comment %} {% for order in orders %}
-    <p><strong>Customer:</strong> {{ order.customer.name }} ({{ order.customer.phone_number }})</p>
-    <p><strong>Offer Type:</strong> {{ order.offer_type }}</p>
-    <p><strong>Status:</strong> {{ order.customer.status}} </p>
-    {% if order.offer_type == "sell" %}
-    <p><strong>Car:</strong>
-    {{ order.trade_in_car.offered_vehicle_model }} ({{ order.trade_in_car.offered_vehicle_year }})
-    {% elif order.offer_type == "buy" %}
-    <p><strong>Showroom car:</strong>
-    {{ order.showroom_car.nama }} ({{ order.showroom_car.tahun }})
-    {% else %}
-    <p><strong>Showroom car:</strong> 
-    {{ order.showroom_car.nama }} ({{ order.showroom_car.tahun }})
-    <p><strong>Trade-in:</strong> 
-    {{ order.trade_in_car.offered_vehicle_model }} ({{ order.trade_in_car.offered_vehicle_year }})
-    {% endif %}    
-    </p>
-    <hr>
-{% endfor %} {% endcomment %}
 
 {% endblock content %}
 
