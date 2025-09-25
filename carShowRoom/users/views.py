@@ -1,14 +1,16 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import CustomUserCreationForm
 from .models import User
+from cars.views import admin_required
 import logging
 logger = logging.getLogger(__name__)
 
-# Create your views here.
+@admin_required
 def userView(request):
 
     return render(request,'base.html')
 
+@admin_required
 def userlist_view(request):
 
     context = {
@@ -17,6 +19,7 @@ def userlist_view(request):
 
     return render(request,'users/user_index.html',context)
 
+@admin_required
 def register_view(request):
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
@@ -28,6 +31,7 @@ def register_view(request):
     
     return render(request, 'users/register.html', {'form':form})
 
+@admin_required
 def update_user_view(request, user_id):
     """
     View to update the details of a specific car.
@@ -49,6 +53,7 @@ def update_user_view(request, user_id):
 
     return render(request, 'users/register.html',context=context)
 
+@admin_required
 def delete_user_view(request, user_id):
     user = get_object_or_404(User, id=user_id)
     user.delete()
