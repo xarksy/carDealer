@@ -53,6 +53,8 @@ def carList(request):
 
     return render(request,'cars/index.html',context)
 
+
+@admin_required
 def dashboard_car_list(request):
 
     context = {
@@ -61,6 +63,7 @@ def dashboard_car_list(request):
 
     return render(request,'cars/dashboard/car_list.html',context)
 
+@admin_required
 def dashboard_customer_list(request):
     context = {
         'orders' : Order.objects.select_related("customer","trade_in_car").all()
@@ -68,6 +71,7 @@ def dashboard_customer_list(request):
 
     return render(request,'cars/dashboard/customer_list.html',context)
 
+@admin_required
 def dashboard_of_dashboard(request):
     context = {
 
