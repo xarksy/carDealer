@@ -15,6 +15,8 @@
 					<a href="#trade-in-section" class="btn btn-outline-success ml-2">Trade-In</a>
 
 					{% if user.is_authenticated and user.role == "admin"  %}
+					<a href="{% url 'dashboard' %}" class="btn btn-success mr-2">Dashboard</a>
+					
 					<a href="{% url 'create_car' %}" class="btn btn-success mr-2">Tambah Mobil</a>
 					<a href="{% url 'car_service' %}" class="btn btn-warning">Tambah data Servis Mobil</a>
 					{% endif %}
