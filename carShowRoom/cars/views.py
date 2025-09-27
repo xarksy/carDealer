@@ -155,7 +155,9 @@ def deleteCar(request, car_id):
     car = get_object_or_404(Cars, id=car_id)
     car.delete()
 
-    return redirect('carList')
+    # return redirect('carList')
+    next_url = request.GET.get('next', 'carList')
+    return redirect(next_url)
 
 @admin_required
 def car_service_plain(request):
@@ -164,6 +166,7 @@ def car_service_plain(request):
         if form.is_valid():
             form.save()
             return redirect('carList')
+            
     else:
         form = ServiceHistoryForm()
     
