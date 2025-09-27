@@ -138,7 +138,9 @@ def updateCar(request, car_id):
         form = CarsForm(request.POST, request.FILES, instance=car)
         if form.is_valid():
             form.save()
-            return redirect('carList')
+            
+            next_url = request.GET.get('next', 'carList')
+            return redirect(next_url)
         else:
             logger.error("Form submission failed: %s", form.errors)
     else:
@@ -166,7 +168,7 @@ def car_service_plain(request):
         if form.is_valid():
             form.save()
             return redirect('carList')
-            
+
     else:
         form = ServiceHistoryForm()
     
