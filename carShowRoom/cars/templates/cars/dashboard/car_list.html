@@ -24,7 +24,7 @@
     {% endfor %}
   </tbody>
 </table>
-<a href="{% url 'create_car'%}" class="btn btn-primary mt-2">Tambah mobil</a>                                     
+<a href="{% url 'create_car'%}?next={% url 'dashboard_car_list' %}" class="btn btn-primary mt-2">Tambah mobil</a>                                     
 
 {% endblock content %}
 
