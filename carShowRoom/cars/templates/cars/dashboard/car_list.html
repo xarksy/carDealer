@@ -18,8 +18,8 @@
       <td>{{ car.nama }}</td>
       <td>{{ car.harga }}</td>
       <td> {{ car.status }}</td>
-      <td><a href="{% url 'update_car' car.id %}?next={% url 'dashboard' %}" class="btn btn-warning">Update</td>
-      <td><a href="{% url 'delete_car' car.id %}?next={% url 'dashboard' %}" class="btn btn-danger">Delete</td>
+      <td><a href="{% url 'update_car' car.id %}?next={% url 'dashboard_car_list' %}" class="btn btn-warning">Update</td>
+      <td><a href="{% url 'delete_car' car.id %}?next={% url 'dashboard_car_list' %}" class="btn btn-danger">Delete</td>
     </tr>
     {% endfor %}
   </tbody>
