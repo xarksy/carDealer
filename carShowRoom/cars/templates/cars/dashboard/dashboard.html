@@ -1,1 +1,24 @@
 {% extends "base.html" %}
+
+{% block content %}
+<h2>Total Order: {{ total_order }}</h2>
+<h2>Total Income: {{ total_income }}</h2>
+
+<canvas id="orderChart"></canvas>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const ctx = document.getElementById('orderChart');
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: [{% for o in order_per_month %}"Bulan {{ o.created_at__month }}",{% endfor %}],
+            datasets: [{
+                label: 'Order per Bulan',
+                data: [{% for o in order_per_month %}{{ o.total }},{% endfor %}],
+            }]
+        }
+    });
+</script>
+
+{% endblock content %}
