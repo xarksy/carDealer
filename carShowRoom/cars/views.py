@@ -6,6 +6,7 @@ from customer.forms import CustomerForm
 from orders.forms import TradeinForm
 from orders.models import Order
 from customer.models import Customer
+from django.db.models import Sum, Count
 
 import logging
 logger = logging.getLogger(__name__)
@@ -72,12 +73,23 @@ def dashboard_customer_list(request):
     return render(request,'cars/dashboard/customer_list.html',context)
 
 @admin_required
-def dashboard_of_dashboard(request):
+def dashboard_of_dashboard(request):    
+    total_order = Order.objects.count()
+    total_income = Order.objects.aggregate(Sum("Harga"))["price_sum"] or 0
+    order_per_month = (
+        Order.objects.values("created_at__month")
+        .annotate(total=Count("id"))
+        .order_by("created_at__month")
+    )
+
     context = {
-
+        'total_order' : total_order,
+        'total_income' : total_income,
+        'order_per_month' : order_per_month,
     }
+    
 
-    return render(request, 'cars/dashboard/dashboard.html',context)
+    return render(request, 'cars/dashboard/dashboard.html', context=context)
 
 @admin_required
 def create_car(request):
