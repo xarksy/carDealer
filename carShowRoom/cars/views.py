@@ -78,7 +78,7 @@ def dashboard_of_dashboard(request):
     total_customers = Customer.objects.count()
     total_cars = Cars.objects.count()
 
-    total_income = Order.objects.aggregate(Sum("showroom_car__harga"))["total"] or 0
+    total_income = Order.objects.aggregate(total=Sum("showroom_car__harga"))["total"] or 0
     order_per_month = (
         Order.objects.values("created_at__month")
         .annotate(total=Count("id"))
