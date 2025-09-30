@@ -14,5 +14,5 @@ urlpatterns = [
     path('logout/',logout_view,name='logout'),
     path('users/',include('users.urls')),
     path('orders/',include('orders.urls')),
-    path('api',include(router.urls)),
+    path('api/',include(router.urls)),
 ]
