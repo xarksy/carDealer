@@ -1,9 +1,10 @@
 from rest_framework.permissions import BasePermission
 
-class IsAdminSuperuser(BasePermission):
+class IsAdminOrSuperuser(BasePermission):
     def has_permission(self, request, view):
+        user = request.user
         return bool (
-            request.user
-            and request.user.is_authenticated
-            and (request.user.is_authenticated or getattr(request.user, "role", None) == "admin")
+            user
+            and user.is_authenticated
+            and (user.is_authenticated or getattr(user, "role", None) == "admin")
         )
