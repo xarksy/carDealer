@@ -1,7 +1,6 @@
 from django.contrib import admin
 from django.urls import path, include
 from .views import login_view, logout_view
-from rest_framework.routers import DefaultRouter
 
 
 urlpatterns = [
