@@ -2,7 +2,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework import  viewsets
 from ..models import Cars
 from .serializers import CarsSerializer
-from .permissions import IsAdminOrSuperuser
+from carShowRoom.api.permissions import IsAdminOrSuperuser
 
 
 class CarsViewSet(viewsets.ModelViewSet):
