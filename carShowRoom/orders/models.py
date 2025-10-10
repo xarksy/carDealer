@@ -23,7 +23,7 @@ class Order(models.Model):
         ("buy","Buy"),
     ]
 
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='orders')
     showroom_car = models.ForeignKey(Cars, on_delete=models.CASCADE, null=True, blank=True)
     offer_type = models.CharField(max_length=10, choices=ORDER_TYPE_CHOICES)
     trade_in_car = models.OneToOneField(TradeInCar, on_delete=models.SET_NULL, null=True, blank=True)

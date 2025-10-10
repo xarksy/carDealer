@@ -24,5 +24,3 @@ class CustomerSerializer(serializers.ModelSerializer):
         if Customer.objects.filter(phone_number=value).exclue(id=customer_id).exists():
             raise serializers.ValidationError("Nomor telepon ini sudah digunakan oleh customer lain.")
         return value
-
-    
