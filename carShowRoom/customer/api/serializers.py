@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from models import Customer
+from orders.api.serializers import OrderSerializer
 
 class CustomerSerializer(serializers.ModelSerializer):
     status_display = serializers.CharField(source='get_status_display', read_only=True)
@@ -24,3 +25,10 @@ class CustomerSerializer(serializers.ModelSerializer):
         if Customer.objects.filter(phone_number=value).exclue(id=customer_id).exists():
             raise serializers.ValidationError("Nomor telepon ini sudah digunakan oleh customer lain.")
         return value
+
+class CustomerDetailSerializer(serializers.ModelSerializer):
+    orders = OrderSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Customer
+        fields = ['id','name','phone_number','email','orders']
