@@ -31,3 +31,15 @@ class CustomerViewSet(viewsets.ModelViewSet):
             {"message": "Customer successfully created", "data": serializer.data},
             status=status.HTTP_201_CREATED
         )
+
+    def update(self, request, *args, **kwargs):
+        """Handle both PUT and PATCH for updating customers."""
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        return Response(
+            {"message": "Customer successfully updated", "data": serializer.data},
+            status=status.HTTP_200_OK
+        )
