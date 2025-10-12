@@ -17,4 +17,10 @@ class CustomerViewSet(viewsets.ModelViewSet):
     ordering_fields = ['created_at', 'updated_at', 'name']
     ordering = ['-created_at']
 
+    def get_serializer_class(self):
+        """Use a detailed serializer when retrieving a single customer."""
+        if self.action == 'retrieve':
+            return CustomerDetailSerializer
+        return CustomerSerializer
+    
     
