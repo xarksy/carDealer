@@ -30,3 +30,10 @@ class OrderViewSet(viewsets.ModelViewSet):
 
         if not customer_id or not offer_type:
             return Response({"error": "customer_id and offer_type are required"}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            customer = Customer.objects.get(id=customer_id)
+        except Customer.DoesNotExist:
+            return Response({"error": "Customer not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        
