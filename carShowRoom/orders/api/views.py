@@ -17,3 +17,7 @@ class IsAdminOrSalesCanView(permissions.BasePermission):
             return user.is_authenticated and (user.is_superuser or getattr(user, "role", "") in ["admin", "sales"])
         return True  # Allow POST/PUT/DELETE for authenticated users
 
+class OrderViewSet(viewsets.ModelViewSet):
+    queryset = Order.objects.all().select_related("customer", "showroom_car", "trade_in_car")
+    serializer_class = OrderSerializer
+    permission_classes = [permissions.IsAuthenticated, IsAdminOrSalesCanView]
