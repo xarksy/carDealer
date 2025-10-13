@@ -36,4 +36,9 @@ class OrderViewSet(viewsets.ModelViewSet):
         except Customer.DoesNotExist:
             return Response({"error": "Customer not found"}, status=status.HTTP_404_NOT_FOUND)
 
-        
+        showroom_car = None
+        if showroom_car_id:
+            try:
+                showroom_car = Cars.objects.get(id=showroom_car_id)
+            except Cars.DoesNotExist:
+                return Response({"error": "Showroom car not found"}, status=status.HTTP_404_NOT_FOUND)
