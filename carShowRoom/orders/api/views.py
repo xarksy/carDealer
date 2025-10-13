@@ -21,3 +21,12 @@ class OrderViewSet(viewsets.ModelViewSet):
     queryset = Order.objects.all().select_related("customer", "showroom_car", "trade_in_car")
     serializer_class = OrderSerializer
     permission_classes = [permissions.IsAuthenticated, IsAdminOrSalesCanView]
+
+    def create(self, request, *args, **kwargs):
+        customer_id = request.data.get("customer_id")
+        showroom_car_id = request.data.get("showroom_car_id")
+        offer_type = request.data.get("offer_type")
+        trade_in_car_data = request.data.get("trade_in_car")
+
+        if not customer_id or not offer_type:
+            return Response({"error": "customer_id and offer_type are required"}, status=status.HTTP_400_BAD_REQUEST)
