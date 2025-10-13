@@ -50,3 +50,13 @@ class OrderViewSet(viewsets.ModelViewSet):
                 trade_in_car = trade_in_car_serializer.save(customer=customer)
             else:
                 return Response(trade_in_car_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        order = Order.objects.create(
+            customer=customer,
+            showroom_car=showroom_car,
+            offer_type=offer_type,
+            trade_in_car=trade_in_car,
+        )
+
+        serializer = OrderSerializer(order)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
