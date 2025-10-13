@@ -42,3 +42,11 @@ class OrderViewSet(viewsets.ModelViewSet):
                 showroom_car = Cars.objects.get(id=showroom_car_id)
             except Cars.DoesNotExist:
                 return Response({"error": "Showroom car not found"}, status=status.HTTP_404_NOT_FOUND)
+        
+        trade_in_car = None
+        if trade_in_car_data:
+            trade_in_car_serializer = TradeInCarSerializer(data=trade_in_car_data)
+            if trade_in_car_serializer.is_valid():
+                trade_in_car = trade_in_car_serializer.save(customer=customer)
+            else:
+                return Response(trade_in_car_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
