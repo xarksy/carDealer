@@ -1,7 +1,7 @@
 from rest_framework import viewsets, permissions, status
 from rest_framework.response import Response
-from models import Order
-from serializers import OrderSerializer, TradeInCarSerializer
+from ..models import Order
+from .serializers import OrderSerializer, TradeInCarSerializer
 from customer.models import Customer
 from cars.models import Cars
 
