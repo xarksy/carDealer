@@ -1,6 +1,6 @@
 from rest_framework import serializers
-from models import Customer
-from orders.api.serializers import OrderSerializer
+from ..models import Customer
+# from orders.api.serializers import OrderSerializer
 
 class CustomerSerializer(serializers.ModelSerializer):
     status_display = serializers.CharField(source='get_status_display', read_only=True)
@@ -27,8 +27,13 @@ class CustomerSerializer(serializers.ModelSerializer):
         return value
 
 class CustomerDetailSerializer(serializers.ModelSerializer):
-    orders = OrderSerializer(many=True, read_only=True)
+    orders = serializers.SerializerMethodField()
 
     class Meta:
         model = Customer
-        fields = ['id','name','phone_number','email','orders']
+        fields = ['id', 'name', 'phone_number', 'email', 'orders']
+
+    def get_orders(self, obj):
+        from orders.api.serializers import OrderSerializer  # lazy import here
+        orders = obj.order_set.all()
+        return OrderSerializer(orders, many=True).data

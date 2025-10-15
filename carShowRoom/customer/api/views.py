@@ -2,8 +2,8 @@ from rest_framework import viewsets, status, filters
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from django_filters.rest_framework import DjangoFilterBackend
-from models import Customer
-from serializers import CustomerSerializer, CustomerDetailSerializer
+from ..models import Customer
+from .serializers import CustomerSerializer, CustomerDetailSerializer
 
 class CustomerViewSet(viewsets.ModelViewSet):
     queryset = Customer.objects.all().order_by('-created_at')
