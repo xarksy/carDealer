@@ -12,7 +12,7 @@
 				<a class="navbar-brand" href="#">Car Showroom</a>
 				<div class="ml-auto">
 					{% comment %} ----- Here {% endcomment %}
-					<a href="#trade-in-section" class="btn btn-outline-success ml-2">Trade-In</a>
+					<a href="#trade-in-section" class="btn btn-outline-success mr-2">Trade-In</a>
 
 					{% if user.is_authenticated and user.role == "admin"  %}
 					<a href="{% url 'dashboard' %}" class="btn btn-success mr-2">Dashboard</a>
