@@ -21,7 +21,7 @@ class IsCustomerReadOnly(BasePermission):
         if not user or not user.is_authenticated:
             return False
         # Allow read-only for customers
-        if getattr(user, "role", "") == "customer" and request.method in permissions.SAFE_METHODS:
+        if getattr(user, "role", "") == "customer" and request.method in BasePermission.SAFE_METHODS:
             return True
         # Block modifications
         return False
