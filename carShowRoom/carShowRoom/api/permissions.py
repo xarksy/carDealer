@@ -9,7 +9,19 @@ class IsAdminOrSuperuser(BasePermission):
 
 class IsStaffOrReadOnly(BasePermission):
     def has_permission(self, request, view):
-        if request.method in ['GET','HEAD']:
+        if request.method in ['GET', 'HEAD', 'OPTIONS']:
             return True
-        return request.user.is_staff
+        return request.user and request.user.is_authenticated and request.user.is_staff
 
+
+class IsCustomerReadOnly(BasePermission):
+    """Customers can only read (GET), not modify."""
+    def has_permission(self, request, view):
+        user = request.user
+        if not user or not user.is_authenticated:
+            return False
+        # Allow read-only for customers
+        if getattr(user, "role", "") == "customer" and request.method in permissions.SAFE_METHODS:
+            return True
+        # Block modifications
+        return False
