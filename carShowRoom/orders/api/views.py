@@ -24,7 +24,11 @@ class OrderViewSet(viewsets.ModelViewSet):
         if user.is_staff or getattr(user, "role", "") == "sales":
             return [permissions.IsAuthenticatedOrReadOnly()]
         
-        
+        # 🧩 Customer: can create (buy/sell/trade-in), view own orders only
+        if getattr(user, "role", "") == "customer":
+            return [permissions.IsAuthenticated()]
+
+        return [permissions.IsAuthenticated()]
 
     def create(self, request, *args, **kwargs):
         customer_id = request.data.get("customer_id")
