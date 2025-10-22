@@ -19,3 +19,9 @@ class CarsViewSet(viewsets.ModelViewSet):
 
         if not user.is_authenticated:
             return [permissions.AllowAny()]  # public can’t modify, only view if needed
+
+        # 🧩 Admin / Superuser: full access
+        if user.is_superuser or getattr(user, "role", "") == "admin":
+            return [IsAdminOrSuperuser()]
+        
+        
