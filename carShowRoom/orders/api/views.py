@@ -20,6 +20,10 @@ class OrderViewSet(viewsets.ModelViewSet):
         if user.is_superuser or getattr(user, "role", "") == "admin":
             return [IsAdminOrSuperuser()]
 
+        # 🧩 Salesperson: can only read orders (no create/delete)
+        if user.is_staff or getattr(user, "role", "") == "sales":
+            return [permissions.IsAuthenticatedOrReadOnly()]
+        
         
 
     def create(self, request, *args, **kwargs):
