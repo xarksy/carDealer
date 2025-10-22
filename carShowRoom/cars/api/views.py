@@ -27,3 +27,10 @@ class CarsViewSet(viewsets.ModelViewSet):
         # 🧩 Salesperson (staff): read and update only
         if user.is_staff or getattr(user, "role", "") == "sales":
             return [IsStaffOrReadOnly()]
+        
+        # 🧩 Customer: read-only
+        if getattr(user, "role", "") == "customer":
+            return [permissions.IsAuthenticatedOrReadOnly()]
+
+        # Default fallback
+        return [permissions.IsAuthenticated()]
