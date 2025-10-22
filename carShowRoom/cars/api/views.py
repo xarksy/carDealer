@@ -24,4 +24,6 @@ class CarsViewSet(viewsets.ModelViewSet):
         if user.is_superuser or getattr(user, "role", "") == "admin":
             return [IsAdminOrSuperuser()]
         
-        
+        # 🧩 Salesperson (staff): read and update only
+        if user.is_staff or getattr(user, "role", "") == "sales":
+            return [IsStaffOrReadOnly()]
