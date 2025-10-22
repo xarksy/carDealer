@@ -4,23 +4,19 @@ from ..models import Order
 from .serializers import OrderSerializer, TradeInCarSerializer
 from customer.models import Customer
 from cars.models import Cars
-
-class IsAdminOrSalesCanView(permissions.BasePermission):
-    """
-    Allow GET requests only for users with admin or sales roles.
-    Other users can still create orders (POST).
-    """
-    def has_permission(self, request, view):
-        if request.method in permissions.SAFE_METHODS:
-            user = request.user
-            # adjust based on your user model
-            return user.is_authenticated and (user.is_superuser or getattr(user, "role", "") in ["admin", "sales"])
-        return True  # Allow POST/PUT/DELETE for authenticated users
+from carShowRoom.api.permissions import IsAdminOrSuperuser
 
 class OrderViewSet(viewsets.ModelViewSet):
     queryset = Order.objects.all().select_related("customer", "showroom_car", "trade_in_car")
     serializer_class = OrderSerializer
-    permission_classes = [permissions.IsAuthenticated, IsAdminOrSalesCanView]
+    
+    def get_permissions(self):
+        user = self.request.user
+
+        if not user.is_authenticated:
+            return [permissions.IsAuthenticated()] # must log in
+        
+        
 
     def create(self, request, *args, **kwargs):
         customer_id = request.data.get("customer_id")
