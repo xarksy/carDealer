@@ -1,4 +1,6 @@
 from django.db import models
+from django.contrib.auth import get_user_model
+User = get_user_model()
 
 class Customer(models.Model):
     STATUS_CHOICES = [
@@ -9,6 +11,7 @@ class Customer(models.Model):
         ("rna","RNA (Return, No Answer)"),
     ]
 
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="customer_profile")
     name = models.CharField(max_length=100)
     phone_number = models.CharField(max_length=20, unique=True)
     email = models.EmailField(blank=True, null=True)
