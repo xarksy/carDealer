@@ -5,7 +5,7 @@ from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
-def demo_api_login(request):
+def demo_login(request):
     if request.method == "POST":
         role = request.POST.get("role")
         creds = {
