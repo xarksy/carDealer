@@ -28,6 +28,6 @@ def demo_api_dashboard(request):
     cars = Cars.objects.all()
     return render(request, "demo/api_dashboard.html", {"cars": cars})
 
-def demo_api_logout(request):
+def demo_logout(request):
     logout(request)
     return redirect("demo_api_login")
