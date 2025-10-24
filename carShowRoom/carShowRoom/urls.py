@@ -12,4 +12,5 @@ urlpatterns = [
     path('orders/',include('orders.urls')),
     path('api/',include('carShowRoom.api.urls')),
     path('login_api/',api_login, name='login_api'),
+    path('demo/',include('demo.urls')),
 ]

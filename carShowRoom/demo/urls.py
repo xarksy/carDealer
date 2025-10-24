@@ -1,5 +1,5 @@
 from django.urls import path
-from views import demo_api_dashboard, demo_api_login, demo_api_logout
+from .views import demo_api_dashboard, demo_api_login, demo_api_logout
 
 urlpatterns = [
     path('login/', demo_api_login, name='demo_api_login'),
