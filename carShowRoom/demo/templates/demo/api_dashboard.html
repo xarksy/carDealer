@@ -1,0 +1,50 @@
+{% extends 'demo/base.html' %}
+{% block content %}
+<h3>Welcome, {{ request.user.username|title }}!</h3>
+<p>Your role: <strong>{{ request.user.role|default:"-" }}</strong></p>
+
+<hr>
+
+<h4>🚘 Car List</h4>
+<table class="table table-bordered table-striped">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Brand</th>
+      <th>Price</th>
+      <th>Year</th>
+      {% if request.user.role in 'admin sales' %}
+        <th>Actions</th>
+      {% endif %}
+    </tr>
+  </thead>
+  <tbody>
+    {% for car in cars %}
+      <tr>
+        <td>{{ car.nama }}</td>
+        <td>{{ car.merek }}</td>
+        <td>{{ car.harga }}</td>
+        <td>{{ car.tahun }}</td>
+
+        {% if request.user.role == 'admin' %}
+        <td>
+          <a href="#" class="btn btn-sm btn-warning">Edit</a>
+          <a href="#" class="btn btn-sm btn-danger">Delete</a>
+        </td>
+        {% elif request.user.role == 'sales' %}
+        <td>
+          <a href="#" class="btn btn-sm btn-warning">Update</a>
+        </td>
+        {% endif %}
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% if request.user.role == 'admin' %}
+  <a href="#" class="btn btn-primary mt-3">➕ Add New Car</a>
+{% elif request.user.role == 'customer' %}
+  <a href="{% url 'demo_order' %}" class="btn btn-success mt-3">🛒 Create Trade-In Order</a>
+{% endif %}
+
+{% endblock %}
