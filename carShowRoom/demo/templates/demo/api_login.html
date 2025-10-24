@@ -1,0 +1,12 @@
+{% extends 'demo/base.html' %}
+{% block content %}
+<div class="text-center">
+  <h2 class="mb-3">Choose a Demo Role</h2>
+  <form method="post" class="d-inline">
+    {% csrf_token %}
+    <button type="submit" name="role" value="admin" class="btn btn-primary m-1">Login as Admin</button>
+    <button type="submit" name="role" value="sales" class="btn btn-warning m-1">Login as Salesperson</button>
+    <button type="submit" name="role" value="customer" class="btn btn-success m-1">Login as Customer</button>
+  </form>
+</div>
+{% endblock %}
