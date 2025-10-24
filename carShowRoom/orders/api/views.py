@@ -10,6 +10,20 @@ class OrderViewSet(viewsets.ModelViewSet):
     queryset = Order.objects.all().select_related("customer", "showroom_car", "trade_in_car")
     serializer_class = OrderSerializer
     
+    def get_queryset(self):
+        """
+        Filter orders based on user role:
+        - Admins & superusers: all orders
+        - Sales: all orders (read-only)
+        - Customers: only their own orders
+        """
+        user = self.request.user
+
+        # 🧩 Admin / superuser → all orders
+        if user.is_superuser or getattr(user, "role", "") == "admin":
+            return Order.objects.all().select_related("customer","showroom_car","trade_in_car")
+
+
     def get_permissions(self):
         user = self.request.user
 
