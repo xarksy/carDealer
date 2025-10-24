@@ -27,7 +27,12 @@ class OrderViewSet(viewsets.ModelViewSet):
         if user.is_staff or getattr(user, "role", "") == "sales":
             return Order.objects.all().select_related("customer", "showroom_car","trade_in_car")
         
+        # 🧩 Customer → only own orders
+        if getattr(user, "role", "") == "customer":
+            return Order.objects.filter(customer__user=user).select_related("customer", "showroom_car", "trade_in_car")
         
+        # default fallback
+        return Order.objects.none()
 
     def get_permissions(self):
         user = self.request.user
