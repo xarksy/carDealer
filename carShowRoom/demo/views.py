@@ -17,17 +17,17 @@ def demo_login(request):
         user = authenticate(request, username=username, password=password)
         if user:
             login(request, user)
-            return redirect("demo_api_dashboard")
+            return redirect("demo_dashboard")
         
     return render(request, "demo/api_login.html")
 
 def demo_api_dashboard(request):
     if not request.user.is_authenticated:
-        return redirect("demo_api_login")
+        return redirect("demo_login")
 
     cars = Cars.objects.all()
-    return render(request, "demo/api_dashboard.html", {"cars": cars})
+    return render(request, "demo/base1.html", {"cars": cars})
 
 def demo_logout(request):
     logout(request)
-    return redirect("demo_api_login")
+    return redirect("demo_login")
