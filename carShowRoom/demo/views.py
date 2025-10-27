@@ -28,6 +28,13 @@ def demo_api_dashboard(request):
     cars = Cars.objects.all()
     return render(request, "demo/base1.html", {"cars": cars})
 
+def demo_carlist_dashboard(request):
+    if not request.user.is_authenticated:
+        return redirect("demo_login")
+
+    cars = Cars.objects.all()
+    return render(request, "demo/api_dashboard.html", {"cars": cars})
+
 def demo_logout(request):
     logout(request)
     return redirect("demo_login")

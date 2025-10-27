@@ -2,17 +2,10 @@ body {
     min-height: 100vh;
     display: flex;
 }
-.main-wrapper {
-    margin-top: 50px;
-}
-.main-container {
-    margin-top: 50px;
-}
 .sidebar {
     width: 220px;
     background: #343a40;
     color: white;
-    margin-top: 50px;
 }
 .sidebar a {
     color: white;
