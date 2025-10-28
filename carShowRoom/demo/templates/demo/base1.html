@@ -1,4 +1,39 @@
-{% extends 'demo/api_base.html' %} {% block content %}
-<h1>Ini isinya lhoo 1111111111111111111 0000000000000000000</h1>
-<h1>yooooooooooooo</h1>
-{% endblock %}
+{% extends "demo/api_base.html" %}
+
+{% block content %}
+<h2>🚗 Mobil</h2>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Nama mobil</th>
+      <th>Harga</th>
+      <th>Status</th>
+      {% if request.user.role in 'admin sales' %}
+      <th>Actions</th>
+      {% endif %}
+    </tr>
+  </thead>
+  <tbody>
+    {% for car in cars %}
+    <tr>
+      <td>{{ car.nama }}</td>
+      <td>{{ car.harga }}</td>
+      <td> {{ car.status }}</td>
+      {% if request.user.role == 'admin' %}
+      <td>
+        <a href="{% url 'update_car' car.id %}?next={% url 'dashboard_car_list' %}" class="btn btn-sm btn-warning">Edit</a>
+        <a href="{% url 'delete_car' car.id %}?next={% url 'dashboard_car_list' %}" class="btn btn-sm btn-danger">Delete</a>
+      </td>      
+      {% elif request.user.role == 'sales' %}
+      <td><a href="{% url 'update_car' car.id %}?next={% url 'dashboard_car_list' %}" class="btn btn-warning">Update</td>
+      {% endif %}
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% if request.user.role == 'admin' %}
+<a href="{% url 'create_car'%}?next={% url 'dashboard_car_list' %}" class="btn btn-primary mt-2">Tambah mobil</a>              
+{% endif %}                       
+
+{% endblock content %}
+

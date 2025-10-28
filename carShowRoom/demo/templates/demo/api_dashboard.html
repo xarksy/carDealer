@@ -1,10 +1,9 @@
 {% extends 'demo/api_base.html' %}
 {% block content %}
-<h3>Welcome, {{ request.user.username|title }}!</h3>
+{% comment %} <h3>Welcome, {{ request.user.username|title }}!</h3>
 <p>Your role: <strong>{{ request.user.role|default:"-" }}</strong></p>
 
-<hr>
-
+<hr> {% endcomment %}
 <h4>🚘 Car List</h4>
 <table class="table table-bordered table-striped">
   <thead>
@@ -13,6 +12,7 @@
       <th>Brand</th>
       <th>Price</th>
       <th>Year</th>
+      <th>Status</th>
       {% if request.user.role in 'admin sales' %}
         <th>Actions</th>
       {% endif %}
@@ -25,6 +25,7 @@
         <td>{{ car.merek }}</td>
         <td>{{ car.harga }}</td>
         <td>{{ car.tahun }}</td>
+        <td>{{ car.status }}</td>
 
         {% if request.user.role == 'admin' %}
         <td>
