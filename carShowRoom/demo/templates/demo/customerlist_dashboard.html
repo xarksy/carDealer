@@ -1,0 +1,40 @@
+{% extends 'demo/api_base.html' %}
+
+{% block content %}
+<h2>📞 Customer</h2>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Nama customer</th>
+      <th>Tipe Order</th>
+      <th>Mobil Showroom</th>
+      <th>Mobil Customer</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for order in orders %}
+    <tr>
+      <td> {{ order.customer.name }} ({{ order.customer.phone_number }}) </td>
+      <td>  {{ order.offer_type }} </td>
+      {% if order.trade_in_car.offered_vehicle_model %}
+      <td> {{ order.trade_in_car.offered_vehicle_model }} ({{ order.trade_in_car.offered_vehicle_year }}) </td>
+      {% else %}
+      <td>  </td>
+      {% endif %}
+
+      {% if order.showroom_car.nama %}
+      <td>     {{ order.showroom_car.nama }} ({{ order.showroom_car.tahun }}) </td>
+      {% else %}
+      <td>  </td>
+      {% endif %}
+
+      <td> {{ order.customer.status }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+
+{% endblock content %}
+
