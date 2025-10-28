@@ -1,0 +1,29 @@
+{% extends "demo/api_base.html" %}
+
+{% block content %}
+<h2>👤 Users</h2>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Username</th>
+      <th>Role</th>
+      <th>Update</th>
+      <th>Delete</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for user in users %}
+    <tr>
+      <td>{{ user.username }}</td>
+      <td>{{ user.role }}</td>
+      <td><a href="{% url 'update_user' user.id %}" class="btn btn-warning">Update</td>
+      <td><a href="{% url 'delete_user' user.id %}" class="btn btn-danger">Delete</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+<a href="{% url 'register'%}" class="btn btn-primary mt-2">Tambah user</a>                                     
+                    
+{% endblock content %}
+
+
