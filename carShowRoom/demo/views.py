@@ -1,9 +1,30 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
-from cars.models import Cars
 from django.contrib.auth import get_user_model
+from cars.models import Cars
+from cars.forms import CarsForm, ServiceHistoryForm
+from django.http import HttpResponseForbidden
+from customer.forms import CustomerForm
+from orders.forms import TradeinForm
+from orders.models import Order
+from customer.models import Customer
+from django.db.models import Sum, Count
+
+import logging
+logger = logging.getLogger(__name__)
 
 User = get_user_model()
+
+
+def admin_required(view_func):
+    def wrapper(request, *args, **kwargs):
+        if request.user.is_authenticated and (request.user.is_superuser or request.user.role in ["admin"]):
+            return view_func(request, *args, **kwargs)
+        # return HttpResponseForbidden("Not allowed")
+        return redirect("carList")
+
+    return wrapper
+
 
 def demo_login(request):
     if request.method == "POST":
@@ -34,6 +55,14 @@ def demo_carlist_dashboard(request):
 
     cars = Cars.objects.all()
     return render(request, "demo/api_dashboard.html", {"cars": cars})
+
+@admin_required
+def dashboard_customer_list(request):
+    context = {
+        'orders' : Order.objects.select_related("customer","trade_in_car").all()
+    }
+
+    return render(request,'cars/dashboard/customer_list.html',context)
 
 def demo_logout(request):
     logout(request)
