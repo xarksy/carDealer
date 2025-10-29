@@ -80,7 +80,6 @@ def dashboard_of_dashboard(request):
     return render(request, 'demo/demo_dashboard.html', context=context)
 
 
-
 def demo_carlist_dashboard(request):
     if not request.user.is_authenticated:
         return redirect("demo_login")
