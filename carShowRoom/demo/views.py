@@ -94,6 +94,6 @@ def dashboard_customer_list(request):
         'orders' : Order.objects.select_related("customer","trade_in_car").all()
     }
 
-    return render(request,'cars/dashboard/customer_list.html',context)
+    return render(request,'demo/customer_list_dashboard.html',context)
 
 
