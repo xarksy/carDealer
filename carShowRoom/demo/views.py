@@ -42,6 +42,10 @@ def demo_login(request):
         
     return render(request, "demo/api_login.html")
 
+def demo_logout(request):
+    logout(request)
+    return redirect("demo_login")
+
 def demo_api_dashboard(request):
     if not request.user.is_authenticated:
         return redirect("demo_login")
@@ -64,6 +68,4 @@ def dashboard_customer_list(request):
 
     return render(request,'cars/dashboard/customer_list.html',context)
 
-def demo_logout(request):
-    logout(request)
-    return redirect("demo_login")
+

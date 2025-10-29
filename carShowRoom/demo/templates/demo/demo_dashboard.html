@@ -1,0 +1,41 @@
+{% extends "demo/api_base.html" %}
+
+{% block content %}
+<h2>Total Order: {{ total_order }}</h2>
+<h2>Total Income: {{ total_income }}</h2>
+<h2>Total Customers: {{ total_customers }}</h2>
+<h2>Total Cars: {{ total_cars }}</h2>
+
+<canvas id="orderChart"></canvas>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    const ctx = document.getElementById('orderChart');
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: [{% for o in order_per_month %}"{{ o.month_name }}"{% if not forloop.last %},{% endif %}{% endfor %}],
+            datasets: [{
+                label: 'Order per Bulan',
+                data: [{% for o in order_per_month %}{{ o.total }}{% if not forloop.last %},{% endif %}{% endfor %}],
+                backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        stepSize: 1
+                    }
+                }
+            }
+        }
+    });
+</script>
+
+{% endblock content %}
+
