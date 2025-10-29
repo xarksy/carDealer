@@ -27,7 +27,7 @@
             {% if user.is_authenticated %}
                 <div class="sidebar">
                     {% if request.user.role == 'admin' %}
-                        <a href="{% url 'dashboard' %}">📊 Dashboard</a>
+                        <a href="{% url 'demo_dashboard' %}">📊 Dashboard</a>
                         <a href="{% url 'dashboard_user_list' %}">👤 User</a>
                         <a href="">📝 Log</a>
                     {% endif %}
