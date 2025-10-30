@@ -141,7 +141,7 @@ def detail_car(request, car_id):
 
     return render(request, 'cars/detail.html', context)
 
-
+# ===== CRUD CAR SERVICE
 @admin_required
 def car_service_plain(request):
     if request.method == 'POST':
