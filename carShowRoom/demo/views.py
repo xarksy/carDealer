@@ -16,16 +16,6 @@ logger = logging.getLogger(__name__)
 User = get_user_model()
 
 
-def admin_required(view_func):
-    def wrapper(request, *args, **kwargs):
-        if request.user.is_authenticated and (request.user.is_superuser or request.user.role in ["admin"]):
-            return view_func(request, *args, **kwargs)
-        # return HttpResponseForbidden("Not allowed")
-        return redirect("carList")
-
-    return wrapper
-
-
 def demo_login(request):
     if request.method == "POST":
         role = request.POST.get("role")
@@ -55,7 +45,6 @@ def demo_api_dashboard(request):
 
 # ========================= > Dashboard
 
-@admin_required
 def dashboard_of_dashboard(request):    
     total_order = Order.objects.count()
     total_customers = Customer.objects.count()
@@ -87,7 +76,6 @@ def demo_carlist_dashboard(request):
     cars = Cars.objects.all()
     return render(request, "demo/api_dashboard.html", {"cars": cars})
 
-@admin_required
 def dashboard_customer_list(request):
     context = {
         'orders' : Order.objects.select_related("customer","trade_in_car").all()
