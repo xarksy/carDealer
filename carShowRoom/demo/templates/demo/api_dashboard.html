@@ -35,7 +35,7 @@
         </td>
         {% elif request.user.role == 'sales' %}
         <td>
-          <a href="{% url 'update_car' car.id %}?next={% url 'demo_carlist_dashboard' %}" class="btn btn-warning">Update</a>
+          <a href="{% url 'update_car' car.id %}?next={% url 'demo_carlist_dashboard' %}" class="btn btn-sm btn-warning">Update</a>
         </td>
         {% endif %}
       </tr>
