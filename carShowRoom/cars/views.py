@@ -78,7 +78,6 @@ def create_car(request):
     return render(request,'cars/car_form_demo.html',context)
 
 
-@admin_required
 def updateCar(request, car_id):
     """
     View to update the details of a specific car.
