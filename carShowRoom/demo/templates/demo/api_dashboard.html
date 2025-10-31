@@ -29,7 +29,7 @@
 
         {% if request.user.role == 'admin' %}
         <td>
-          <a href="#" class="btn btn-sm btn-warning">Edit</a>
+          <a href="{% url 'update_car' car.id %}?next={% url 'dashboard_car_list' %}" class="btn btn-warning">Edit</a>
           {% comment %} <a href="#" class="btn btn-sm btn-danger">Delete</a> {% endcomment %}
           <a href="{% url 'delete_car' car.id %}?next={% url 'demo_carlist_dashboard' %}" class="btn btn-sm btn-danger">Delete</a>
         </td>
