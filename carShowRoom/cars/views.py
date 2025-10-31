@@ -100,7 +100,7 @@ def updateCar(request, car_id):
         'form': form
     }
 
-    return render(request, 'cars/car_form.html',context=context)
+    return render(request, 'cars/car_form_demo.html',context=context)
 
 @admin_required
 def deleteCar(request, car_id):
