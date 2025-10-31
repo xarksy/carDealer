@@ -43,7 +43,7 @@
 </table>
 
 {% if request.user.role == 'admin' %}
-  <a href="#" class="btn btn-primary mt-3">➕ Add New Car</a>
+  <a href="" class="btn btn-primary mt-3">➕ Add New Car</a>
 {% elif request.user.role == 'customer' %}
   <a href="{% url 'demo_order' %}" class="btn btn-success mt-3">🛒 Create Trade-In Order</a>
 {% endif %}

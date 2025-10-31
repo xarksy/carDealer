@@ -1,0 +1,26 @@
+{% extends "demo/api_base.html" %}
+{% block content %}
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %} {{ form.non_field_errors }}
+            <table class="table table-bordered" style="width: 60%; margin: 0 auto;">
+            <tbody>
+            {% for field in form %}
+            {% if not field.is_hidden %}
+            <tr>
+                <th>{{ field.label }}</th>
+                <td>{{ field }}</td>
+            </tr>
+            {% else %}
+            {{ field }} {# hidden input only #}
+            {% endif %}
+            {% endfor %}
+            </tbody>
+            </table>
+            <div class="mb-3 text-center">
+            <button type="submit" class="btn btn-primary mt-4">Simpan</button>
+            {% if car.id %}
+            <a href="{% url 'detail_car' car.id %}" class="btn btn-success">Kembali</a>           
+            {% endif %}
+            </div>
+        </form>
+{% endblock content %}

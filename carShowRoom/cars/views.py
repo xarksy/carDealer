@@ -75,7 +75,7 @@ def create_car(request):
         'form': form
     }
 
-    return render(request,'cars/car_form.html',context)
+    return render(request,'cars/car_form_demo.html',context)
 
 
 @admin_required
