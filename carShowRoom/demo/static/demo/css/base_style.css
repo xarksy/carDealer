@@ -30,4 +30,6 @@ body.no-sidebar .main-container {
 .main-container {
     margin-top: 70px;
     margin-left: 20px;
+    flex: 1;
+    width: 100%;
 }
