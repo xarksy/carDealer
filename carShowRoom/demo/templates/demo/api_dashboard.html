@@ -21,7 +21,8 @@
   <tbody>
     {% for car in cars %}
       <tr>
-        <td>{{ car.nama }}</td>
+        {% comment %} <td>{{ car.nama }}</td> {% endcomment %}
+        <td><a href="{% url 'detail_car' car.id %}" class="text-decoration-none text-dark" style="font-weight: normal; text-decoration: none;">{{car.nama}}</td>
         <td>{{ car.merek }}</td>
         <td>{{ car.harga }}</td>
         <td>{{ car.tahun }}</td>
