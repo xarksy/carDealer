@@ -30,18 +30,12 @@ def demo_login(request):
             login(request, user)
             return redirect("demo_dashboard")
         
-    return render(request, "demo/api_login.html")
+    return render(request, "demo/demo_login.html")
 
 def demo_logout(request):
     logout(request)
     return redirect("demo_login")
 
-def demo_api_dashboard(request):
-    if not request.user.is_authenticated:
-        return redirect("demo_login")
-
-    cars = Cars.objects.all()
-    return render(request, "demo/base1.html", {"cars": cars})
 
 # ========================= > Dashboard
 
