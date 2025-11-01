@@ -2,6 +2,16 @@ body {
     min-height: 100vh;
     display: flex;
 }
+/* When sidebar is hidden, make content fully centered horizontally */
+body.no-sidebar .main-container {
+    margin-left: 0 !important;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+
+
 .sidebar {
     width: 220px;
     background: #343a40;
