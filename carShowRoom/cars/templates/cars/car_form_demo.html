@@ -1,4 +1,4 @@
-{% extends "demo/api_base.html" %}
+{% extends "demo/base.html" %}
 {% block content %}
         <form method="POST" enctype="multipart/form-data">
             {% csrf_token %} {{ form.non_field_errors }}
