@@ -9,4 +9,6 @@ urlpatterns = [
     path('', include('cars.api.urls')),
     path('', include('orders.api.urls')),
     path('', include('customer.api.urls')),
+    path('', include('users.api.urls')),
+
 ]
