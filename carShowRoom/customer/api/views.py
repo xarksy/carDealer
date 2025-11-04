@@ -1,6 +1,6 @@
-from rest_framework import viewsets, status, filters
+from rest_framework import viewsets, status, filters, generics
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from django_filters.rest_framework import DjangoFilterBackend
 from ..models import Customer
 from .serializers import CustomerSerializer, CustomerDetailSerializer
@@ -51,3 +51,8 @@ class CustomerViewSet(viewsets.ModelViewSet):
             {"message": "Customer successfully deleted"},
             status=status.HTTP_204_NO_CONTENT
         )
+
+class CustomerRegisterView(generics.CreateAPIView):
+    queryset = Customer.objects.all()
+    serializer_class = CustomerSerializer
+    permission_classes = AllowAny
