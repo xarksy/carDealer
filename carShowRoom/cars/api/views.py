@@ -5,6 +5,7 @@ from ..models import Cars
 from .serializers import CarsSerializer
 from django_filters.rest_framework import DjangoFilterBackend
 from carShowRoom.api.permissions import IsAdminOrSuperuser, IsStaffOrReadOnly
+from rest_framework.decorators import action
 
 
 class CarsViewSet(viewsets.ModelViewSet):
@@ -15,6 +16,12 @@ class CarsViewSet(viewsets.ModelViewSet):
     search_fields = ['nama','merek']
     ordering_fields = ['harga', 'tahun']
     permission_classes = [IsAdminOrSuperuser]
+
+    @action(detail=False, method=['get'], permission_classes=[permissions.AllowAny])
+    def available(self, request):
+        cars = Cars.objects.filter(status='available')
+        serializer = self.get_serializer(cars, many=True)
+        return Response(serializer.data)
 
     def create(self, request, *args, **kwargs):
         response = super().create(request, *args, **kwargs)
