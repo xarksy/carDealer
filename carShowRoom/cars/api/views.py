@@ -6,8 +6,10 @@ from .serializers import CarsSerializer
 from django_filters.rest_framework import DjangoFilterBackend
 from carShowRoom.api.permissions import IsAdminOrSuperuser, IsStaffOrReadOnly
 from rest_framework.decorators import action
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
 
-
+@method_decorator(cache_page(60 * 5), name='list') # cache for 5 minutes
 class CarsViewSet(viewsets.ModelViewSet):
     queryset = Cars.objects.all()
     serializer_class = CarsSerializer
