@@ -3,13 +3,15 @@ from rest_framework import  viewsets, filters, permissions, status
 from rest_framework.response import Response
 from ..models import Cars
 from .serializers import CarsSerializer
+from django_filters.rest_framework import DjangoFilterBackend
 from carShowRoom.api.permissions import IsAdminOrSuperuser, IsStaffOrReadOnly
 
 
 class CarsViewSet(viewsets.ModelViewSet):
     queryset = Cars.objects.all()
     serializer_class = CarsSerializer
-    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    filterset_fields = ['merek', 'model', 'tahun', 'jenis_bahan_bakar']
     search_fields = ['nama','merek']
     ordering_fields = ['harga', 'tahun']
     permission_classes = [IsAdminOrSuperuser]
