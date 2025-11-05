@@ -16,6 +16,14 @@ class CarsViewSet(viewsets.ModelViewSet):
     ordering_fields = ['harga', 'tahun']
     permission_classes = [IsAdminOrSuperuser]
 
+    def create(self, request, *args, **kwargs):
+        response = super().create(request, *args, **kwargs)
+        return Response({
+            "message": "Car successfully added",
+            "data": response.data
+        }, status=status.HTTP_201_CREATED)
+
+
     def get_permissions(self):
         user = self.request.user
 
