@@ -11,6 +11,11 @@ from rest_framework import filters
 class OrderViewSet(viewsets.ModelViewSet):
     queryset = Order.objects.all().select_related("customer", "showroom_car", "trade_in_car")
     serializer_class = OrderSerializer
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    filterset_fields = ['payment_method', 'status', 'created_by__username']
+    search_fields = ['customer__name']
+    ordering_fields = ['created_at', 'total']
+    ordering = ['-created_at']
     
     def get_queryset(self):
         """
