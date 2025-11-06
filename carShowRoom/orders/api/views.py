@@ -1,4 +1,4 @@
-from rest_framework import viewsets, permissions, status
+from rest_framework import viewsets, permissions, status, filters
 from rest_framework.response import Response
 from ..models import Order
 from .serializers import OrderSerializer, TradeInCarSerializer
@@ -6,7 +6,7 @@ from customer.models import Customer
 from cars.models import Cars
 from carShowRoom.api.permissions import IsAdminOrSuperuser
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import filters
+from rest_framework.decorators import action
 
 class OrderViewSet(viewsets.ModelViewSet):
     queryset = Order.objects.all().select_related("customer", "showroom_car", "trade_in_car")
@@ -99,3 +99,8 @@ class OrderViewSet(viewsets.ModelViewSet):
 
         serializer = OrderSerializer(order)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+    
+    @action(detail=False, methods=['get'])
+    def summary(self, request):
+        total = self.get_queryset().count()
+        return Response({"total_orders:": total})
