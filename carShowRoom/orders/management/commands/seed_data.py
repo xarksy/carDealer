@@ -19,4 +19,12 @@ class Command(BaseCommand):
                 harga=random.randint(100000000,500000000)
             )
         
+        # Seed Customers
+        for _ in range(5):
+            Customer.objects.get_or_create(
+                nama=fake.name(),
+                email=fake.email(),
+                phone=fake.phone_number()
+            )
+        
         
