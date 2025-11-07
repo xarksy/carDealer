@@ -85,6 +85,10 @@ class OrderViewSet(viewsets.ModelViewSet):
             except Cars.DoesNotExist:
                 return Response({"error": "Showroom car not found"}, status=status.HTTP_404_NOT_FOUND)
         
+        if offer_type not in ["buy", "sell", "trade-in"]:
+            return Response({"error": "Invalid offer type."}, status=status.HTTP_400_BAD_REQUEST)
+
+
         trade_in_car = None
         if trade_in_car_data:
             trade_in_car_serializer = TradeInCarSerializer(data=trade_in_car_data)
