@@ -7,6 +7,7 @@ from cars.models import Cars
 from carShowRoom.api.permissions import IsAdminOrSuperuser
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.decorators import action
+from django.db import transaction
 
 class OrderViewSet(viewsets.ModelViewSet):
     queryset = Order.objects.all().select_related("customer", "showroom_car", "trade_in_car")
@@ -89,23 +90,24 @@ class OrderViewSet(viewsets.ModelViewSet):
             return Response({"error": "Invalid offer type."}, status=status.HTTP_400_BAD_REQUEST)
 
 
-        trade_in_car = None
-        if trade_in_car_data:
-            trade_in_car_serializer = TradeInCarSerializer(data=trade_in_car_data)
-            if trade_in_car_serializer.is_valid():
-                trade_in_car = trade_in_car_serializer.save(customer=customer)
-            else:
-                return Response(trade_in_car_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        with transaction.atomic():
+            trade_in_car = None
+            if trade_in_car_data:
+                trade_in_car_serializer = TradeInCarSerializer(data=trade_in_car_data)
+                if trade_in_car_serializer.is_valid():
+                    trade_in_car = trade_in_car_serializer.save(customer=customer)
+                else:
+                    return Response(trade_in_car_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-        order = Order.objects.create(
-            customer=customer,
-            showroom_car=showroom_car,
-            offer_type=offer_type,
-            trade_in_car=trade_in_car,
-        )
+            order = Order.objects.create(
+                customer=customer,
+                showroom_car=showroom_car,
+                offer_type=offer_type,
+                trade_in_car=trade_in_car,
+            )
 
-        serializer = OrderSerializer(order)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+            serializer = OrderSerializer(order)
+        return Response({"message": "Order created successfully","order": serializer.data}, status=status.HTTP_201_CREATED)
     
     @action(detail=False, methods=['get'])
     def summary(self, request):
