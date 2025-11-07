@@ -55,4 +55,4 @@ class CustomerViewSet(viewsets.ModelViewSet):
 class CustomerRegisterView(generics.CreateAPIView):
     queryset = Customer.objects.all()
     serializer_class = CustomerSerializer
-    permission_classes = AllowAny
+    permission_classes = [AllowAny]
