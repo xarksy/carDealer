@@ -111,5 +111,13 @@ class OrderViewSet(viewsets.ModelViewSet):
     
     @action(detail=False, methods=['get'])
     def summary(self, request):
-        total = self.get_queryset().count()
-        return Response({"total_orders:": total})
+        orders = self.get_queryset()
+        total_orders = orders.count()
+        total_sales = sum(o.total for o in orders)
+        avg_sale = total_sales / total_orders if total_orders else 0
+
+        return Response({
+            "total_orders": total_orders,
+            "total_sales": round(total_sales, 2),
+            "average_sale": round(avg_sale, 2),
+        })
