@@ -48,7 +48,7 @@ class OrderViewSet(viewsets.ModelViewSet):
         user = self.request.user
 
         if not user.is_authenticated:
-            return [permissions.IsAuthenticated()] # must log in
+            return [permissions.AllowAny()] # must log in
         
         # 🧩 Admin: full access
         if user.is_superuser or getattr(user, "role", "") == "admin":
