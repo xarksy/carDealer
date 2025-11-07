@@ -27,4 +27,13 @@ class Command(BaseCommand):
                 phone=fake.phone_number()
             )
         
+        # Seed Orders
+        cars = list(Cars.objects.all())
+        customers = list(Customer.objects.all())
+        for _ in range(15):
+            Order.objects.get_or_create(
+                customer=random.choice(customers),
+                car=random.choice(cars),
+            )
         
+        self.stdout.write(self.style.SUCCESS("🌱 Database seeded successfully!"))
