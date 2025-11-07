@@ -19,7 +19,7 @@ class CarsViewSet(viewsets.ModelViewSet):
     ordering_fields = ['harga', 'tahun']
     permission_classes = [IsAdminOrSuperuser]
 
-    @action(detail=False, method=['get'], permission_classes=[permissions.AllowAny])
+    @action(detail=False, methods=['get'], permission_classes=[permissions.AllowAny])
     def available(self, request):
         cars = Cars.objects.filter(status='available')
         serializer = self.get_serializer(cars, many=True)

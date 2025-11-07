@@ -26,20 +26,23 @@ class OrderViewSet(viewsets.ModelViewSet):
         """
         user = self.request.user
 
+        qs = Order.objects.none()
         # 🧩 Admin / superuser → all orders
         if user.is_superuser or getattr(user, "role", "") == "admin":
-            return Order.objects.all().select_related("customer","showroom_car","trade_in_car")
-
+            # return Order.objects.all().select_related("customer","showroom_car","trade_in_car")
+            qs = Order.objects.all()
         # 🧩 Salesperson → all orders, but can’t modify
-        if user.is_staff or getattr(user, "role", "") == "sales":
-            return Order.objects.all().select_related("customer", "showroom_car","trade_in_car")
-        
+        elif user.is_staff or getattr(user, "role", "") == "sales":
+            # return Order.objects.all().select_related("customer", "showroom_car","trade_in_car")
+            qs = Order.objects.all()
         # 🧩 Customer → only own orders
-        if getattr(user, "role", "") == "customer":
-            return Order.objects.filter(customer__user=user).select_related("customer", "showroom_car", "trade_in_car")
+        elif getattr(user, "role", "") == "customer":
+            qs = Order.objects.filter(customer__user=user)
+            # return Order.objects.filter(customer__user=user).select_related("customer", "showroom_car", "trade_in_car")
         
         # default fallback
-        return Order.objects.none()
+        # return Order.objects.none()
+        return qs.select_related("customer", "showroom_car", "trade_in_car")
 
     def get_permissions(self):
         user = self.request.user
