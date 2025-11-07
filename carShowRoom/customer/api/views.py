@@ -1,4 +1,4 @@
-from rest_framework import viewsets, status, filters, generics
+from rest_framework import viewsets, status, filters, generics, serializers
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from django_filters.rest_framework import DjangoFilterBackend
@@ -56,3 +56,20 @@ class CustomerRegisterView(generics.CreateAPIView):
     queryset = Customer.objects.all()
     serializer_class = CustomerSerializer
     permission_classes = [AllowAny]
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        email = serializer.validated_data.get("email")
+
+        if Customer.objects.filter(email=email).exists():
+            return Response(
+                {"status": "error", "message": "Email already registered"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        self.perform_create(serializer)
+        return Response(
+            {"status": "success", "message": "Customer registered successfully", "data": serializer.data},
+            status=status.HTTP_201_CREATED
+        )
