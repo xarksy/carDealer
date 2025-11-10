@@ -178,49 +178,6 @@ def car_service(request, car_id):
 
     return render(request,'cars/service_history_form.html', context=context)
 
-
-#===============================  Dashboard view
-@admin_required
-def dashboard_car_list(request):
-
-    context = {
-        'cars' : Cars.objects.all()
-    }
-
-    return render(request,'cars/dashboard/car_list.html',context)
-
-@admin_required
-def dashboard_customer_list(request):
-    context = {
-        'orders' : Order.objects.select_related("customer","trade_in_car").all()
-    }
-
-    return render(request,'cars/dashboard/customer_list.html',context)
-
-@admin_required
-def dashboard_of_dashboard(request):    
-    total_order = Order.objects.count()
-    total_customers = Customer.objects.count()
-    total_cars = Cars.objects.count()
-
-    total_income = Order.objects.aggregate(total=Sum("showroom_car__harga"))["total"] or 0
-    order_per_month = (
-        Order.objects.values("created_at__month")
-        .annotate(total=Count("id"))
-        .order_by("created_at__month")
-    )
-
-    context = {
-        'total_order' : total_order,
-        'total_customer' : total_customers,
-        'total_cars' : total_cars,
-        'total_income' : total_income,
-        'order_per_month' : order_per_month,
-    }
-    
-
-    return render(request, 'cars/dashboard/dashboard.html', context=context)
-
 #=============== success page
 def success_page(request):
 
