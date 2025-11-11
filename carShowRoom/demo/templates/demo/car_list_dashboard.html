@@ -33,6 +33,8 @@
           <a href="{% url 'update_car' car.id %}?next={% url 'demo_carlist_dashboard' %}" class="btn btn-sm btn-warning">Edit</a>
           {% comment %} <a href="#" class="btn btn-sm btn-danger">Delete</a> {% endcomment %}
           <a href="{% url 'delete_car' car.id %}?next={% url 'demo_carlist_dashboard' %}" class="btn btn-sm btn-danger">Delete</a>
+          <a href="{% url 'service_history' car.id %}?next={% url 'demo_carlist_dashboard' %}" class="btn btn-sm btn-success">Tambah data service</a>
+
         </td>
         {% elif request.user.role == 'sales' %}
         <td>
