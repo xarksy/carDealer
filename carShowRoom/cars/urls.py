@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.urls import path, include
-from .views import carList, create_car, detail_car, updateCar, deleteCar, car_service_plain, car_service, dashboard_car_list, success_page, dashboard_customer_list, dashboard_of_dashboard
+from .views import carList, create_car, detail_car, updateCar, deleteCar, car_service_plain, car_service, success_page
 from users.views import userlist_view
 
 urlpatterns = [
