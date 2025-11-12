@@ -11,7 +11,7 @@ from django.views.decorators.cache import cache_page
 
 @method_decorator(cache_page(60 * 5), name='list') # cache for 5 minutes
 class CarsViewSet(viewsets.ModelViewSet):
-    queryset = Cars.objects.all()
+    queryset = Cars.objects.all().order_by('id')
     serializer_class = CarsSerializer
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     filterset_fields = ['merek', 'model', 'tahun', 'jenis_bahan_bakar']
