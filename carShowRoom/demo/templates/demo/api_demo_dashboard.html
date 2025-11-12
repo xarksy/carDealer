@@ -1,4 +1,32 @@
 {% extends 'demo/base.html' %}
 {% block content %}
+<h1>Car Dealer Dashboard</h1>
+<button id="loadCars">Load Cars</button>
+<table id="carsTable" border="1"></table>
+
+<script>
+    async function login() {
+      const res = await fetch("/api/token/", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({username: "kook", password: "-123-123"})
+      });
+      const data = await res.json();
+      return data.access;
+    }
+
+    async function loadCars() {
+      const token = await login();
+      const res = await fetch("/api/cars/", {
+        headers: {"Authorization": `Bearer ${token}`}
+      });
+      const cars = await res.json();
+      const table = document.getElementById("carsTable");
+      table.innerHTML = "<tr><th>ID</th><th>Name</th><th>Brand</th></tr>" +
+        cars.results.map(c => `<tr><td>${c.id}</td><td>${c.nama}</td><td>${c.merek}</td></tr>`).join("");
+    }
+
+    document.getElementById("loadCars").addEventListener("click", loadCars);
+  </script>
 
 {% endblock content %}
