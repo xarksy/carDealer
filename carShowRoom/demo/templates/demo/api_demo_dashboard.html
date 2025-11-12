@@ -2,6 +2,7 @@
 {% block content %}
 <h1>Car Dealer Dashboard</h1>
 <button id="loadCars">Load Cars</button>
+<p id="status"></p> <!-- 👈 status message placeholder -->
 <table id="carsTable" border="1"></table>
 
 <script>
@@ -14,7 +15,7 @@
 
     if (!res.ok) {
       console.error("Login failed:", res.status);
-      return null; // stop if login failed
+      return null;
     }
 
     const data = await res.json();
@@ -22,33 +23,51 @@
       console.error("No access token:", data);
       return null;
     }
+
     return data.access;
   }
 
   async function loadCars() {
+    const status = document.getElementById("status");
+    const table = document.getElementById("carsTable");
+
+    // Reset UI
+    table.innerHTML = "";
+    status.textContent = "🔄 Loading cars...";
+
     const token = await login();
     if (!token) {
-      alert("Login failed — please check your credentials.");
+      status.textContent = "❌ Login failed — please check your credentials.";
       return;
     }
 
-    const res = await fetch("/api/cars/", {
-      headers: {"Authorization": `Bearer ${token}`}
-    });
+    try {
+      const res = await fetch("/api/cars/", {
+        headers: {"Authorization": `Bearer ${token}`}
+      });
 
-    if (!res.ok) {
-      alert("Unauthorized or error fetching cars");
-      return;
+      if (!res.ok) {
+        status.textContent = `⚠️ Error fetching cars: ${res.status}`;
+        return;
+      }
+
+      const cars = await res.json();
+
+      // Update the table
+      if (cars.results && cars.results.length > 0) {
+        table.innerHTML = "<tr><th>ID</th><th>Name</th><th>Brand</th></tr>" +
+          cars.results.map(c => `<tr><td>${c.id}</td><td>${c.nama}</td><td>${c.merek}</td></tr>`).join("");
+        status.textContent = "✅ Cars loaded successfully.";
+      } else {
+        status.textContent = "ℹ️ No cars found.";
+      }
+    } catch (error) {
+      console.error(error);
+      status.textContent = "❌ Network error — please try again.";
     }
-
-    const cars = await res.json();
-    const table = document.getElementById("carsTable");
-    table.innerHTML = "<tr><th>ID</th><th>Name</th><th>Brand</th></tr>" +
-      cars.results.map(c => `<tr><td>${c.id}</td><td>${c.nama}</td><td>${c.merek}</td></tr>`).join("");
   }
 
   document.getElementById("loadCars").addEventListener("click", loadCars);
 </script>
-
 
 {% endblock content %}
