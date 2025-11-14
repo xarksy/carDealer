@@ -26,7 +26,7 @@ def login_view(request):
 
 def logout_view(request):
     logout(request)
-    return redirect("login")
+    return redirect("demo_login")
 
 def api_login(request):
     return render(request,'api_login.html')
