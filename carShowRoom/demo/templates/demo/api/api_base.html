@@ -1,25 +1,119 @@
 <div class="container my-5">
+
+    <!-- Page Title -->
     <h2 class="text-center mb-3">API Demo & Documentation</h2>
-    <p class="text-center text-muted">Use the Auth tab to obtain a JWT token, then test endpoints.</p>
+    <p class="text-center text-muted">
+        Use the Auth tab to obtain a JWT token, then test Customers, Cars, and Orders API endpoints.
+    </p>
+
+    <!-- Active Token -->
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body d-flex align-items-center">
+                    <div>
+                        <strong>Active Token:</strong>
+                        <div>
+                            <code id="activeToken">Bearer demo-token-123 (no token)</code>
+                        </div>
+                    </div>
+                    <div class="ms-auto">
+                        <button class="btn btn-sm btn-outline-secondary" onclick="copyToken()">
+                            Copy Token
+                        </button>
+                        <button class="btn btn-sm btn-outline-danger ms-2" onclick="clearToken()">
+                            Clear
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 text-end">
+            <small class="text-muted">
+                Base API path: <code>/api/</code>
+            </small>
+        </div>
+    </div>
 
     {% include "demo/api/api_response_panels.html" %}
 
     <!-- Tabs -->
     <ul class="nav nav-tabs" id="apiTabs" role="tablist">
-        <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#auth">Auth</button></li>
-        <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#customers">Customers</button></li>
-        <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#cars">Cars</button></li>
-        <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#orders">Orders</button></li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active"
+                    id="auth-tab"
+                    data-bs-toggle="tab"
+                    data-bs-target="#auth"
+                    type="button"
+                    role="tab">
+                Auth
+            </button>
+        </li>
+
+        <li class="nav-item" role="presentation">
+            <button class="nav-link"
+                    id="customers-tab"
+                    data-bs-toggle="tab"
+                    data-bs-target="#customers"
+                    type="button"
+                    role="tab">
+                Customers
+            </button>
+        </li>
+
+        <li class="nav-item" role="presentation">
+            <button class="nav-link"
+                    id="cars-tab"
+                    data-bs-toggle="tab"
+                    data-bs-target="#cars"
+                    type="button"
+                    role="tab">
+                Cars
+            </button>
+        </li>
+
+        <li class="nav-item" role="presentation">
+            <button class="nav-link"
+                    id="orders-tab"
+                    data-bs-toggle="tab"
+                    data-bs-target="#orders"
+                    type="button"
+                    role="tab">
+                Orders
+            </button>
+        </li>
     </ul>
 
+    <!-- Tab Content -->
     <div class="tab-content mt-3">
-        <div class="tab-pane fade show active" id="auth">{% include "demo/api/api_auth.html" %}</div>
-        <div class="tab-pane fade" id="customers">{% include "demo/api/api_customers.html" %}</div>
-        <div class="tab-pane fade" id="cars">{% include "demo/api/api_cars.html" %}</div>
-        <div class="tab-pane fade" id="orders">{% include "demo/api/api_orders.html" %}</div>
+
+        <!-- Auth Tab -->
+        <div class="tab-pane fade show active" id="auth" role="tabpanel">
+            {% include "demo/api/api_auth.html" %}
+        </div>
+
+        <!-- Customers Tab -->
+        <div class="tab-pane fade" id="customers" role="tabpanel">
+            {% include "demo/api/api_customers.html" %}
+        </div>
+
+        <!-- Cars Tab -->
+        <div class="tab-pane fade" id="cars" role="tabpanel">
+            {% include "demo/api/api_cars.html" %}
+        </div>
+
+        <!-- Orders Tab -->
+        <div class="tab-pane fade" id="orders" role="tabpanel">
+            {% include "demo/api/api_orders.html" %}
+        </div>
+
     </div>
 
+    <!-- Shared Modals -->
     {% include "demo/api/api_modals.html" %}
+
 </div>
 
+<!-- Shared Scripts -->
 {% include "demo/api/api_scripts.html" %}
