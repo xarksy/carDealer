@@ -79,3 +79,7 @@ def dashboard_customer_list(request):
     return render(request,'demo/api_demo_dashboard.html',context)
 
 
+# ==================> Demo API
+def demo_api(request):
+
+    return render(request,'demo/api/demo_api.html')
