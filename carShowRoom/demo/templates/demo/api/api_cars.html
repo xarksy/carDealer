@@ -1,0 +1,42 @@
+<div class="row">
+
+    <!-- LEFT SIDE: Actions -->
+    <div class="col-md-6">
+
+        <!-- GET /api/cars/ -->
+        <div class="card mb-3">
+            <div class="card-header">GET /api/cars/ (Public)</div>
+            <div class="card-body">
+                <p>Fetch all cars. This does not require authentication.</p>
+
+                <button class="btn btn-primary"
+                        onclick="tryApi('GET','/api/cars/')">
+                    Try GET /api/cars/
+                </button>
+
+                <button class="btn btn-outline-success ms-2"
+                        onclick="tryApi('GET','/api/cars/available/')">
+                    Available Cars
+                </button>
+            </div>
+        </div>
+
+        <!-- POST /api/cars/ -->
+        <div class="card mb-3">
+            <div class="card-header">POST /api/cars/ &mdash; Create Car</div>
+
+            <div class="card-body">
+
+                <form id="createCarForm"
+                      onsubmit="event.preventDefault(); createCar();">
+
+                    <div class="mb-2">
+                        <label class="form-label">Name</label>
+                        <input id="car_name" class="form-control" required />
+                    </div>
+
+                    <div class="mb-2">
+                        <label class="form-label">Price</label>
+                        <input id="car_price"
+                               class="form-control"
+                               type="number"
