@@ -112,4 +112,31 @@ function getAuthHeaders() {
 }
 
 
+
+/* ============================================================
+   GENERIC API CALL
+   ============================================================ */
+async function tryApi(method, endpoint, body = null, overrideTarget = null) {
+    const headers = getAuthHeaders();
+
+    const res = await fetch(endpoint, {
+        method,
+        headers,
+        body: body ? JSON.stringify(body) : null
+    });
+
+    let data;
+    try {
+        data = await res.json();
+    } catch {
+        data = { error: "Non-JSON response" };
+    }
+
+    const target = overrideTarget || getTargetByEndpoint(endpoint);
+    if (target) showResponse(target, data, res.status);
+
+    return { ok: res.ok, status: res.status };
+}
+
+
 </script>
