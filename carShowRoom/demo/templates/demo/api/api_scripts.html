@@ -139,4 +139,13 @@ async function tryApi(method, endpoint, body = null, overrideTarget = null) {
 }
 
 
+/* ============================================================
+   API CALL WITH ID
+   ============================================================ */
+function tryApiWithId(method, base, id, suffix = '/') {
+    if (!id) return alert("Please provide an ID");
+    const endpoint = base + id + suffix;
+    return tryApi(method, endpoint);
+}
+
 </script>
