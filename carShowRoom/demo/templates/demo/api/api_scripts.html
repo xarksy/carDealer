@@ -74,5 +74,28 @@ async function obtainToken() {
     }
 }
 
+/* ============================================================
+   AUTH: Refresh Token
+   ============================================================ */
+async function refreshToken() {
+    const refresh = document.getElementById("refreshTokenInput").value;
+    if (!refresh) return alert("Paste refresh token first.");
+
+    const res = await fetch("/api/token/refresh/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ refresh })
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
+        setTokenFrom(data.access, data.refresh || null);
+        alert("Token refreshed.");
+    } else {
+        alert("Refresh failed: " + JSON.stringify(data));
+    }
+}
+
 
 </script>
