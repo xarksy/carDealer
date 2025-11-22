@@ -98,4 +98,18 @@ async function refreshToken() {
 }
 
 
+/* ============================================================
+   UTIL: Build request headers
+   ============================================================ */
+function getAuthHeaders() {
+    const headers = { "Content-Type": "application/json" };
+    const token = document.getElementById("activeToken").textContent;
+
+    if (token.startsWith("Bearer ") && !token.includes("(no token)")) {
+        headers["Authorization"] = token;
+    }
+    return headers;
+}
+
+
 </script>
