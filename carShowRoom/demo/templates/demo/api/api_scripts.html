@@ -16,6 +16,40 @@ function showResponse(targetId, data, status = 200) {
     pre.textContent = "HTTP " + status + "\n\n" + JSON.stringify(data, null, 4);
 }
 
+/* ============================================================
+   TOKEN HANDLING
+   ============================================================ */
+function setTokenFrom(access, refresh = null) {
+    const tokenDisplay = document.getElementById('activeToken');
+
+    if (!access) {
+        tokenDisplay.textContent = "Bearer demo-token-123 (no token)";
+        return;
+    }
+
+    tokenDisplay.textContent = "Bearer " + access;
+
+    // save to localStorage
+    localStorage.setItem('api_demo_access', access);
+    if (refresh) localStorage.setItem('api_demo_refresh', refresh);
+}
+
+function copyToken() {
+    navigator.clipboard.writeText(document.getElementById('activeToken').textContent);
+    alert("Token copied to clipboard");
+}
+
+function clearToken() {
+    setTokenFrom(null);
+    localStorage.removeItem('api_demo_access');
+    localStorage.removeItem('api_demo_refresh');
+}
+
+function useDemoToken() {
+    setTokenFrom("demo-token-123");
+}
+
+
 
 
 </script>
