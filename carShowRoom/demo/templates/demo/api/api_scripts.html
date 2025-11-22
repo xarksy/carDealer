@@ -51,5 +51,28 @@ function useDemoToken() {
 
 
 
+/* ============================================================
+   AUTH: Obtain JWT token
+   ============================================================ */
+async function obtainToken() {
+    const username = document.getElementById("loginUsername").value;
+    const password = document.getElementById("loginPassword").value;
+
+    const res = await fetch("/api/token/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password })
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
+        setTokenFrom(data.access, data.refresh || null);
+        alert("Token obtained.");
+    } else {
+        alert("Login failed: " + JSON.stringify(data));
+    }
+}
+
 
 </script>
