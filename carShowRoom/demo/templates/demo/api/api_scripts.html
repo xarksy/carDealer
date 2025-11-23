@@ -148,4 +148,21 @@ function tryApiWithId(method, base, id, suffix = '/') {
     return tryApi(method, endpoint);
 }
 
+/* ============================================================
+   CUSTOMERS: Create
+   ============================================================ */
+async function createCustomer() {
+    const body = {
+        name: document.getElementById("cust_name").value,
+        email: document.getElementById("cust_email").value,
+        phone: document.getElementById("cust_phone").value,
+    };
+    await tryApi("POST", "/api/customers/", body);
+}
+
+async function getCustomersIds() {
+    await tryApi("GET", "/api/customers/");
+}
+
+
 </script>
