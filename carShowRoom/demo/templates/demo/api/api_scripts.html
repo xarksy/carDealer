@@ -198,5 +198,45 @@ async function createOrder() {
     await tryApi("POST", "/api/orders/", body);
 }
 
+/* ============================================================
+   EDIT (PUT) MODAL: Open modal with dynamic fields
+   ============================================================ */
+async function openEditModalFor(base, id) {
+    if (!id) return alert("Please enter ID first");
+
+    const endpoint = base + id + "/";
+
+    // Fetch existing resource
+    const res = await fetch(endpoint, { headers: getAuthHeaders() });
+    const data = await res.json();
+
+    // Build form fields dynamically
+    const container = document.getElementById("editFields");
+    container.innerHTML = ""; // clear
+
+    Object.entries(data).forEach(([key, value]) => {
+        // skip nested objects
+        if (typeof value === "object" && value !== null) return;
+
+        const type = typeof value === "number" ? "number" : "text";
+        container.innerHTML += `
+            <div class="mb-2">
+                <label class="form-label">${key}</label>
+                <input class="form-control"
+                       data-key="${key}"
+                       type="${type}"
+                       value="${value ?? ''}" />
+            </div>
+        `;
+    });
+
+    // set hidden fields
+    document.getElementById("edit_endpoint").value = base;
+    document.getElementById("edit_id").value = id;
+
+    // show modal
+    const modal = new bootstrap.Modal(document.getElementById("editModal"));
+    modal.show();
+}
 
 </script>
