@@ -164,5 +164,19 @@ async function getCustomersIds() {
     await tryApi("GET", "/api/customers/");
 }
 
+/* ============================================================
+   CARS: Create
+   ============================================================ */
+async function createCar() {
+    const body = {
+        name: document.getElementById("car_name").value,
+        price: parseFloat(document.getElementById("car_price").value || 0),
+        status: document.getElementById("car_status").value
+    };
+
+    await tryApi("POST", "/api/cars/", body);
+}
+
+
 
 </script>
