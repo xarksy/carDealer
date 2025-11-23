@@ -239,4 +239,34 @@ async function openEditModalFor(base, id) {
     modal.show();
 }
 
+/* ============================================================
+   EDIT (PUT): Submit modal changes
+   ============================================================ */
+async function submitEdit() {
+    const endpoint = document.getElementById("edit_endpoint").value;
+    const id = document.getElementById("edit_id").value;
+    const inputs = document.querySelectorAll("#editFields [data-key]");
+    const body = {};
+
+    inputs.forEach(input => {
+        const key = input.getAttribute("data-key");
+        let val = input.value;
+
+        if (input.type === "number") val = parseFloat(val);
+
+        try {
+            body[key] = JSON.parse(val);
+        } catch {
+            body[key] = val;
+        }
+    });
+
+    await tryApi("PUT", endpoint + id + "/", body);
+
+    // Close modal
+    const modalObj = bootstrap.Modal.getInstance(document.getElementById("editModal"));
+    if (modalObj) modalObj.hide();
+}
+
+
 </script>
