@@ -178,5 +178,25 @@ async function createCar() {
 }
 
 
+/* ============================================================
+   ORDERS: Create
+   ============================================================ */
+async function createOrder() {
+    let items;
+    try {
+        items = JSON.parse(document.getElementById("order_items").value);
+    } catch {
+        return alert("Items must be valid JSON");
+    }
+
+    const body = {
+        customer: document.getElementById("order_customer").value,
+        items: items,
+        total: parseFloat(document.getElementById("order_total").value || 0),
+    };
+
+    await tryApi("POST", "/api/orders/", body);
+}
+
 
 </script>
