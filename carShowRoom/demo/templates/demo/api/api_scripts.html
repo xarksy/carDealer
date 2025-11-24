@@ -268,5 +268,16 @@ async function submitEdit() {
     if (modalObj) modalObj.hide();
 }
 
+/* ============================================================
+   INIT: Restore token if saved
+   ============================================================ */
+(function init() {
+    const access = localStorage.getItem("api_demo_access");
+    const refresh = localStorage.getItem("api_demo_refresh");
+
+    if (access) {
+        setTokenFrom(access, refresh);
+    }
+})();
 
 </script>
