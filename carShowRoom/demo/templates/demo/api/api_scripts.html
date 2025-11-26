@@ -95,7 +95,12 @@ async function obtainToken() {
     const data = await res.json();
 
     if (res.ok) {
-        setTokenFrom(data.access, data.refresh || null);
+        setTokenFrom(data.access, data.refresh);
+
+        // Autofill the refresh token input box
+        const rt = document.getElementById("refreshTokenInput");
+        if (rt && data.refresh) rt.value = data.refresh;
+
         alert("Token obtained.");
     } else {
         alert("Login failed: " + JSON.stringify(data));
