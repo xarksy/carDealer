@@ -81,29 +81,15 @@
     <!-- Sample Requests Panel -->
     <div class="col-md-6">
         <div class="card h-100">
-            <div class="card-header">Sample Auth Requests</div>
-
+            <div class="card-header">Auth — Live Response</div>
             <div class="card-body">
-
-                <!-- Login -->
-                <h6>POST /api/token/</h6>
-                <pre class="bg-light p-2 rounded">
-{
-  "username": "demo",
-  "password": "password123"
-}
+                <pre id="authResponse"
+                    class="bg-dark text-white p-3"
+                    style="min-height:200px">
+    Use the buttons to test authentication endpoints.
                 </pre>
-
-                <!-- Refresh -->
-                <h6 class="mt-3">POST /api/token/refresh/</h6>
-                <pre class="bg-light p-2 rounded">
-{
-  "refresh": "your-refresh-token"
-}
-                </pre>
-
             </div>
-        </div>
+        </div>    
     </div>
 
 </div>
