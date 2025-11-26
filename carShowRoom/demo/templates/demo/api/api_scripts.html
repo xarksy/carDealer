@@ -40,19 +40,27 @@ function showResponse(targetId, data, status = 200) {
    TOKEN HANDLING
    ============================================================ */
 function setTokenFrom(access, refresh = null) {
-    const tokenDisplay = document.getElementById('activeToken');
+
+    const accessBox = document.getElementById("activeToken");
+    const refreshBox = document.getElementById("refreshTokenDisplay");
 
     if (!access) {
-        tokenDisplay.textContent = "Bearer demo-token-123 (no token)";
+        accessBox.textContent = "No access token";
+        refreshBox.textContent = "No refresh token";
         return;
     }
 
-    tokenDisplay.textContent = "Bearer " + access;
+    accessBox.textContent = access.startsWith("Bearer") ? access : "Bearer " + access;
 
-    // save to localStorage
-    localStorage.setItem('api_demo_access', access);
-    if (refresh) localStorage.setItem('api_demo_refresh', refresh);
+    if (refresh) {
+        refreshBox.textContent = refresh;
+        localStorage.setItem("api_demo_refresh", refresh);
+    } else {
+        const saved = localStorage.getItem("api_demo_refresh");
+        refreshBox.textContent = saved || "No refresh token";
+    }
 }
+
 
 function copyToken() {
     navigator.clipboard.writeText(document.getElementById('activeToken').textContent);
