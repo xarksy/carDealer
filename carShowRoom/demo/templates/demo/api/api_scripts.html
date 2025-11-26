@@ -280,4 +280,14 @@ async function submitEdit() {
     }
 })();
 
+
+/* ============================================================
+   Get user profile
+   ============================================================ */
+async function getProfile() {
+    await tryApi("GET", "/api/user/profile/", null, "authResponse");
+    document.getElementById("authResponseContainer").classList.remove("d-none");
+}
+
+
 </script>
