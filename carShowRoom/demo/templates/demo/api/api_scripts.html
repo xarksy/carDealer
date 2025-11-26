@@ -9,12 +9,25 @@ function getTargetByEndpoint(endpoint) {
     return null;
 }
 
+{% comment %} function showResponse(targetId, data, status = 200) {
+    const pre = document.getElementById(targetId);
+    if (!pre) return;
+
+    pre.textContent = "HTTP " + status + "\n\n" + JSON.stringify(data, null, 4);
+} {% endcomment %}
+
 function showResponse(targetId, data, status = 200) {
+
+    // Make the correct response box visible
+    const container = document.getElementById(targetId + "Container");
+    if (container) container.classList.remove("d-none");
+
     const pre = document.getElementById(targetId);
     if (!pre) return;
 
     pre.textContent = "HTTP " + status + "\n\n" + JSON.stringify(data, null, 4);
 }
+
 
 /* ============================================================
    TOKEN HANDLING
