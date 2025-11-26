@@ -8,25 +8,43 @@
 
     <!-- Active Token -->
         <div class="card mb-4">
-        <div class="card-body d-flex align-items-center">
+        <div class="card-body">
 
-            <div style="flex-grow: 1;">
-                <strong>Active Token:</strong>
+            <div class="mb-3">
+                <strong>Access Token:</strong>
                 <code id="activeToken" style="
                     white-space: normal;
                     word-break: break-all;
                     display: block;
-                ">Bearer demo-token-123 (no token)</code>
+                    background: #f8f9fa;
+                    padding: 8px;
+                    border-radius: 6px;
+                    border: 1px solid #e1e1e1;
+                ">No access token</code>
             </div>
 
-            <div class="ms-3 text-end">
-                <button class="btn btn-sm btn-outline-secondary" onclick="copyToken()">Copy</button>
+            <div class="mb-3">
+                <strong>Refresh Token:</strong>
+                <code id="refreshTokenDisplay" style="
+                    white-space: normal;
+                    word-break: break-all;
+                    display: block;
+                    background: #f8f9fa;
+                    padding: 8px;
+                    border-radius: 6px;
+                    border: 1px solid #e1e1e1;
+                ">No refresh token</code>
+            </div>
+
+            <div class="text-end">
+                <button class="btn btn-sm btn-outline-secondary" onclick="copyAccessToken()">Copy Access</button>
+                <button class="btn btn-sm btn-outline-secondary ms-2" onclick="copyRefreshToken()">Copy Refresh</button>
                 <button class="btn btn-sm btn-outline-danger ms-2" onclick="clearToken()">Clear</button>
-                <div class="mt-1 small text-muted">Base API: /api/</div>
             </div>
 
         </div>
     </div>
+
 
 
     {% comment %} {% include "demo/api/api_response_panels.html" %} {% endcomment %}

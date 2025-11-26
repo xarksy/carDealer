@@ -98,7 +98,13 @@ async function obtainToken() {
    AUTH: Refresh Token
    ============================================================ */
 async function refreshToken() {
-    const refresh = document.getElementById("refreshTokenInput").value;
+    let refresh = document.getElementById("refreshTokenInput").value.trim();
+
+    // If user pasted "Bearer <token>" → strip "Bearer "
+    if (refresh.toLowerCase().startsWith("bearer ")) {
+        refresh = refresh.slice(7);  // remove "Bearer "
+    }
+
     if (!refresh) return alert("Paste refresh token first.");
 
     const res = await fetch("/api/token/refresh/", {
