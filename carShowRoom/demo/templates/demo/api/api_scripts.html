@@ -137,17 +137,17 @@ async function refreshToken() {
 }
 
 
-    function copyAccessToken() {
-        const t = document.getElementById("activeToken").textContent.trim();
-        navigator.clipboard.writeText(t);
-        alert("Access token copied");
-    }
+function copyAccessToken() {
+    const t = document.getElementById("activeToken").textContent.trim();
+    navigator.clipboard.writeText(t);
+    alert("Access token copied");
+}
 
-    function copyRefreshToken() {
-        const t = document.getElementById("refreshTokenDisplay").textContent.trim();
-        navigator.clipboard.writeText(t);
-        alert("Refresh token copied");
-    }
+function copyRefreshToken() {
+    const t = document.getElementById("refreshTokenDisplay").textContent.trim();
+    navigator.clipboard.writeText(t);
+    alert("Refresh token copied");
+}
 
 
 /* ============================================================
