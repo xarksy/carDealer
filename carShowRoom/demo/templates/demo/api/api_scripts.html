@@ -71,6 +71,9 @@ function clearToken() {
     setTokenFrom(null);
     localStorage.removeItem('api_demo_access');
     localStorage.removeItem('api_demo_refresh');
+
+    const badge = document.getElementById("tokenRefreshedBadge");
+    if (badge) badge.style.display = "none";
 }
 
 function useDemoToken() {
