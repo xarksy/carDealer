@@ -131,6 +131,9 @@ async function refreshToken() {
     if (res.ok) {
         setTokenFrom(data.access, data.refresh || null);
         alert("Token refreshed.");
+
+        showTokenRefreshedBadge();
+
     } else {
         alert("Refresh failed: " + JSON.stringify(data));
     }
