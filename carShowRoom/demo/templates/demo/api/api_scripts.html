@@ -341,5 +341,30 @@ async function getProfile() {
 }
 
 
+/* ============================================================
+   Color animation access token text
+   ============================================================ */
+
+function showTokenRefreshedBadge() {
+    const badge = document.getElementById("tokenRefreshedBadge");
+    if (!badge) return;
+
+    // Generate random vibrant color
+    const colors = ["#28a745", "#17a2b8", "#ffc107", "#fd7e14", "#dc3545", "#6610f2"];
+    const color = colors[Math.floor(Math.random() * colors.length)];
+
+    badge.style.backgroundColor = color;
+    badge.style.display = "inline-block";
+
+    // Add small animation
+    badge.style.opacity = "1";
+    badge.style.transform = "scale(1.05)";
+
+    setTimeout(() => {
+        badge.style.opacity = "0.9";
+        badge.style.transform = "scale(1)";
+    }, 200);
+}
+
 
 </script>
