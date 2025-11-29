@@ -372,5 +372,23 @@ function showTokenRefreshedBadge() {
     }, 200);
 }
 
+/* ============================================================
+   Trigger bounce after click refresh token
+   ============================================================ */
+
+function bounceTokenCard() {
+    const card = document.getElementById("tokenCard");
+    if (!card) return;
+
+    // Remove animation if it was already applied
+    card.classList.remove("token-bounce");
+
+    // Force reflow so animation restarts (important!)
+    void card.offsetWidth;
+
+    // Add the animation again
+    card.classList.add("token-bounce");
+}
+
 
 </script>
