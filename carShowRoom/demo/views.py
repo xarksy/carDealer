@@ -39,7 +39,10 @@ def demo_logout(request):
 
 # ========================= > Dashboard
 
-def dashboard_of_dashboard(request):    
+def dashboard_of_dashboard(request):
+    if not request.user.is_authenticated:
+        return redirect("demo_login")
+        
     total_order = Order.objects.count()
     total_customers = Customer.objects.count()
     total_cars = Cars.objects.count()
