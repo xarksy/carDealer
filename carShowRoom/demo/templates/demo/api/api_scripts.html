@@ -136,6 +136,7 @@ async function refreshToken() {
         alert("Token refreshed.");
 
         showTokenRefreshedBadge();
+        bounceTokenCard();
 
     } else {
         alert("Refresh failed: " + JSON.stringify(data));
