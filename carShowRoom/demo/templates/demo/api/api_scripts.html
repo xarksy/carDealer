@@ -104,6 +104,9 @@ async function obtainToken() {
         const rt = document.getElementById("refreshTokenInput");
         if (rt && data.refresh) rt.value = data.refresh;
 
+        showTokenRefreshedBadge();  // optional, if you want consistency
+        scrollToTokenCard();        // 👈 THIS WAS MISSING
+
         alert("Token obtained.");
     } else {
         alert("Login failed: " + JSON.stringify(data));
@@ -136,7 +139,7 @@ async function refreshToken() {
         alert("Token refreshed.");
 
         showTokenRefreshedBadge();
-        bounceTokenCard();
+        scrollToTokenCard();
 
     } else {
         alert("Refresh failed: " + JSON.stringify(data));
@@ -374,22 +377,19 @@ function showTokenRefreshedBadge() {
 }
 
 /* ============================================================
-   Trigger bounce after click refresh token
+   Trigger scroll up after click refresh token
    ============================================================ */
 
-function bounceTokenCard() {
+function scrollToTokenCard() {
     const card = document.getElementById("tokenCard");
     if (!card) return;
 
-    // Remove animation if it was already applied
-    card.classList.remove("token-bounce");
-
-    // Force reflow so animation restarts (important!)
-    void card.offsetWidth;
-
-    // Add the animation again
-    card.classList.add("token-bounce");
+    card.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+    });
 }
+
 
 
 </script>

@@ -1,10 +1,22 @@
+/* ⬆⬆ Token Bounce Animation ⬆⬆ */
 @keyframes tokenBounceUp {
     0%   { transform: translateY(0); }
-    30%  { transform: translateY(-10px); }
-    60%  { transform: translateY(0px); }
+    30%  { transform: translateY(-12px); }
+    60%  { transform: translateY(0); }
     100% { transform: translateY(0); }
 }
 
 .token-bounce {
     animation: tokenBounceUp 0.45s ease-out;
+}
+
+/* Token refreshed badge enhancement */
+#tokenRefreshedBadge {
+    transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+/* Optional: subtle border highlight when refreshed */
+#tokenCard.refreshed {
+    border: 2px solid #4caf50 !important;
+    transition: border-color 0.3s ease;
 }
