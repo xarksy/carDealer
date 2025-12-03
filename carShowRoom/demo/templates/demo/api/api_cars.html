@@ -40,3 +40,81 @@
                         <input id="car_price"
                                class="form-control"
                                type="number"
+                               step="0.01" />
+                    </div>
+
+                    <div class="mb-2">
+                        <label class="form-label">Status</label>
+                        <select id="car_status" class="form-control">
+                            <option value="available">available</option>
+                            <option value="sold">sold</option>
+                            <option value="reserved">reserved</option>
+                        </select>
+                    </div>
+
+                    <button class="btn btn-success">
+                        Create Car
+                    </button>
+
+                </form>
+
+            </div>
+        </div>
+
+        <!-- GET/PUT/DELETE /api/cars/<id>/ -->
+        <div class="card">
+            <div class="card-header">
+                Car Detail (GET / PUT / DELETE)
+            </div>
+
+            <div class="card-body">
+
+                <div class="mb-2">
+                    <label class="form-label">Car ID</label>
+                    <input id="car_detail_id"
+                           class="form-control"
+                           placeholder="e.g. 1" />
+                </div>
+
+                <div class="d-flex">
+                    <!-- GET -->
+                    <button class="btn btn-primary"
+                            onclick="tryApiWithId('GET','/api/cars/', car_detail_id.value)">
+                        Get Detail
+                    </button>
+
+                    <!-- PUT -->
+                    <button class="btn btn-outline-warning ms-2"
+                            onclick="openEditModalFor('/api/cars/', car_detail_id.value)">
+                        Edit (PUT)
+                    </button>
+
+                    <!-- DELETE -->
+                    <button class="btn btn-outline-danger ms-2"
+                            onclick="tryApiWithId('DELETE','/api/cars/', car_detail_id.value)">
+                        Delete
+                    </button>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <!-- RIGHT SIDE: Response Panel -->
+    <div class="col-md-6">
+        <div id="carsResponseContainer">
+            <div class="card">
+                <div class="card-header">Cars — Live Response</div>
+                <div class="card-body">
+                    <pre id="carsResponse"
+                         class="bg-dark text-white p-3"
+                         style="min-height:300px">
+Use the buttons on the left to test the Cars API.
+                    </pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
