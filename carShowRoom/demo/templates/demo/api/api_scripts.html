@@ -28,6 +28,10 @@ function getTargetByEndpoint(endpoint) {
     pre.textContent = "HTTP " + status + "\n\n" + JSON.stringify(data, null, 4);
 } {% endcomment %}
 
+/* ============================================================
+   LIVE RESPONSES
+   ============================================================ */
+
 function showResponse(targetId, data, status = 200) {
     const pre = document.getElementById(targetId);
     if (!pre) return;
@@ -167,13 +171,13 @@ function getAuthHeaders() {
     const headers = { "Content-Type": "application/json" };
     const token = document.getElementById("activeToken").textContent;
 
+    console.log(token)
+    
     if (token.startsWith("Bearer ") && !token.includes("(no token)")) {
         headers["Authorization"] = token;
     }
     return headers;
 }
-
-
 
 /* ============================================================
    GENERIC API CALL
@@ -190,8 +194,10 @@ async function tryApi(method, endpoint, body = null, overrideTarget = null) {
     let data;
     try {
         data = await res.json();
+        console.log(data);
     } catch {
         data = { error: "Non-JSON response" };
+        console.log(data);
     }
 
     const target = overrideTarget || getTargetByEndpoint(endpoint);
