@@ -223,7 +223,7 @@ async function createCustomer() {
     const body = {
         name: document.getElementById("cust_name").value,
         email: document.getElementById("cust_email").value,
-        phone: document.getElementById("cust_phone").value,
+        phone_number: document.getElementById("cust_phone").value,
     };
     await tryApi("POST", "/api/customers/", body);
 }
