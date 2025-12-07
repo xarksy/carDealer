@@ -22,7 +22,7 @@ class CustomerSerializer(serializers.ModelSerializer):
     
     def validate_phone_number(self, value):
         customer_id = self.instance.id if self.instance else None
-        if Customer.objects.filter(phone_number=value).exclue(id=customer_id).exists():
+        if Customer.objects.filter(phone_number=value).exclude(id=customer_id).exists():
             raise serializers.ValidationError("Nomor telepon ini sudah digunakan oleh customer lain.")
         return value
 
