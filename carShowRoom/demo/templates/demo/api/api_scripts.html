@@ -219,13 +219,47 @@ function tryApiWithId(method, base, id, suffix = '/') {
 /* ============================================================
    CUSTOMERS: Create
    ============================================================ */
-async function createCustomer() {
+{% comment %} async function createCustomer() {
     const body = {
         name: document.getElementById("cust_name").value,
         email: document.getElementById("cust_email").value,
         phone_number: document.getElementById("cust_phone").value,
     };
     await tryApi("POST", "/api/customers/", body);
+} {% endcomment %}
+
+async function createCustomer() {
+    // 1. Ambil elemen input
+    const nameInput = document.getElementById("cust_name");
+    const emailInput = document.getElementById("cust_email");
+    const phoneInput = document.getElementById("cust_phone");
+    const addressInput = document.getElementById("cust_address"); // <--- BARU
+
+    // 2. Susun Body JSON
+    const body = {
+        name: nameInput.value,
+        email: emailInput.value,
+        
+        // PERBAIKAN PENTING: Backend mengharapkan 'phone_number', bukan 'phone'
+        phone_number: phoneInput.value, 
+        
+        // TAMBAHAN: Field address sesuai request
+        address: addressInput.value 
+    };
+
+    // 3. Kirim ke API
+    // Pastikan headers Anda sudah menyertakan X-CSRFToken seperti solusi sebelumnya
+    const result = await tryApi("POST", "/api/customers/", body);
+
+    // 4. (Opsional) Reset form jika sukses
+    if (result && result.ok) {
+        nameInput.value = "";
+        emailInput.value = "";
+        phoneInput.value = "";
+        addressInput.value = "";
+        // Refresh list customer agar data baru muncul (jika ada fungsi refresh otomatis)
+        // getCustomersIds(); 
+    }
 }
 
 async function getCustomersIds() {
