@@ -35,5 +35,8 @@ class CustomerDetailSerializer(serializers.ModelSerializer):
 
     def get_orders(self, obj):
         from orders.api.serializers import OrderSerializer  # lazy import here
-        orders = obj.order_set.all()
+        # orders = obj.order_set.all()
+
+        orders = obj.orders.all()
+
         return OrderSerializer(orders, many=True).data
