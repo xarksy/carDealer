@@ -271,23 +271,30 @@ async function getCustomersIds() {
    ============================================================ */
 async function createCar() {
     const body = {
-        // KIRI: Nama field di Database (sesuai views.py)
-        // KANAN: ID dari input HTML
+        // Data Utama
         nama: document.getElementById("car_nama").value,
         merek: document.getElementById("car_merek").value,
         model: document.getElementById("car_model").value,
         tahun: parseInt(document.getElementById("car_tahun").value || 0),
         harga: parseFloat(document.getElementById("car_harga").value || 0),
-        status: document.getElementById("car_status").value
         
-        // Catatan: Jika ada field 'jenis_bahan_bakar' yang wajib, 
-        // tambahkan juga inputnya di HTML dan disini.
+        // Data Spesifikasi (Wajib sesuai error log tadi)
+        kilometer: parseInt(document.getElementById("car_kilometer").value || 0),
+        transmisi: document.getElementById("car_transmisi").value,
+        jenis_bahan_bakar: document.getElementById("car_bbm").value,
+        mesin: document.getElementById("car_mesin").value,
+        tempat_duduk: parseInt(document.getElementById("car_seats").value || 0),
+        
+        // Data Tambahan
+        deskripsi: document.getElementById("car_desc").value,
+        status: document.getElementById("car_status").value
     };
 
-    // Pastikan headers auth & CSRF sudah benar
+    // Debugging: Cek di console browser apa yang dikirim
+    console.log("Sending Car Data:", body);
+
     await tryApi("POST", "/api/cars/", body);
 }
-
 
 /* ============================================================
    ORDERS: Create
