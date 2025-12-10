@@ -64,11 +64,12 @@
                             <label class="form-label">Kilometer</label>
                             <input id="car_kilometer" type="number" class="form-control" placeholder="0" required />
                         </div>
+                        
                         <div class="col-md-6 mb-2">
                             <label class="form-label">Transmisi</label>
                             <select id="car_transmisi" class="form-control">
-                                <option value="Manual">Manual</option>
-                                <option value="Automatic">Automatic</option>
+                                <option value="manual">Manual</option>
+                                <option value="auto">Otomatis</option>
                             </select>
                         </div>
                     </div>
@@ -76,7 +77,11 @@
                     <div class="row">
                         <div class="col-md-6 mb-2">
                             <label class="form-label">Bahan Bakar</label>
-                            <input id="car_bbm" class="form-control" placeholder="Bensin/Solar" required />
+                            <select id="car_bbm" class="form-control">
+                                <option value="bensin">Bensin</option>
+                                <option value="diesel">Diesel</option>
+                                <option value="elektrik">Elektrik</option>
+                            </select>
                         </div>
                         <div class="col-md-6 mb-2">
                             <label class="form-label">Kapasitas Mesin</label>
@@ -99,7 +104,7 @@
                         <select id="car_status" class="form-control">
                             <option value="available">Available</option>
                             <option value="sold">Sold</option>
-                            <option value="reserved">Reserved</option>
+                            <option value="booked">Booked</option>
                         </select>
                     </div>
 
