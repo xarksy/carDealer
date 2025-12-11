@@ -55,8 +55,13 @@ class CarsViewSet(viewsets.ModelViewSet):
     def get_permissions(self):
         user = self.request.user
 
-        if not user.is_authenticated:
-            return [permissions.AllowAny()]  # public can’t modify, only view if needed
+        # if not user.is_authenticated:
+        #     return [permissions.AllowAny()]  # public can’t modify, only view if needed
+        
+        # GANTI DENGAN INI:
+        if not self.request.user.is_authenticated:
+            # Langsung tolak jika tidak login (sama seperti Customer)
+            return [permissions.IsAuthenticated()]
 
         # 🧩 Admin / Superuser: full access
         if user.is_superuser or getattr(user, "role", "") == "admin":
