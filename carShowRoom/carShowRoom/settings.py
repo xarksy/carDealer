@@ -168,3 +168,9 @@ CORS_ALLOWED_ORIGINS = [
 
 CORS_ALLOW_ALL_ORIGINS = True
 
+
+# URL dasar untuk mengakses file media (gambar upload)
+MEDIA_URL = '/media/'
+
+# Folder fisik di komputer tempat gambar disimpan
+MEDIA_ROOT = BASE_DIR / 'media'
