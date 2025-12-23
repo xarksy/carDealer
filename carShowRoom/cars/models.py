@@ -21,6 +21,14 @@ class Cars(models.Model):
     def __str__(self):
         return self.nama
 
+class CarImage(models.Model):
+    # Menghubungkan gambar ke mobil tertentu
+    mobil = models.ForeignKey(Cars, related_name='images', on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='cars/gallery/')
+
+    def __str__(self):
+        return f"Gambar untuk {self.mobil.nama}"
+
 class ServiceHistory(models.Model):
     mobil = models.ForeignKey(Cars, on_delete=models.CASCADE, related_name='service_histories')
     tanggal_service = models.DateField()
