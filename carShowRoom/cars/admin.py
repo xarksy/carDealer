@@ -17,5 +17,6 @@ class CarAdmin(admin.ModelAdmin):
 # Register your models here.
 admin.site.register(Cars)
 admin.site.register(ServiceHistory)
+admin.site.register(CarAdmin)
 
 
