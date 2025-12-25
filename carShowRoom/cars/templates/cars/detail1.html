@@ -1,0 +1,145 @@
+{% load static %}
+{% load humanize %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detail Mobil</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+      crossorigin="anonymous"
+    />
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12 text-center my-4">
+                <h1>Detail Mobil</h1>
+            </div>
+        </div>
+
+        <!-- First Row -->
+        <div class="d-flex">
+            <!-- Left Column: Image -->
+            <div class="flex-fill text-justify">
+                <img src="https://images.freeimages.com/images/large-previews/a25/japanes-car-1449114.jpg?fmt=webp&w=500" alt="{{ car.name }}" style="max-width: 100%; max-height: 300px;">
+
+                <h4 style="margin-top: 2px;">Simulasi Kredit</h4>
+                <table class="table table-bordered">
+                    <tr>
+                        <td><label for="cash">Dana bank:</label></td>
+                        <td><input type="number" name="cash" id="cash" class="form-control form-control-sm" required></td>
+                    </tr>
+                    <tr>
+                        <td><label for="tenor">Tenor (bulan):</label></td>
+                        <td><input type="number" name="tenor" id="tenor" class="form-control form-control-sm" required></td>
+                    </tr>
+                    <tr>
+                        <td><label for="interest">Bunga (%):</label></td>
+                        <td><input type="number" name="interest" id="interest" class="form-control form-control-sm" required></td>
+                    </tr>
+                </table>
+                <button type="submit" class="btn btn-primary btn-sm" id="hitung">Hitung</button>
+                <button type="reset" class="btn btn-secondary btn-sm" id="reset_hitungan">Reset</button>
+            </div>
+
+            <!-- Middle Column: Car Details -->
+            <div class="flex-fill" style="margin-left: 5px; border: 1px solid #ccc; padding: 10px;">
+                <div class="mb-3">
+                    <strong>Nama Mobil:</strong> {{ car.nama }}
+                </div>
+                <div class="mb-3">
+                    <strong>Tahun:</strong> {{ car.tahun }}
+                </div>
+                <div class="mb-3">
+                    <strong>Kilometer:</strong> {{ car.kilometer }} km
+                </div>
+                <div class="mb-3">
+                    <strong>Transmisi:</strong> {{ car.transmisi }}
+                </div>
+                <div class="mb-3">
+                    <strong>Jenis Bahan Bakar:</strong> {{ car.jenis_bahan_bakar }}
+                </div>
+                <div class="mb-3">
+                    <strong>Cakupan Mesin:</strong> {{ car.mesin }}
+                </div>
+                <div class="mb-3">
+                    <strong>Penumpang:</strong> {{ car.tempat_duduk }}
+                </div>
+                <div class="mb-3">
+                    <strong>HPP Cash:</strong> Rp{{ cash|floatformat:0|intcomma }}
+                </div>
+                <h3>Hasil:</h3>
+                <div class="mb-2">
+                    <strong>Angsuran Bulanan:</strong> <span id="angsuran_bulanan">-</span>
+                </div>
+                <div class="mb-2">
+                    <p><strong>Total Bunga:</strong> <span id="total_bunga">-</span></p>
+                </div>
+                <div class="mb-2">
+                    <p><strong>Total Pembayaran:</strong> <span id="total_pembayaran">-</span></p>
+                </div>
+                
+            </div>
+
+            <!-- Right Column: Buttons -->
+            <div class="flex-fill" style="border: 1px solid #ccc; padding: 10px; margin-left: 5px">
+                <div class="">
+                    
+                    <h3>Riwayat Servis</h3>                    
+                    <div style="max-height: 450px; overflow-y: auto; border: 1px solid #ccc; padding: 10px;">
+                        {% if service_history|length == 0 %}
+                            <p>Tidak ada riwayat servis.</p>
+                        {% endif %}
+                        {% for service in service_history %}
+                            <strong>Tanggal Servis:</strong> {{ service.tanggal_service }}<br>
+                            <strong>Jenis Servis:</strong> {{ service.deskripsi }}<br>
+                            <strong>Biaya Servis: </strong> Rp{{ service.biaya|floatformat:0|intcomma }}<br>                
+                            <hr>
+                        {% endfor %}
+                        
+                    </div>
+                    <form method="get" action="{% url 'orders' %}">
+                        <input type="hidden" name="car_id" value=" {{ car.id }}">
+                        <button type="submit" name="action" value="Buy">Buy</button>
+                        <button type="submit" name="action" value="Trade">Trade</button>
+                    </form>
+
+                    {% if user.role == "admin" %}
+                    <a href="{% url 'update_car' car.id %}" class="btn btn-primary mt-2">Update data mobil</a>                                     
+                    <a href="{% url 'service_history' car.id%}" class="btn btn-warning mt-2">Tambah data Servis</a>
+                    <form method="POST" action="{% url 'delete_car' car.id %}" style="display: inline-block;">
+                        {% csrf_token %}
+                        <button type="submit" onclick="return confirm('Yakin ingin menghapus mobil ini?')" class="btn btn-danger mt-2">Hapus</button>
+                    </form>
+                    {% endif %}
+                    
+                    <a href="{% url 'carList' %}" class="btn btn-secondary mt-2">Kembali</a>
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'logout'%}" class="btn btn-dark mt-2">Logout</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        
+            
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" 
+            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" 
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" 
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" 
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" 
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" 
+            crossorigin="anonymous"></script>
+
+    <script src="{% static "cars/js/hpp_cicilan.js" %}"></script>
+</body>
+</html>

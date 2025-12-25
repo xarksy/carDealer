@@ -72,8 +72,17 @@
                                 <div class="car-img-wrapper">
                                     {% if car.gambar %}
                                         <img src="{{ car.gambar.url }}" alt="{{ car.nama }}">
-                                    {% else %}
-                                        <img src="https://via.placeholder.com/500x300?text=No+Image" alt="Placeholder">
+                                        {% comment %} <img src="{{ car.gambar.url }}" alt="Cover">
+                                            <h3>Galeri Foto:</h3>
+                                            <div class="row">
+                                                {% for photo in car.images.all %}
+                                                    <div class="col-md-3">
+                                                        <img src="{{ photo.image.url }}" class="img-fluid">
+                                                    </div>
+                                                {% endfor %}
+                                            </div> {% endcomment %}
+                                    {% comment %} {% else %}
+                                        <img src="https://via.placeholder.com/500x300?text=No+Image" alt="Placeholder"> {% endcomment %}
                                     {% endif %}
                                 </div>
                             </div>
