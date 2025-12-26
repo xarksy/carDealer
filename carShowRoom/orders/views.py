@@ -4,54 +4,73 @@ from cars.models import Cars
 from customer.models import Customer
 from .forms import TradeinForm
 from customer.forms import CustomerForm
-
 import logging
+
 logger = logging.getLogger(__name__)
 
-# Create your views here.
 def placing_order_view(request):
-    action = request.GET.get("action",None)
+    # Ambil parameter action dari GET (URL) atau POST (Form) agar konsisten
+    action = request.GET.get("action") or request.POST.get("action")
     car_id = request.GET.get("car_id") or request.POST.get("car_id")
+    
     car = get_object_or_404(Cars, id=car_id) if car_id else None
-    id_nya = int(car_id.strip())
-    # trade_form, customer_form = None, None
-
+    
+    # Inisialisasi Form
     if request.method == "POST":
-        trade_form = TradeinForm(request.POST or None)
-        customer_form = CustomerForm(request.POST or None)
-        if action == "Trade":            
-            if trade_form.is_valid() and customer_form.is_valid():                
+        customer_form = CustomerForm(request.POST)
+        trade_form = TradeinForm(request.POST)
+        
+        if action == "Trade":
+            # Untuk Trade-in, WAJIB validasi kedua form
+            if trade_form.is_valid() and customer_form.is_valid():
                 customer = customer_form.save()
-                order = Order(customer=customer, offer_type="trade") 
-                placing_order = trade_form.save(commit=False)
-                placing_order.customer = customer
-                placing_order.save()
-                order.trade_in_car = placing_order
-                order.showroom_car = car
-                order.save()
-                return redirect('detail_car',car_id=id_nya)   
-            else:
-                logger.error("Form submission failed with errors: %s", {"customer_form": customer_form.errors, "trade_form": trade_form.errors})     
-        elif action == "Buy":
-            if trade_form.is_valid() and customer_form.is_valid():                
-                customer = customer_form.save()
-                order = Order(customer=customer, offer_type="buy")                 
-                order.showroom_car = car
-                order.save()
-                return redirect('detail_car',car_id=id_nya)   
-
-            else:
-                logger.error("Form submission failed with errors: %s", {"customer_form": customer_form.errors, "trade_form": trade_form.errors})
                 
+                # Simpan data Trade In
+                trade_in_car = trade_form.save(commit=False)
+                trade_in_car.customer = customer
+                trade_in_car.save()
+                
+                # Buat Order Utama
+                order = Order(
+                    customer=customer, 
+                    offer_type="trade",
+                    showroom_car=car,
+                    trade_in_car=trade_in_car
+                )
+                order.save()
+                
+                return redirect('detail_car', car_id=car.id)
+            else:
+                logger.error("Trade Error: %s %s", customer_form.errors, trade_form.errors)
+
+        elif action == "Buy":
+            # Untuk Buy, HANYA validasi customer_form (trade_form diabaikan)
+            if customer_form.is_valid():
+                customer = customer_form.save()
+                
+                # Buat Order Utama
+                order = Order(
+                    customer=customer, 
+                    offer_type="buy",
+                    showroom_car=car
+                )
+                order.save()
+                
+                return redirect('detail_car', car_id=car.id)
+            else:
+                logger.error("Buy Error: %s", customer_form.errors)
+    
     else:
+        # Method GET: Tampilkan form kosong
         customer_form = CustomerForm()
         trade_form = TradeinForm()
 
     context = {
         "customer_form": customer_form,
-        "trade_form": trade_form,
+        "trade_form": trade_form, # Variabel ini yang dikirim ke template
         "action": action,
-        "car_id": car_id
+        "car_id": car_id,
+        "car": car # Tambahkan object car agar bisa menampilkan info mobil di header (opsional)
     }
 
-    return render(request,'orders/order_form.html', context)
+    return render(request, 'orders/order_form.html', context)
