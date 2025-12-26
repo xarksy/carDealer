@@ -54,4 +54,4 @@ def placing_order_view(request):
         "car_id": car_id
     }
 
-    return render(request,'orders/trade_form.html', context)
+    return render(request,'orders/order_form.html', context)
