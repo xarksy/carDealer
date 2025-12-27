@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
 from .models import Order
 from cars.models import Cars
 from customer.models import Customer
@@ -39,9 +40,13 @@ def placing_order_view(request):
                 )
                 order.save()
                 
+                # 2. TAMBAHKAN PESAN SUKSES DI SINI
+                messages.success(request, "Data sudah disimpan, tim kami segera menghubungi anda.")
+
                 return redirect('detail_car', car_id=car.id)
             else:
                 logger.error("Trade Error: %s %s", customer_form.errors, trade_form.errors)
+                messages.error(request, "Mohon periksa kembali data yang Anda masukkan.") # Opsional: Pesan error
 
         elif action == "Buy":
             # Untuk Buy, HANYA validasi customer_form (trade_form diabaikan)
@@ -55,10 +60,15 @@ def placing_order_view(request):
                     showroom_car=car
                 )
                 order.save()
+
+                # 3. TAMBAHKAN PESAN SUKSES DI SINI
+                messages.success(request, "Data sudah disimpan, tim kami segera menghubungi anda.")
                 
                 return redirect('detail_car', car_id=car.id)
             else:
                 logger.error("Buy Error: %s", customer_form.errors)
+
+                messages.error(request, "Mohon periksa kembali data yang Anda masukkan.") # Opsional: Pesan error
     
     else:
         # Method GET: Tampilkan form kosong
