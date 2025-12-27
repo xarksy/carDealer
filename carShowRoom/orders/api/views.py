@@ -13,9 +13,18 @@ class OrderViewSet(viewsets.ModelViewSet):
     queryset = Order.objects.all().select_related("customer", "showroom_car", "trade_in_car")
     serializer_class = OrderSerializer
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
-    filterset_fields = ['payment_method', 'status', 'created_by__username']
+    
+    # ---------------------------------------------------------
+    # FIX: Changed fields to match 'Order' model definitions
+    # 'payment_method', 'status', 'created_by' did not exist.
+    # ---------------------------------------------------------
+    filterset_fields = ['offer_type'] 
+    
     search_fields = ['customer__name']
-    ordering_fields = ['created_at', 'total']
+    
+    # FIX: Removed 'total' as it does not exist in the model
+    ordering_fields = ['created_at'] 
+    
     ordering = ['-created_at']
     
     def get_queryset(self):
@@ -30,19 +39,14 @@ class OrderViewSet(viewsets.ModelViewSet):
         qs = Order.objects.none()
         # 🧩 Admin / superuser → all orders
         if user.is_superuser or getattr(user, "role", "") == "admin":
-            # return Order.objects.all().select_related("customer","showroom_car","trade_in_car")
             qs = Order.objects.all()
         # 🧩 Salesperson → all orders, but can’t modify
         elif user.is_staff or getattr(user, "role", "") == "sales":
-            # return Order.objects.all().select_related("customer", "showroom_car","trade_in_car")
             qs = Order.objects.all()
         # 🧩 Customer → only own orders
         elif getattr(user, "role", "") == "customer":
             qs = Order.objects.filter(customer__user=user)
-            # return Order.objects.filter(customer__user=user).select_related("customer", "showroom_car", "trade_in_car")
         
-        # default fallback
-        # return Order.objects.none()
         return qs.select_related("customer", "showroom_car", "trade_in_car")
 
     def get_permissions(self):
@@ -113,8 +117,12 @@ class OrderViewSet(viewsets.ModelViewSet):
     def summary(self, request):
         orders = self.get_queryset()
         total_orders = orders.count()
-        total_sales = sum(o.total for o in orders)
-        avg_sale = total_sales / total_orders if total_orders else 0
+        
+        # Note: 'total' does not exist on Order model. 
+        # You need to calculate this from the car price or add a field to Order.
+        # For now, I am setting this to 0 to prevent a crash.
+        total_sales = 0 
+        avg_sale = 0
 
         return Response({
             "total_orders": total_orders,
