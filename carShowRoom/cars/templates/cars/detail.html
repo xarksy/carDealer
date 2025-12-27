@@ -130,14 +130,13 @@
                     </div>
                 </div>
 
+                {% if user.is_authenticated and user.role == 'admin' %}
                 <div class="card shadow-sm mb-4">
                     <div class="card-header bg-white font-weight-bold d-flex justify-content-between align-items-center">
-                        <span><i class="fas fa-wrench mr-2 text-warning"></i> Riwayat Servis</span>
-                        {% if user.role == "admin" %}
+                        <span><i class="fas fa-wrench mr-2 text-warning"></i> Riwayat Servis</span>                        
                             <a href="{% url 'service_history' car.id%}" class="btn btn-sm btn-outline-warning">
                                 <i class="fas fa-plus"></i> Tambah
                             </a>
-                        {% endif %}
                     </div>
                     <div class="card-body service-scroll">
                         {% if service_history|length == 0 %}
@@ -157,6 +156,7 @@
                         {% endif %}
                     </div>
                 </div>
+                {% endif %}
 
             </div>
 
