@@ -1,6 +1,6 @@
 window.addEventListener('DOMContentLoaded', function () {
     // ==========================================
-    // BAGIAN 1: LOGIKA KALKULATOR KREDIT (EXISTING)
+    // BAGIAN 1: LOGIKA KALKULATOR KREDIT
     // ==========================================
     const cashInput = document.getElementById('cash');
     const tenorInput = document.getElementById('tenor');
@@ -37,7 +37,7 @@ window.addEventListener('DOMContentLoaded', function () {
     if (resetButton) {
         resetButton.addEventListener('click', function () {
             cashInput.value = '';
-            tenorInput.value = ''; // Reset ke kosong atau default
+            tenorInput.value = ''; 
             angsuranBulanan.innerText = '-';
             totalPembayaran.innerText = '-';
             totalBunga.innerText = '-';
@@ -45,13 +45,21 @@ window.addEventListener('DOMContentLoaded', function () {
     }
 
     // ==========================================
-    // BAGIAN 2: LOGIKA POP-UP / MODAL OTOMATIS (BARU)
+    // BAGIAN 2: LOGIKA POP-UP / MODAL OTOMATIS
     // ==========================================
     
-    // Kita gunakan jQuery selector karena Bootstrap 4 memanfaatkannya untuk modal
-    // Cek apakah elemen dengan ID 'successModal' ada di halaman
-    if ($('#successModal').length) {
-        // Tampilkan modal
-        $('#successModal').modal('show');
+    // Cek apakah jQuery ($) sudah dimuat
+    if (typeof $ !== 'undefined') {
+        // Cek apakah elemen modal ada di halaman
+        var $modal = $('#successModal');
+        
+        if ($modal.length > 0) {
+            console.log("Modal ditemukan! Memunculkan pop-up..."); // Cek Console browser (F12) jika tidak muncul
+            $modal.modal('show');
+        } else {
+            console.log("Tidak ada pesan sukses (Modal tidak dirender).");
+        }
+    } else {
+        console.error("jQuery belum dimuat! Pastikan script jQuery ada di atas script ini.");
     }
 });
