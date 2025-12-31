@@ -91,27 +91,28 @@ a.card-link-wrapper {
     padding-bottom: 60px;
 }
 
-.floating-wa {
-    position: fixed;
-    width: 60px;
-    height: 60px;
-    bottom: 40px;
-    right: 40px;
+.btn-wa-overlay {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 45px;
+    height: 45px;
     background-color: #25d366;
-    color: #FFF;
-    border-radius: 50px;
-    text-align: center;
-    font-size: 30px;
-    box-shadow: 2px 2px 3px #999;
-    z-index: 100;
+    color: white;
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
+    font-size: 24px;
+    z-index: 20; /* Agar di atas gambar/carousel */
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
     transition: all 0.3s ease;
+    border: 2px solid white;
 }
 
-.floating-wa:hover {
-    background-color: #128C7E;
-    color: #fff;
+.btn-wa-overlay:hover {
+    background-color: #128c7e;
+    color: white;
     transform: scale(1.1);
+    text-decoration: none;
 }

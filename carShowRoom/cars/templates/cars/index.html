@@ -1,8 +1,8 @@
+{% load static %}
+{% load humanize %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    {% load static %}
-    {% load humanize %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Car Showroom Premium</title>
@@ -11,10 +11,39 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     
     <link rel="stylesheet" href="{% static 'cars/css/style.css' %}">
+
+    <style>
+        /* CSS Khusus Tombol WhatsApp Overlay (Melayang di Gambar) */
+        .btn-wa-overlay {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 45px;
+            height: 45px;
+            background-color: #25d366;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            z-index: 20; /* Agar di atas gambar/carousel */
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+            border: 2px solid white;
+        }
+
+        .btn-wa-overlay:hover {
+            background-color: #128c7e;
+            color: white;
+            transform: scale(1.1);
+            text-decoration: none;
+        }
+    </style>
 </head>
 <body>
 
-    <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top">
+    <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top shadow-sm mb-4">
         <div class="container">
             <a class="navbar-brand font-weight-bold text-primary" href="#">
                 <i class="fas fa-car-side mr-2"></i>Car Showroom
@@ -24,155 +53,120 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <div class="ml-auto">
-                    <a href="#trade-in-section" class="btn btn-outline-primary mr-2">
-                        <i class="fas fa-exchange-alt mr-1"></i> Jual
-                    </a>
-
-                    {% if user.is_authenticated and user.role == "admin" %}
-                        <a href="{% url 'demo_dashboard' %}" class="btn btn-info mr-2"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
-                        <a href="{% url 'create_car' %}" class="btn btn-success mr-2"><i class="fas fa-plus"></i> Mobil</a>
-                    {% endif %}
-                    
                     {% if user.is_authenticated %}
-                        <a href="{% url 'logout' %}" class="btn btn-dark ml-2"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                        <span class="mr-3">Halo, <b>{{ user.username }}</b></span>
+                        <a href="{% url 'logout' %}" class="btn btn-sm btn-danger">Logout</a>
                     {% else %}
-                        <a href="{% url 'login' %}" class="btn btn-primary ml-2">Login</a>
+                        <a href="{% url 'login' %}" class="btn btn-sm btn-primary">Login</a>
                     {% endif %}
                 </div>
             </div>
         </div>
     </nav>
 
-    <div class="container-fluid hero-section text-center">
-        <h1 class="font-weight-bold">Temukan Mobil Impian Anda</h1>
-        <p class="lead">Kualitas terbaik dengan harga yang bersaing</p>
-    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center mb-5">
+                <h2 class="font-weight-bold">Koleksi Mobil Terbaik</h2>
+                <p class="text-muted">Temukan mobil impian Anda dengan kualitas terbaik dan harga terjangkau.</p>
+            </div>
+        </div>
 
-    <div class="container mt-4">
-        
-        <div class="row" id="car-container">
+        <div class="row">
             {% for car in cars %}
             <div class="col-lg-8 offset-lg-2 mb-4">
-                <div class="card card-car shadow-sm position-relative">
+                <div class="card card-car shadow-sm position-relative border-0">
                     
                     {% if user.is_authenticated and user.role == "admin" %}
-                    <div class="admin-delete-btn">
+                    <div class="admin-delete-btn" style="position: absolute; top: 10px; left: 10px; z-index: 30;">
                         <form method="POST" action="{% url 'delete_car' car.id %}">
                             {% csrf_token %}
-                            <button type="submit" onclick="return confirm('Yakin ingin menghapus mobil {{ car.nama }}?')" class="btn btn-link text-danger p-0" title="Hapus Mobil">
+                            <button type="submit" onclick="return confirm('Hapus mobil {{ car.nama }}?')" class="btn btn-danger btn-sm rounded-circle shadow" title="Hapus">
                                 <i class="fas fa-trash-alt"></i>
                             </button>
                         </form>
                     </div>
                     {% endif %}
 
-                    <a href="{% url 'detail_car' car.id %}" class="card-link-wrapper">
-                        <div class="row no-gutters">
-                            <div class="col-md-5">
-                                <div class="car-img-wrapper">
-                                    {% if car.gambar %}
-                                        <img src="{{ car.gambar.url }}" alt="{{ car.nama }}">
-                                        {% comment %} <img src="{{ car.gambar.url }}" alt="Cover">
-                                            <h3>Galeri Foto:</h3>
-                                            <div class="row">
-                                                {% for photo in car.images.all %}
-                                                    <div class="col-md-3">
-                                                        <img src="{{ photo.image.url }}" class="img-fluid">
-                                                    </div>
-                                                {% endfor %}
-                                            </div> {% endcomment %}
-                                    {% comment %} {% else %}
-                                        <img src="https://via.placeholder.com/500x300?text=No+Image" alt="Placeholder"> {% endcomment %}
-                                    {% endif %}
-                                </div>
-                            </div>
+                    <div class="row no-gutters">
+                        <div class="col-md-5 position-relative"> 
                             
-                            <div class="col-md-7">
-                                <div class="card-body d-flex flex-column justify-content-center h-100">
-                                    <h4 class="card-title mb-1 text-dark">{{ car.nama }}</h4>
-                                    <p class="text-muted small mb-3">
-                                        <i class="fas fa-tag mr-1"></i> {{ car.merek }} | {{ car.model }} | {{ car.tahun }}
-                                    </p>
-                                    
-                                    <div class="row mb-2">
-                                        <div class="col-6">
-                                            <small class="text-muted d-block">ID Mobil</small>
-                                            <span class="font-weight-bold">#{{ car.id }}</span>
-                                        </div>
-                                        <div class="col-6">
-                                            <small class="text-muted d-block">Harga</small>
-                                            <span class="price-tag">Rp {{ car.harga|floatformat:0|intcomma }}</span>
-                                        </div>
-                                    </div>
+                            <a href="https://wa.me/6281234567890?text=Halo%20Admin%2C%20saya%20tertarik%20dengan%20mobil%20{{ car.nama }}%20di%20showroom%20Anda." 
+                               target="_blank" 
+                               class="btn-wa-overlay" 
+                               data-toggle="tooltip" 
+                               title="Hubungi via WhatsApp">
+                                <i class="fab fa-whatsapp"></i>
+                            </a>
 
-                                    <div class="mt-auto pt-3 border-top text-right">
-                                        <span class="btn btn-sm btn-outline-primary">Lihat Detail <i class="fas fa-arrow-right ml-1"></i></span>
+                            <div class="car-img-wrapper h-100">
+                                {% if car.gambar %}
+                                    <div id="carouselCar{{ car.id }}" class="carousel slide h-100" data-ride="carousel">
+                                        <div class="carousel-inner h-100">
+                                            <div class="carousel-item active h-100">
+                                                <img src="{{ car.gambar.url }}" class="d-block w-100" style="height: 100%; object-fit: cover; min-height: 250px;" alt="Cover">
+                                            </div>
+                                            {% for photo in car.images.all %}
+                                            <div class="carousel-item h-100">
+                                                <img src="{{ photo.image.url }}" class="d-block w-100" style="height: 100%; object-fit: cover; min-height: 250px;" alt="Slide">
+                                            </div>
+                                            {% endfor %}
+                                        </div>
+                                        
+                                        {% if car.images.all %}
+                                        <a class="carousel-control-prev" href="#carouselCar{{ car.id }}" role="button" data-slide="prev">
+                                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                        </a>
+                                        <a class="carousel-control-next" href="#carouselCar{{ car.id }}" role="button" data-slide="next">
+                                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                        </a>
+                                        {% endif %}
                                     </div>
-                                </div>
+                                {% else %}
+                                    <img src="https://via.placeholder.com/500x300?text=No+Image" class="d-block w-100 h-100" style="object-fit: cover;" alt="Placeholder">
+                                {% endif %}
                             </div>
                         </div>
-                    </a>
+                        
+                        <div class="col-md-7">
+                            <div class="card-body d-flex flex-column justify-content-center h-100">
+                                <h4 class="card-title mb-1">
+                                    <a href="{% url 'detail_car' car.id %}" class="text-dark text-decoration-none font-weight-bold">
+                                        {{ car.nama }}
+                                    </a>
+                                </h4>
+                                
+                                <p class="text-muted small mb-3">
+                                    <i class="fas fa-calendar-alt mr-1"></i> {{ car.tahun }} | {{ car.transmisi }} | {{ car.kilometer|intcomma }} km
+                                </p>
+                                
+                                <div class="row mb-2">
+                                    <div class="col-6">
+                                        <small class="text-muted d-block">ID Unit</small>
+                                        <span class="font-weight-bold">#{{ car.id }}</span>
+                                    </div>
+                                    <div class="col-6 text-right">
+                                        <small class="text-muted d-block">Harga Cash</small>
+                                        <span class="text-primary font-weight-bold h5">Rp {{ car.harga|floatformat:0|intcomma }}</span>
+                                    </div>
+                                </div>
+
+                                <div class="mt-auto pt-3 border-top text-right">
+                                    <a href="{% url 'detail_car' car.id %}" class="btn btn-outline-primary btn-block">
+                                        Lihat Detail Lengkap <i class="fas fa-arrow-right ml-2"></i>
+                                    </a>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             {% empty %}
             <div class="col-12 text-center py-5">
-                <h3 class="text-muted">Belum ada data mobil yang tersedia.</h3>
+                <h3 class="text-muted">Belum ada mobil tersedia.</h3>
             </div>
             {% endfor %}
-        </div>
-
-        <div id="trade-in-section" class="row mt-5 mb-5">
-            <div class="col-lg-8 offset-lg-2">
-                <div class="card shadow border-0 rounded-lg">
-                    <div class="card-header bg-dark text-white p-3">
-                        <h3 class="mb-0 h5"><i class="fas fa-car-crash mr-2"></i>Formulir Jual</h3>
-                    </div>
-                    <div class="card-body bg-white p-4">
-                        
-                        {% if not trade_form %}
-                            <div class="alert alert-danger">
-                                <strong>Form Error:</strong> Variabel 'trade_form' tidak ditemukan. Mohon cek file <code>views.py</code>.
-                            </div>
-                        {% else %}
-
-                        <form method="POST" id="tradeInForm" enctype="multipart/form-data">
-                            {% csrf_token %}
-                            {{ trade_form.non_field_errors }}
-                            
-                            <div id="step1">
-                                <h5 class="mb-4 text-primary border-bottom pb-2">Langkah 1: Informasi Kendaraan</h5>
-                                <div class="row g-3">
-                                    <div class="col-md-6 form-group"><label>Model</label> {{ trade_form.offered_vehicle_model }}</div>
-                                    <div class="col-md-6 form-group"><label>Varian</label> {{ trade_form.offered_vehicle_varian }}</div>
-                                    <div class="col-md-6 form-group"><label>Transmisi</label> {{ trade_form.offered_vehicle_transmission }}</div>
-                                    <div class="col-md-6 form-group"><label>Provinsi</label> {{ trade_form.offered_vehicle_province }}</div>
-                                    <div class="col-md-6 form-group"><label>Tahun</label> {{ trade_form.offered_vehicle_year }}</div>
-                                    <div class="col-md-6 form-group"><label>Kilometer</label> {{ trade_form.offered_vehicle_kilometers }}</div>
-                                    <div class="col-12 form-group"><label>Catatan</label> {{ trade_form.offered_vehicle_notes }}</div>
-                                </div>
-                                <div class="d-flex justify-content-end mt-4">
-                                    <button type="button" id="btn-next" class="btn btn-primary px-4">Lanjut <i class="fas fa-arrow-right ml-1"></i></button>
-                                </div>
-                            </div>
-                            
-                            <div id="step2" style="display: none;">
-                                <h5 class="mb-4 text-success border-bottom pb-2">Langkah 2: Data Diri</h5>
-                                <div class="row g-3">
-                                    <div class="col-md-6 form-group"><label>Nama</label> {{ customer_form.name }}</div>
-                                    <div class="col-md-6 form-group"><label>No HP</label> {{ customer_form.phone_number }}</div>
-                                    <div class="col-md-6 form-group"><label>Email</label> {{ customer_form.email }}</div>
-                                    <div class="col-md-6 form-group"><label>Alamat</label> {{ customer_form.address }}</div>
-                                </div>
-                                <div class="d-flex justify-content-between mt-4">
-                                    <button type="button" id="btn-prev" class="btn btn-secondary"><i class="fas fa-arrow-left ml-1"></i> Kembali</button>
-                                    <button type="submit" class="btn btn-success px-5">Kirim Pengajuan <i class="fas fa-paper-plane ml-1"></i></button>
-                                </div>                                  
-                            </div>
-                        </form>
-
-                        {% endif %} </div>
-                </div>
-            </div>
         </div>
     </div>
 
@@ -185,8 +179,10 @@
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
     
-    <script src="{% static 'cars/js/custom.js' %}"></script>
-
-
+    <script>
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
+    </script>
 </body>
 </html>
