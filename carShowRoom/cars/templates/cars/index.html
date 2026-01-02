@@ -1,7 +1,7 @@
 {% load static %}
 {% load humanize %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="{% static 'cars/css/style.css' %}">
 
     <style>
-        /* CSS Khusus Tombol WhatsApp Overlay (Melayang di Gambar) */
+        /* CSS KHUSUS TOMBOL WHATSAPP OVERLAY */
         .btn-wa-overlay {
             position: absolute;
             top: 10px;
@@ -27,7 +27,7 @@
             align-items: center;
             justify-content: center;
             font-size: 24px;
-            z-index: 20; /* Agar di atas gambar/carousel */
+            z-index: 20; 
             box-shadow: 0 2px 8px rgba(0,0,0,0.3);
             transition: all 0.3s ease;
             border: 2px solid white;
@@ -39,9 +39,17 @@
             transform: scale(1.1);
             text-decoration: none;
         }
+        
+        /* Animasi Kartu */
+        .card-car {
+            transition: transform 0.3s;
+        }
+        .card-car:hover {
+            transform: translateY(-5px);
+        }
     </style>
 </head>
-<body>
+<body class="bg-light">
 
     <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top shadow-sm mb-4">
         <div class="container">
@@ -53,6 +61,9 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <div class="ml-auto">
+                    <a href="#trade-in-section" class="btn btn-outline-primary mr-2">
+                        <i class="fas fa-car mr-1"></i> Jual Mobil
+                    </a>
                     {% if user.is_authenticated %}
                         <span class="mr-3">Halo, <b>{{ user.username }}</b></span>
                         <a href="{% url 'logout' %}" class="btn btn-sm btn-danger">Logout</a>
@@ -65,10 +76,11 @@
     </nav>
 
     <div class="container">
+        
         <div class="row">
             <div class="col-12 text-center mb-5">
                 <h2 class="font-weight-bold">Koleksi Mobil Terbaik</h2>
-                <p class="text-muted">Temukan mobil impian Anda dengan kualitas terbaik dan harga terjangkau.</p>
+                <p class="text-muted">Pilihan mobil berkualitas dengan harga terbaik untuk Anda.</p>
             </div>
         </div>
 
@@ -91,7 +103,7 @@
                     <div class="row no-gutters">
                         <div class="col-md-5 position-relative"> 
                             
-                            <a href="https://wa.me/6281234567890?text=Halo%20Admin%2C%20saya%20tertarik%20dengan%20mobil%20{{ car.nama }}%20di%20showroom%20Anda." 
+                            <a href="https://wa.me/6281234567890?text=Halo%20Admin%2C%20saya%20tertarik%20dengan%20mobil%20{{ car.nama }}." 
                                target="_blank" 
                                class="btn-wa-overlay" 
                                data-toggle="tooltip" 
@@ -156,7 +168,6 @@
                                         Lihat Detail Lengkap <i class="fas fa-arrow-right ml-2"></i>
                                     </a>
                                 </div>
-
                             </div>
                         </div>
                     </div>
@@ -169,8 +180,100 @@
             {% endfor %}
         </div>
     </div>
+    
+    <div id="trade-in-section" class="py-5 bg-white mt-5 border-top">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-10"> <div class="card shadow-lg border-0">
+                        <div class="card-header bg-dark text-white text-center py-3">
+                            <h4 class="mb-0 font-weight-bold">Formulir Jual / Tukar Tambah</h4>
+                            <p class="mb-0 small text-white-50">Lengkapi data diri dan data mobil Anda di bawah ini</p>
+                        </div>
+                        <div class="card-body p-4">
+                            
+                            <form method="POST" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                
+                                <div class="row">
+                                    <div class="col-md-6 border-right">
+                                        <h5 class="text-primary mb-3"><i class="fas fa-user-circle mr-2"></i>Data Diri</h5>
+                                        <div class="form-group">
+                                            <label>Nama Lengkap</label>
+                                            {{ customer_form.name }}
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Nomor HP (WhatsApp)</label>
+                                            {{ customer_form.phone_number }}
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Email</label>
+                                            {{ customer_form.email }}
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Alamat Lengkap</label>
+                                            {{ customer_form.address }}
+                                        </div>
+                                    </div>
 
-    <footer class="bg-dark text-white text-center py-3 mt-5">
+                                    <div class="col-md-6">
+                                        <h5 class="text-success mb-3"><i class="fas fa-car mr-2"></i>Data Mobil Anda</h5>
+                                        <div class="row">
+                                            <div class="col-6 form-group">
+                                                <label>Merek/Model</label>
+                                                {{ trade_form.offered_vehicle_model }}
+                                            </div>
+                                            <div class="col-6 form-group">
+                                                <label>Tahun</label>
+                                                {{ trade_form.offered_vehicle_year }}
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="row">
+                                            <div class="col-6 form-group">
+                                                <label>Varian</label>
+                                                {{ trade_form.offered_vehicle_varian }}
+                                            </div>
+                                            <div class="col-6 form-group">
+                                                <label>Transmisi</label>
+                                                {{ trade_form.offered_vehicle_transmission }}
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-6 form-group">
+                                                <label>Kilometer</label>
+                                                {{ trade_form.offered_vehicle_kilometers }}
+                                            </div>
+                                            <div class="col-6 form-group">
+                                                <label>Provinsi</label>
+                                                {{ trade_form.offered_vehicle_province }}
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>Catatan Tambahan (Kondisi Mobil)</label>
+                                            {{ trade_form.offered_vehicle_notes }}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row mt-4">
+                                    <div class="col-12 text-center">
+                                        <button type="submit" class="btn btn-success btn-lg px-5 shadow">
+                                            <i class="fas fa-paper-plane mr-2"></i> Kirim Penawaran
+                                        </button>
+                                    </div>
+                                </div>
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-dark text-white text-center py-3">
         <div class="container">
             <small>&copy; 2024 Car Showroom. All Rights Reserved.</small>
         </div>
@@ -181,7 +284,13 @@
     
     <script>
         $(function () {
-            $('[data-toggle="tooltip"]').tooltip()
+            $('[data-toggle="tooltip"]').tooltip();
+            
+            // Script agar form terlihat rapi otomatis
+            $('input, select, textarea').addClass('form-control');
+            
+            // Khusus textarea notes agar tidak terlalu tinggi
+            $('textarea').attr('rows', 3);
         })
     </script>
 </body>
