@@ -53,8 +53,6 @@ def carList(request):
 
     return render(request,'cars/index.html',context)
 
-
-
 # ====================== CRUD CAR
 @admin_required
 def create_car(request):

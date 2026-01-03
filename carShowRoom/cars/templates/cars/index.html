@@ -31,6 +31,7 @@
                     </a>
                     {% if user.is_authenticated %}
                         <span class="mr-3">Halo, <b>{{ user.username }}</b></span>
+                        <a href="{% url 'demo_dashboard' %}" class="btn btn-sm btn-success">Dashboard</a>
                         <a href="{% url 'logout' %}" class="btn btn-sm btn-danger">Logout</a>
                     {% else %}
                         <a href="{% url 'login' %}" class="btn btn-sm btn-primary">Login</a>
