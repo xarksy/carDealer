@@ -8,7 +8,7 @@ class CarsForm(forms.ModelForm):
     """
     class Meta:
         model = Cars
-        fields = ['nama', 'harga', 'status', 'merek', 'model', 'tahun', 'kilometer', 'transmisi', 'jenis_bahan_bakar', 'mesin', 'tempat_duduk', 'deskripsi']
+        fields = ['nama', 'harga', 'status', 'merek', 'model', 'tahun', 'kilometer', 'transmisi', 'jenis_bahan_bakar', 'mesin', 'tempat_duduk', 'deskripsi','gambar']
         # widgets = {
         #     'gambar': forms.ClearableFileInput(attrs={'multiple': True}),
         # }
