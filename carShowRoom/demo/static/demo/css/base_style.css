@@ -1,35 +1,81 @@
+/* static/demo/css/base_style.css */
+
 body {
     min-height: 100vh;
     display: flex;
+    background-color: #f5f7fb;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
-/* When sidebar is hidden, make content fully centered horizontally */
+
+/* Jika tidak login, konten tengah */
 body.no-sidebar .main-container {
     margin-left: 0 !important;
     width: 100%;
-    display: flex;
-    justify-content: center;
+    max-width: 1200px;
+    margin: 70px auto;
 }
 
-
-
+/* Sidebar Style */
 .sidebar {
     width: 220px;
-    background: #343a40;
+    background: #212529; /* Dark Bootstrap color */
     color: white;
-    margin-top: 55px;
+    margin-top: 56px; /* Tinggi navbar standard BS5 */
+    position: fixed;
+    height: 100vh;
+    overflow-y: auto;
+    z-index: 1000;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
 }
+
 .sidebar a {
-    color: white;
+    color: rgba(255,255,255,0.8);
     text-decoration: none;
     display: block;
-    padding: 10px 15px;
+    padding: 12px 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    transition: all 0.3s;
 }
+
 .sidebar a:hover {
-    background: #495057;
+    background: #343a40;
+    color: #fff;
+    padding-left: 25px; /* Efek geser */
 }
+
+/* Main Container Adjustment */
 .main-container {
-    margin-top: 70px;
-    margin-left: 20px;
+    margin-top: 70px; /* Jarak dari Navbar */
+    margin-left: 220px; /* Jarak dari Sidebar (PENTING AGAR TIDAK TERTUTUP) */
     flex: 1;
     width: 100%;
+    padding: 20px 30px;
+}
+
+/* --- DASHBOARD FORM STYLES --- */
+.card {
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+.card-header {
+    border-bottom: 1px solid #eee;
+    padding: 15px 20px;
+}
+.form-control, .form-select {
+    border-radius: 6px;
+    border: 1px solid #dfe3e7;
+    padding: 8px 12px;
+}
+.form-control:focus {
+    box-shadow: 0 0 0 3px rgba(13,110,253,0.15);
+    border-color: #86b7fe;
+}
+.image-upload-wrapper {
+    background: #f8f9fa;
+    border: 2px dashed #dee2e6;
+    transition: border-color 0.3s;
+}
+.image-upload-wrapper:hover {
+    border-color: #0d6efd;
 }
