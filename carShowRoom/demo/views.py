@@ -9,6 +9,7 @@ from orders.forms import TradeinForm
 from orders.models import Order
 from customer.models import Customer
 from django.db.models import Sum, Count
+from django.core.paginator import Paginator
 
 import logging
 logger = logging.getLogger(__name__)
@@ -67,11 +68,42 @@ def dashboard_of_dashboard(request):
 
 
 def demo_carlist_dashboard(request):
+    # 1. Cek keamanan: Pastikan user sudah login
     if not request.user.is_authenticated:
         return redirect("demo_login")
 
-    cars = Cars.objects.all()
-    return render(request, "demo/car_list_dashboard.html", {"cars": cars})
+    # 2. Ambil data mobil
+    # Kita tambahkan .order_by('-id') agar data terbaru muncul paling atas.
+    # Paginator membutuhkan data yang urutannya konsisten agar tidak error.
+    cars_data = Cars.objects.all().order_by('-id')
+
+    # 3. Logika "Items Per Page" (Jumlah data per halaman)
+    # Kita cek apakah user memilih angka view dari dropdown (misal: 10, 25, 50)
+    # Jika tidak ada yang dipilih, default-nya adalah 5 data per halaman.
+    items_per_page = request.GET.get('paginate_by', 5)
+
+    # Validasi: Pastikan items_per_page adalah angka. Jika error, kembalikan ke 5.
+    try:
+        items_per_page = int(items_per_page)
+    except ValueError:
+        items_per_page = 5
+
+    # 4. Masukkan data ke Paginator
+    paginator = Paginator(cars_data, items_per_page)
+
+    # 5. Ambil nomor halaman yang sedang aktif dari URL (misal: ?page=2)
+    page_number = request.GET.get('page')
+    
+    # Ambil objek halaman yang sesuai (Django otomatis menangani jika page kosong/invalid)
+    page_obj = paginator.get_page(page_number)
+
+    # 6. Siapkan data untuk dikirim ke HTML
+    context = {
+        "cars": page_obj,          # Data mobil yang sudah dipotong per halaman
+        "items_per_page": items_per_page # Agar dropdown view tetap ingat pilihan terakhir user
+    }
+
+    return render(request, "demo/car_list_dashboard.html", context)
 
 def dashboard_customer_list(request):
     context = {

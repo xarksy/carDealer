@@ -6,6 +6,13 @@ class CarsForm(forms.ModelForm):
     """
     Form for creating and updating Cars instances.
     """
+    # Field tambahan untuk upload banyak gambar (tidak masuk langsung ke model Cars)
+    # gallery_images = forms.FileField(
+    #     required=False,
+    #     widget=forms.ClearableFileInput(attrs={'multiple': True}),
+    #     label="Foto Galeri Tambahan"
+    # )
+
     class Meta:
         model = Cars
         fields = ['nama', 'harga', 'status', 'merek', 'model', 'tahun', 'kilometer', 'transmisi', 'jenis_bahan_bakar', 'mesin', 'tempat_duduk', 'deskripsi','gambar']
