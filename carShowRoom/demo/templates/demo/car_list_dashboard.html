@@ -1,55 +1,161 @@
 {% extends 'demo/base.html' %}
+{% load humanize %} 
 {% block content %}
-{% comment %} <h3>Welcome, {{ request.user.username|title }}!</h3>
-<p>Your role: <strong>{{ request.user.role|default:"-" }}</strong></p>
 
-<hr> {% endcomment %}
-<h4>🚘 Car List</h4>
-<table class="table table-bordered table-striped">
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Brand</th>
-      <th>Price</th>
-      <th>Year</th>
-      <th>Status</th>
-      {% if request.user.role in 'admin sales' %}
-        <th>Actions</th>
-      {% endif %}
-    </tr>
-  </thead>
-  <tbody>
-    {% for car in cars %}
-      <tr>
-        {% comment %} <td>{{ car.nama }}</td> {% endcomment %}
-        <td><a href="{% url 'detail_car' car.id %}" class="text-decoration-none text-dark" style="font-weight: normal; text-decoration: none;">{{car.nama}}</td>
-        <td>{{ car.merek }}</td>
-        <td>{{ car.harga }}</td>
-        <td>{{ car.tahun }}</td>
-        <td>{{ car.status }}</td>
+<div class="container-fluid mt-4">
+    
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h4 class="m-0 text-primary"><i class="fas fa-car"></i> 🚘 Car List</h4>
+        
+        <form method="get" class="d-flex align-items-center">
+            <label for="paginate_by" class="me-2 text-muted small">Show:</label>
+            <select name="paginate_by" id="paginate_by" class="form-select form-select-sm" onchange="this.form.submit()" style="width: auto;">
+                <option value="5" {% if items_per_page == 5 %}selected{% endif %}>5</option>
+                <option value="10" {% if items_per_page == 10 %}selected{% endif %}>10</option>
+                <option value="25" {% if items_per_page == 25 %}selected{% endif %}>25</option>
+                <option value="50" {% if items_per_page == 50 %}selected{% endif %}>50</option>
+            </select>
+        </form>
+    </div>
 
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover table-striped align-middle mb-0">
+                    <thead class="bg-light text-dark">
+                        <tr>
+                            <th class="py-3 ps-3">Name</th>
+                            <th class="py-3">Brand</th>
+                            <th class="py-3 text-end">Price</th> <th class="py-3 text-center">Year</th>
+                            <th class="py-3 text-center">Status</th>
+                            {% if request.user.role in 'admin sales' %}
+                                <th class="py-3 text-center">Actions</th>
+                            {% endif %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for car in cars %}
+                        <tr>
+                            <td class="ps-3">
+                                <a href="{% url 'detail_car' car.id %}" class="fw-bold text-decoration-none text-primary">
+                                    {{ car.nama }}
+                                </a>
+                            </td>
+                            
+                            <td>{{ car.merek }}</td>
+                            
+                            <td class="text-end font-monospace">
+                                Rp {{ car.harga|intcomma }} </td>
+                            
+                            <td class="text-center">{{ car.tahun }}</td>
+                            
+                            <td class="text-center">
+                                {% if car.status|lower == 'available' %}
+                                    <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-3">Available</span>
+                                {% else %}
+                                    <span class="badge bg-secondary rounded-pill px-3">{{ car.status }}</span>
+                                {% endif %}
+                            </td>
+
+                            {% if request.user.role == 'admin' %}
+                            <td class="text-center">
+                                <div class="btn-group" role="group">
+                                    <a href="{% url 'update_car' car.id %}?next={% url 'demo_carlist_dashboard' %}" 
+                                       class="btn btn-sm btn-outline-warning" title="Edit">
+                                       Edit
+                                    </a>
+                                    <a href="{% url 'delete_car' car.id %}?next={% url 'demo_carlist_dashboard' %}" 
+                                       class="btn btn-sm btn-outline-danger" title="Delete" 
+                                       onclick="return confirm('Are you sure you want to delete {{ car.nama }}?');">
+                                       Delete
+                                    </a>
+                                </div>
+                                <div class="mt-1">
+                                    <a href="{% url 'service_history' car.id %}?next={% url 'demo_carlist_dashboard' %}" 
+                                       class="btn btn-sm btn-success w-100" style="font-size: 0.75rem;">
+                                       + Data Service
+                                    </a>
+                                </div>
+                            </td>
+                            {% elif request.user.role == 'sales' %}
+                            <td class="text-center">
+                                <a href="{% url 'update_car' car.id %}?next={% url 'demo_carlist_dashboard' %}" 
+                                   class="btn btn-sm btn-warning text-white">
+                                   Update
+                                </a>
+                            </td>
+                            {% endif %}
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="6" class="text-center py-4 text-muted">
+                                Tidak ada data mobil yang ditemukan.
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="card-footer bg-white py-3">
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center m-0">
+                    
+                    {% if cars.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ cars.previous_page_number }}&paginate_by={{ items_per_page }}" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    {% else %}
+                    <li class="page-item disabled">
+                        <span class="page-link">&laquo;</span>
+                    </li>
+                    {% endif %}
+
+                    {% for num in cars.paginator.page_range %}
+                        {% if cars.number == num %}
+                            <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+                        {% elif num > cars.number|add:'-3' and num < cars.number|add:'3' %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ num }}&paginate_by={{ items_per_page }}">{{ num }}</a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if cars.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ cars.next_page_number }}&paginate_by={{ items_per_page }}" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                    {% else %}
+                    <li class="page-item disabled">
+                        <span class="page-link">&raquo;</span>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            
+            <div class="text-center mt-2 small text-muted">
+                Showing page {{ cars.number }} of {{ cars.paginator.num_pages }}. Total {{ cars.paginator.count }} cars.
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-4">
         {% if request.user.role == 'admin' %}
-        <td>
-          <a href="{% url 'update_car' car.id %}?next={% url 'demo_carlist_dashboard' %}" class="btn btn-sm btn-warning">Edit</a>
-          {% comment %} <a href="#" class="btn btn-sm btn-danger">Delete</a> {% endcomment %}
-          <a href="{% url 'delete_car' car.id %}?next={% url 'demo_carlist_dashboard' %}" class="btn btn-sm btn-danger">Delete</a>
-          <a href="{% url 'service_history' car.id %}?next={% url 'demo_carlist_dashboard' %}" class="btn btn-sm btn-success">Tambah data service</a>
-
-        </td>
-        {% elif request.user.role == 'sales' %}
-        <td>
-          <a href="{% url 'update_car' car.id %}?next={% url 'demo_carlist_dashboard' %}" class="btn btn-sm btn-warning">Update</a>
-        </td>
+          <a href="{% url 'create_car' %}" class="btn btn-primary shadow-sm">
+            <i class="fas fa-plus-circle"></i> Add New Car
+          </a>
+        {% elif request.user.role == 'customer' %}
+          <a href="{% url 'demo_order' %}" class="btn btn-success shadow-sm">
+            <i class="fas fa-shopping-cart"></i> Create Trade-In Order
+          </a>
         {% endif %}
-      </tr>
-    {% endfor %}
-  </tbody>
-</table>
+    </div>
 
-{% if request.user.role == 'admin' %}
-  <a href="{% url 'create_car' %}" class="btn btn-primary mt-3">➕ Add New Car</a>
-{% elif request.user.role == 'customer' %}
-  <a href="{% url 'demo_order' %}" class="btn btn-success mt-3">🛒 Create Trade-In Order</a>
-{% endif %}
+</div>
 
 {% endblock %}
