@@ -68,39 +68,70 @@ def dashboard_of_dashboard(request):
 
 
 def demo_carlist_dashboard(request):
-    # 1. Cek keamanan: Pastikan user sudah login
     if not request.user.is_authenticated:
         return redirect("demo_login")
 
-    # 2. Ambil data mobil
-    # Kita tambahkan .order_by('-id') agar data terbaru muncul paling atas.
-    # Paginator membutuhkan data yang urutannya konsisten agar tidak error.
-    cars_data = Cars.objects.all().order_by('-id')
+    # 1. Mulai dengan mengambil SEMUA data
+    cars_data = Cars.objects.all()
 
-    # 3. Logika "Items Per Page" (Jumlah data per halaman)
-    # Kita cek apakah user memilih angka view dari dropdown (misal: 10, 25, 50)
-    # Jika tidak ada yang dipilih, default-nya adalah 5 data per halaman.
+    # ================= LOGIKA FILTERING (PENYARINGAN) =================
+    
+    # Filter by Merek (Brand)
+    selected_brand = request.GET.get('brand')
+    if selected_brand and selected_brand != "":
+        cars_data = cars_data.filter(merek__iexact=selected_brand)
+
+    # Filter by Harga Minimum
+    min_price = request.GET.get('min_price')
+    if min_price and min_price != "":
+        cars_data = cars_data.filter(harga__gte=min_price)
+
+    # Filter by Harga Maximum
+    max_price = request.GET.get('max_price')
+    if max_price and max_price != "":
+        cars_data = cars_data.filter(harga__lte=max_price)
+
+    # ================= LOGIKA SORTING (PENGURUTAN) =================
+    
+    sort_by = request.GET.get('sort', 'newest') # Default: newest
+    
+    if sort_by == 'price_low':
+        cars_data = cars_data.order_by('harga')       # Harga Terendah
+    elif sort_by == 'price_high':
+        cars_data = cars_data.order_by('-harga')      # Harga Tertinggi
+    elif sort_by == 'year_new':
+        cars_data = cars_data.order_by('-tahun')      # Tahun Muda
+    elif sort_by == 'year_old':
+        cars_data = cars_data.order_by('tahun')       # Tahun Tua
+    else:
+        cars_data = cars_data.order_by('-id')         # Default (Input Terakhir)
+
+    # ================= LOGIKA PAGINATION (HALAMAN) =================
+    
     items_per_page = request.GET.get('paginate_by', 5)
-
-    # Validasi: Pastikan items_per_page adalah angka. Jika error, kembalikan ke 5.
     try:
         items_per_page = int(items_per_page)
     except ValueError:
         items_per_page = 5
 
-    # 4. Masukkan data ke Paginator
     paginator = Paginator(cars_data, items_per_page)
-
-    # 5. Ambil nomor halaman yang sedang aktif dari URL (misal: ?page=2)
     page_number = request.GET.get('page')
-    
-    # Ambil objek halaman yang sesuai (Django otomatis menangani jika page kosong/invalid)
     page_obj = paginator.get_page(page_number)
 
-    # 6. Siapkan data untuk dikirim ke HTML
+    # ================= DATA PENDUKUNG DROPDOWN =================
+    
+    # Ambil daftar merek unik yang ada di database untuk opsi Dropdown Filter
+    # flat=True membuat hasilnya jadi list ['Honda', 'Toyota', ...] bukan object
+    brands_list = Cars.objects.values_list('merek', flat=True).distinct().order_by('merek')
+
     context = {
-        "cars": page_obj,          # Data mobil yang sudah dipotong per halaman
-        "items_per_page": items_per_page # Agar dropdown view tetap ingat pilihan terakhir user
+        "cars": page_obj,
+        "items_per_page": items_per_page,
+        "brands_list": brands_list,       # Untuk dropdown merek
+        "selected_brand": selected_brand, # Agar filter tidak reset saat ganti halaman
+        "min_price": min_price,
+        "max_price": max_price,
+        "current_sort": sort_by,
     }
 
     return render(request, "demo/car_list_dashboard.html", context)
