@@ -137,12 +137,55 @@ def demo_carlist_dashboard(request):
     return render(request, "demo/car_list_dashboard.html", context)
 
 def dashboard_customer_list(request):
+    if not request.user.is_authenticated:
+        return redirect("demo_login")
+
+    # 1. Ambil data Order (optimasi dengan select_related agar tidak berat)
+    orders_data = Order.objects.select_related("customer", "trade_in_car", "showroom_car").all()
+
+    # ================= LOGIKA FILTERING =================
+    
+    # Filter by Nama Customer (Search)
+    search_query = request.GET.get('q')
+    if search_query and search_query != "":
+        orders_data = orders_data.filter(customer__name__icontains=search_query)
+
+    # Filter by Status Customer
+    selected_status = request.GET.get('status')
+    if selected_status and selected_status != "":
+        orders_data = orders_data.filter(customer__status__iexact=selected_status)
+
+    # ================= LOGIKA SORTING =================
+    
+    # Default urutkan dari order terbaru (ID terbesar)
+    orders_data = orders_data.order_by('-id')
+
+    # ================= LOGIKA PAGINATION =================
+    
+    items_per_page = request.GET.get('paginate_by', 5)
+    try:
+        items_per_page = int(items_per_page)
+    except ValueError:
+        items_per_page = 5
+
+    paginator = Paginator(orders_data, items_per_page)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    # ================= DATA PENDUKUNG =================
+    
+    # Ambil daftar status unik untuk dropdown filter
+    status_list = Order.objects.values_list('customer__status', flat=True).distinct().order_by('customer__status')
+
     context = {
-        'orders' : Order.objects.select_related("customer","trade_in_car").all()
+        'orders': page_obj,
+        'items_per_page': items_per_page,
+        'status_list': status_list,      # Untuk dropdown status
+        'selected_status': selected_status,
+        'search_query': search_query,
     }
 
-    return render(request,'demo/customer_list_dashboard.html',context)
-    # return render(request,'demo/api_demo_dashboard.html',context)
+    return render(request, 'demo/customer_list_dashboard.html', context)
 
 
 # ==================> Demo API
