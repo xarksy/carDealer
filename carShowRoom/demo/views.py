@@ -140,25 +140,26 @@ def dashboard_customer_list(request):
     if not request.user.is_authenticated:
         return redirect("demo_login")
 
-    # 1. Ambil data Order (optimasi dengan select_related agar tidak berat)
-    orders_data = Order.objects.select_related("customer", "trade_in_car", "showroom_car").all()
+    # 1. Ambil data awal (urutkan dari terbaru)
+    orders_data = Order.objects.select_related("customer", "trade_in_car", "showroom_car").all().order_by('-id')
 
     # ================= LOGIKA FILTERING =================
     
-    # Filter by Nama Customer (Search)
+    # 1. Filter by Nama Customer (Search)
     search_query = request.GET.get('q')
     if search_query and search_query != "":
         orders_data = orders_data.filter(customer__name__icontains=search_query)
 
-    # Filter by Status Customer
+    # 2. Filter by Status Customer
     selected_status = request.GET.get('status')
     if selected_status and selected_status != "":
         orders_data = orders_data.filter(customer__status__iexact=selected_status)
 
-    # ================= LOGIKA SORTING =================
-    
-    # Default urutkan dari order terbaru (ID terbesar)
-    orders_data = orders_data.order_by('-id')
+    # 3. Filter by Order Type (BARU) 
+    # Menggunakan 'offer_type' sesuai nama field di model Order
+    selected_type = request.GET.get('type')
+    if selected_type and selected_type != "":
+        orders_data = orders_data.filter(offer_type__iexact=selected_type)
 
     # ================= LOGIKA PAGINATION =================
     
@@ -172,16 +173,26 @@ def dashboard_customer_list(request):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
-    # ================= DATA PENDUKUNG =================
+    # ================= DATA PENDUKUNG DROPDOWN =================
     
-    # Ambil daftar status unik untuk dropdown filter
+    # Ambil list status unik
     status_list = Order.objects.values_list('customer__status', flat=True).distinct().order_by('customer__status')
+    
+    # Ambil list offer_type unik (Buy, Sell, Trade)
+    type_list = Order.objects.values_list('offer_type', flat=True).distinct().order_by('offer_type')
 
     context = {
         'orders': page_obj,
         'items_per_page': items_per_page,
-        'status_list': status_list,      # Untuk dropdown status
+        
+        # Data untuk Filter Status
+        'status_list': status_list,
         'selected_status': selected_status,
+        
+        # Data untuk Filter Order Type (BARU)
+        'type_list': type_list,
+        'selected_type': selected_type,
+
         'search_query': search_query,
     }
 
