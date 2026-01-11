@@ -5,11 +5,12 @@ from .views import login_view, logout_view, api_login
 # untuk display image
 from django.conf import settings
 from django.conf.urls.static import static
+from demo.views import demo_login
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include('cars.urls')),    
-    path('login/',login_view, name='login'),
+    path('login/',demo_login, name='login'),
     path('logout/',logout_view,name='logout'),
     path('users/',include('users.urls')),
     path('orders/',include('orders.urls')),
