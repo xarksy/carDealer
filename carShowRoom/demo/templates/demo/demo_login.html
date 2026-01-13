@@ -6,12 +6,10 @@
     {% csrf_token %}
     <button type="submit" name="role" value="admin" class="btn btn-primary m-1">Login as Admin</button>
     <button type="submit" name="role" value="sales" class="btn btn-warning m-1">Login as Salesperson</button>
-    <button type="submit" name="role" value="customer" class="btn btn-success m-1">Login as Customer</button>
   </form>
 
   <div class="mt-3">
-    <a href="" class="btn btn-dark m-1">API Demo</a>
-    <a href="{% url 'demo_api' %}" class="btn btn-dark m-1">API Demo</a>
+    <a href="{% url 'carList' %}" class="btn btn-success m-1">Homepage</a>
   </div>
 
 </div>
