@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'demo',
     'rest_framework',
     'corsheaders',
+    'activity_log',
 ]
 
 MIDDLEWARE = [
