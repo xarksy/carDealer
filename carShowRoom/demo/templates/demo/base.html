@@ -31,7 +31,7 @@
                 {% if request.user.role == 'admin' %}
                     <a href="{% url 'demo_dashboard' %}"><i class="fas fa-chart-line me-2"></i>Dashboard</a>
                     <a href="{% url 'demo_userlist_dashboard' %}"><i class="fas fa-users me-2"></i>User</a>
-                    <a href=""><i class="fas fa-clipboard-list me-2"></i>Log</a>
+                    <a href="{% url 'dashboard_log_list' %}"><i class="fas fa-users me-2"></i>Log</a>
                 {% endif %}
                 
                 {% if request.user.role == 'admin' or request.user.role == 'sales' %}
