@@ -51,6 +51,6 @@ def dashboard_log(request):
         'action_list' : action_list
     }
 
-    return render(request, 'activity_log/activity_log.html', context)
+    return render(request, 'activity_log.html', context)
 
 # Create your views here.
