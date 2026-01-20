@@ -63,6 +63,15 @@ def create_car(request):
         if form.is_valid():
             form.save()
 
+            # === TAMBAHKAN INI SETELAH SAVE ===
+            log_activity(
+                user=request.user, 
+                action='CREATE', 
+                target_model='Mobil', 
+                description=f"Menambahkan mobil {form.car.nama} ({form.car.merek})"
+            )
+            # ==================================
+
             next_url = request.GET.get('next', 'carList')
             return redirect(next_url)
         else:
@@ -86,6 +95,15 @@ def updateCar(request, car_id):
         form = CarsForm(request.POST, request.FILES, instance=car)
         if form.is_valid():
             form.save()
+
+            # === TAMBAHKAN INI SETELAH SAVE ===
+            log_activity(
+                user=request.user, 
+                action='UPDATE', 
+                target_model='Mobil', 
+                description=f"Update mobil {form.car.nama} ({form.car.merek})"
+            )
+            # ==================================
 
             next_url = request.GET.get('next', 'carList')
             return redirect(next_url)
