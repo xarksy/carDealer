@@ -7,7 +7,7 @@ from orders.forms import TradeinForm
 from orders.models import Order
 from customer.models import Customer
 from django.db.models import Sum, Count
-from activity_log.utils 
+from activity_log.utils import log_activity
 
 import logging
 logger = logging.getLogger(__name__)
