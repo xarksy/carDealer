@@ -61,14 +61,14 @@ def create_car(request):
     if request.method == 'POST':
         form = CarsForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
+            created_car = form.save()
 
             # === TAMBAHKAN INI SETELAH SAVE ===
             log_activity(
                 user=request.user, 
                 action='CREATE', 
                 target_model='Mobil', 
-                description=f"Menambahkan mobil {form.car.nama} ({form.car.merek})"
+                description=f"Menambahkan mobil {created_car.nama} ({created_car.merek})"
             )
             # ==================================
 
@@ -94,14 +94,14 @@ def updateCar(request, car_id):
     if request.method == 'POST':
         form = CarsForm(request.POST, request.FILES, instance=car)
         if form.is_valid():
-            form.save()
+            updated_car = form.save()
 
             # === TAMBAHKAN INI SETELAH SAVE ===
             log_activity(
                 user=request.user, 
                 action='UPDATE', 
                 target_model='Mobil', 
-                description=f"Update mobil {form.car.nama} ({form.car.merek})"
+                description=f"Update mobil {updated_car.nama} ({updated_car.merek})"
             )
             # ==================================
 
