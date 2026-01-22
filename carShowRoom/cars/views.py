@@ -123,6 +123,15 @@ def deleteCar(request, car_id):
     car = get_object_or_404(Cars, id=car_id)
     car.delete()
 
+    # === TAMBAHKAN INI SETELAH SAVE ===
+    log_activity(
+        user=request.user, 
+        action='DELETE', 
+        target_model='Mobil', 
+        description=f"Menghapus mobil {car.nama} ({car.merek})"
+    )
+    # ==================================
+
     # return redirect('carList')
     next_url = request.GET.get('next', 'carList')
     return redirect(next_url)
