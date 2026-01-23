@@ -193,6 +193,17 @@ def car_service(request, car_id):
             service_history = form.save(commit=False)
             service_history.car = car
             service_history.save()
+
+            # === LOGGING ===
+            log_activity(
+                user=request.user,
+                action='UPDATE', # Atau 'CREATE' karena ini menambah data servis baru
+                target_model='Service History',
+                # Gunakan variabel 'car' langsung karena 'service_history' adalah anak dari 'car'
+                description=f"Menambah data servis untuk mobil {car.nama} ({car.merek})"
+            )
+            # ===============
+            
             return redirect('detail_car',car_id=car.id)
     else:
         form = ServiceHistoryForm(initial={'mobil': car.id}, hide_car_field=True)
