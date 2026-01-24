@@ -4,12 +4,14 @@ from django.contrib.auth import get_user_model
 from cars.models import Cars
 from cars.forms import CarsForm, ServiceHistoryForm
 from django.http import HttpResponseForbidden
-from customer.forms import CustomerForm
+from customer.forms import CustomerForm, CustomerStatusForm
 from orders.forms import TradeinForm
 from orders.models import Order
 from customer.models import Customer
 from django.db.models import Sum, Count
 from django.core.paginator import Paginator
+from activity_log.utils import log_activity
+
 
 import logging
 logger = logging.getLogger(__name__)
@@ -198,6 +200,40 @@ def dashboard_customer_list(request):
 
     return render(request, 'demo/customer_list_dashboard.html', context)
 
+def update_customer_status(request, customer_id):
+    # 1. Ambil data customer (atau error 404 jika tidak ada)
+    customer = get_object_or_404(Customer, id=customer_id)
+
+    # 2. Security Check: Hanya Admin dan Sales yang boleh masuk
+    if request.user.role not in ['admin', 'sales']:
+        return redirect('demo_customer_list_dashboard')
+
+    if request.method == 'POST':
+        form = CustomerStatusForm(request.POST, instance=customer)
+        if form.is_valid():
+            # Kita simpan status lama untuk catatan Log
+            old_status = customer.status
+            
+            # Simpan perubahan
+            updated_customer = form.save()
+
+            # 3. CATAT LOG AKTIVITAS
+            log_activity(
+                user=request.user,
+                action='UPDATE',
+                target_model='Customer',
+                description=f"Mengubah status {updated_customer.name} dari '{old_status}' menjadi '{updated_customer.status}'"
+            )
+
+            # Kembali ke dashboard
+            return redirect('demo_customer_list_dashboard')
+    else:
+        form = CustomerStatusForm(instance=customer)
+
+    return render(request, 'demo/update_customer_status.html', {
+        'form': form,
+        'customer': customer
+    })
 
 # ==================> Demo API
 def demo_api(request):
