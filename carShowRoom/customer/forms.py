@@ -30,3 +30,11 @@ class CustomerForm(forms.ModelForm):
                 customer.save()
 
         return customer
+
+class CustomerStatusForm(forms.ModelForm):
+    class Meta:
+        model = Customer
+        fields = ['status'] # Kita hanya izinkan ubah status
+        widgets = {
+            'status': forms.Select(attrs={'class': 'form-select'})
+        }
