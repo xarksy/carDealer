@@ -23,7 +23,7 @@
                     <label class="form-label small text-muted mb-1">Order Type</label>
                     <select name="type" class="form-select form-select-sm">
                         <option value="">All Types</option>
-                        {% for type in type_list %}
+                        {% for type in type_list %}\
                             {% if type %}
                                 <option value="{{ type }}" {% if selected_type == type %}selected{% endif %}>
                                     {{ type|title }}
@@ -119,13 +119,26 @@
                             <td class="text-center">
                                 {% if order.customer.status|lower == 'deal' %}
                                     <span class="badge bg-success rounded-pill px-3">Deal</span>
-                                {% elif order.customer.status|lower == 'negotiation' %}
-                                    <span class="badge bg-warning text-dark rounded-pill px-3">Negotiation</span>
+                                {% elif order.customer.status|lower == 'negotiating' %}
+                                    <span class="badge bg-warning text-dark rounded-pill px-3">Negotiating</span>
+                                {% elif order.customer.status|lower == 'uncontacted' %}
+                                    <span class="badge bg-danger rounded-pill px-3">Uncontacted</span>
                                 {% else %}
                                     <span class="badge bg-secondary rounded-pill px-3">{{ order.customer.status|default:"Pending" }}</span>
                                 {% endif %}
+
+                                {% if request.user.role in 'admin sales' %}
+                                    <div class="mt-2">
+                                        <a href="{% url 'update_customer_status' order.customer.id %}" 
+                                           class="btn btn-sm btn-outline-primary py-0 px-2" 
+                                           style="font-size: 0.7rem; border-radius: 4px;"
+                                           title="Update Status">
+                                           <i class="fas fa-pencil-alt me-1"></i> Update
+                                        </a>
+                                    </div>
+                                {% endif %}
                             </td>
-                        </tr>
+                            </tr>
                         {% empty %}
                         <tr>
                             <td colspan="5" class="text-center py-5 text-muted">
