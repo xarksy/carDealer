@@ -1,41 +1,168 @@
 {% extends "demo/base.html" %}
+{% load humanize %} {% block content %}
+<div class="container-fluid mt-4">
 
-{% block content %}
-<h2>Total Order: {{ total_order }}</h2>
-<h2>Total Income: {{ total_income }}</h2>
-<h2>Total Customers: {{ total_customer }}</h2>
-<h2>Total Cars: {{ total_cars }}</h2>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h3 class="m-0 fw-bold text-dark">📊 Dashboard Overview</h3>
+            <p class="text-muted m-0">Statistik penjualan untuk tahun <strong>{{ selected_year }}</strong></p>
+        </div>
 
-<canvas id="orderChart"></canvas>
+        <form method="get" class="d-flex align-items-center bg-white p-2 rounded shadow-sm border">
+            <label for="year" class="me-2 text-muted small fw-bold"><i class="fas fa-calendar-alt"></i> Year:</label>
+            <select name="year" id="year" class="form-select form-select-sm border-0 bg-light fw-bold" 
+                    onchange="this.form.submit()" style="cursor: pointer;">
+                {% for y in available_years %}
+                    <option value="{{ y }}" {% if y == selected_year %}selected{% endif %}>
+                        {{ y }}
+                    </option>
+                {% endfor %}
+            </select>
+        </form>
+    </div>
+
+    <div class="row g-3 mb-4">
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0 border-start border-4 border-primary h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <p class="text-muted small mb-1 text-uppercase fw-bold">Total Orders</p>
+                            <h4 class="mb-0 fw-bold text-primary">{{ total_order }}</h4>
+                        </div>
+                        <div class="bg-primary bg-opacity-10 p-3 rounded-circle text-primary">
+                            <i class="fas fa-shopping-cart fa-lg"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0 border-start border-4 border-success h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <p class="text-muted small mb-1 text-uppercase fw-bold">Total Income</p>
+                            <h4 class="mb-0 fw-bold text-success">Rp {{ total_income|intcomma }}</h4>
+                        </div>
+                        <div class="bg-success bg-opacity-10 p-3 rounded-circle text-success">
+                            <i class="fas fa-money-bill-wave fa-lg"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0 border-start border-4 border-warning h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <p class="text-muted small mb-1 text-uppercase fw-bold">Customers</p>
+                            <h4 class="mb-0 fw-bold text-warning">{{ total_customer }}</h4>
+                        </div>
+                        <div class="bg-warning bg-opacity-10 p-3 rounded-circle text-warning">
+                            <i class="fas fa-users fa-lg"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0 border-start border-4 border-secondary h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <p class="text-muted small mb-1 text-uppercase fw-bold">Cars Available</p>
+                            <h4 class="mb-0 fw-bold text-secondary">{{ total_cars }}</h4>
+                        </div>
+                        <div class="bg-secondary bg-opacity-10 p-3 rounded-circle text-secondary">
+                            <i class="fas fa-car fa-lg"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-white py-3">
+                    <h5 class="m-0 fw-bold text-dark"><i class="fas fa-chart-line me-2 text-primary"></i> Monthly Sales Trend ({{ selected_year }})</h5>
+                </div>
+                <div class="card-body">
+                    <div style="height: 350px;">
+                        <canvas id="orderChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
-    const ctx = document.getElementById('orderChart');
-    new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: [{% for o in order_per_month %}"{{ o.month_name }}"{% if not forloop.last %},{% endif %}{% endfor %}],
+    document.addEventListener("DOMContentLoaded", function() {
+        const ctx = document.getElementById('orderChart').getContext('2d');
+        
+        // Data dari Django Views
+        const chartData = {
+            // Mengambil Nama Bulan (Jan, Feb, Mar...)
+            labels: [{% for data in order_per_month %}"{{ data.month|date:'M' }}",{% endfor %}],
             datasets: [{
-                label: 'Order per Bulan',
-                data: [{% for o in order_per_month %}{{ o.total }}{% if not forloop.last %},{% endif %}{% endfor %}],
-                backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                label: 'Orders in {{ selected_year }}',
+                // Mengambil Total Order per bulan
+                data: [{% for data in order_per_month %}{{ data.total }},{% endfor %}],
+                backgroundColor: 'rgba(54, 162, 235, 0.2)',
                 borderColor: 'rgba(54, 162, 235, 1)',
-                borderWidth: 1
+                borderWidth: 2,
+                pointBackgroundColor: 'rgba(54, 162, 235, 1)',
+                pointRadius: 4,
+                tension: 0.4, // Membuat garis melengkung halus
+                fill: true
             }]
-        },
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    ticks: {
-                        stepSize: 1
+        };
+
+        new Chart(ctx, {
+            type: 'line', // Saya ubah ke 'line' agar tren lebih terlihat, bisa diganti 'bar'
+            data: chartData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false,
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1, // Agar sumbu Y bilangan bulat (order tidak mungkin desimal)
+                            precision: 0
+                        },
+                        grid: {
+                            borderDash: [2, 4]
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        }
                     }
                 }
             }
-        }
+        });
     });
 </script>
 
-{% endblock content %}
-
+{% endblock %}
