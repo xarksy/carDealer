@@ -11,6 +11,9 @@ from customer.models import Customer
 from django.db.models import Sum, Count
 from django.core.paginator import Paginator
 from activity_log.utils import log_activity
+from django.db.models.functions import ExtractYear, TruncMonth
+from django.utils import timezone
+import datetime
 
 
 import logging
@@ -45,28 +48,67 @@ def demo_logout(request):
 def dashboard_of_dashboard(request):
     if not request.user.is_authenticated:
         return redirect("demo_login")
-        
-    total_order = Order.objects.count()
+
+    # 1. Ambil Tahun Saat Ini
+    current_year = timezone.now().year
+
+    # 2. Ambil Daftar Tahun yang Tersedia di Database (Untuk opsi Dropdown)
+    # Ini akan menghasilkan list seperti [2026, 2025, 2024]
+    available_years = Order.objects.annotate(
+        year=ExtractYear('created_at')
+    ).values_list('year', flat=True).distinct().order_by('-year')
+
+    # Jika database kosong, setidaknya sediakan tahun sekarang
+    if not available_years:
+        available_years = [current_year]
+
+    # 3. Tangkap Pilihan User dari URL (misal: ?year=2024)
+    selected_year = request.GET.get('year')
+    
+    # Validasi: Jika user tidak memilih (None) atau input aneh, pakai tahun sekarang
+    try:
+        selected_year = int(selected_year)
+    except (ValueError, TypeError):
+        selected_year = current_year
+
+    # ================= QUERY DATA (DIFILTER TAHUN) =================
+    
+    # Filter global untuk tahun ini
+    orders_in_year = Order.objects.filter(created_at__year=selected_year)
+
+    total_order = orders_in_year.count()
+    
+    # Income dihitung HANYA jika status Deal (Best Practice)
+    total_income = orders_in_year.filter(customer__status='deal').aggregate(
+        total=Sum("showroom_car__harga")
+    )["total"] or 0
+
+    # Grafik Bulanan (Perbaikan Logika: Pakai TruncMonth agar akurat)
+    order_per_month = (
+        orders_in_year
+        .annotate(month=TruncMonth('created_at'))
+        .values('month')
+        .annotate(total=Count('id'))
+        .order_by('month')
+    )
+
+    # Data lain yang tidak perlu filter tahun (Total Customer & Total Mobil)
     total_customers = Customer.objects.count()
     total_cars = Cars.objects.count()
 
-    total_income = Order.objects.aggregate(total=Sum("showroom_car__harga"))["total"] or 0
-    order_per_month = (
-        Order.objects.values("created_at__month")
-        .annotate(total=Count("id"))
-        .order_by("created_at__month")
-    )
-
     context = {
-        'total_order' : total_order,
-        'total_customer' : total_customers,
-        'total_cars' : total_cars,
-        'total_income' : total_income,
-        'order_per_month' : order_per_month,
+        'total_order': total_order,
+        'total_customer': total_customers,
+        'total_cars': total_cars,
+        'total_income': total_income,
+        'order_per_month': order_per_month,
+        
+        # Data untuk Dropdown Filter
+        'available_years': available_years,
+        'selected_year': selected_year,
     }
-    
 
-    return render(request, 'demo/chart_dashboard.html', context=context)
+    return render(request, 'demo/chart_dashboard.html', context)
 
 
 def demo_carlist_dashboard(request):
