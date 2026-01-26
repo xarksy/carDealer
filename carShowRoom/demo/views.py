@@ -96,16 +96,32 @@ def dashboard_of_dashboard(request):
     total_customers = Customer.objects.count()
     total_cars = Cars.objects.count()
 
+    # === TAMBAHAN BARU: DATA CHART MOBIL & CUSTOMER ===
+    
+    # 1. Grafik Stok Mobil per Merek (Top 10)
+    # Contoh hasil: [{'merek': 'Toyota', 'total': 5}, {'merek': 'Honda', 'total': 3}]
+    car_brand_data = Cars.objects.values('merek') \
+        .annotate(total=Count('id')) \
+        .order_by('-total')[:10]
+
+    # 2. Grafik Status Customer (Funnel)
+    # Contoh hasil: [{'status': 'deal', 'total': 10}, {'status': 'uncontacted', 'total': 5}]
+    customer_status_data = Customer.objects.values('status') \
+        .annotate(total=Count('id')) \
+        .order_by('status')
+
     context = {
         'total_order': total_order,
         'total_customer': total_customers,
         'total_cars': total_cars,
         'total_income': total_income,
         'order_per_month': order_per_month,
-        
-        # Data untuk Dropdown Filter
         'available_years': available_years,
         'selected_year': selected_year,
+        
+        # Kirim data baru ke HTML
+        'car_brand_data': car_brand_data,
+        'customer_status_data': customer_status_data,
     }
 
     return render(request, 'demo/chart_dashboard.html', context)
