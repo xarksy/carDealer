@@ -7,17 +7,38 @@
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
             <h3 class="m-0 fw-bold text-dark">📊 Executive Dashboard</h3>
-            <p class="text-muted m-0">Performance overview for <strong>{{ selected_year }}</strong></p>
+            <p class="text-muted m-0">
+                Performance for 
+                {% if selected_month %}
+                    <strong>{{ selected_month|date:"F" }} {{ selected_year }}</strong> (Daily View)
+                {% else %}
+                    <strong>{{ selected_year }}</strong> (Monthly View)
+                {% endif %}
+            </p>
         </div>
 
-        <form method="get" class="d-flex align-items-center bg-white p-2 rounded shadow-sm border">
-            <label for="year" class="me-2 text-muted small fw-bold"><i class="fas fa-calendar-alt"></i> Year:</label>
-            <select name="year" id="year" class="form-select form-select-sm border-0 bg-light fw-bold" 
-                    onchange="this.form.submit()" style="cursor: pointer;">
-                {% for y in available_years %}
-                    <option value="{{ y }}" {% if y == selected_year %}selected{% endif %}>{{ y }}</option>
-                {% endfor %}
-            </select>
+        <form method="get" class="d-flex gap-2 bg-white p-2 rounded shadow-sm border">
+            
+            <div class="d-flex align-items-center">
+                <label class="me-2 text-muted small fw-bold">Month:</label>
+                <select name="month" class="form-select form-select-sm border-0 bg-light fw-bold" onchange="this.form.submit()" style="cursor: pointer;">
+                    <option value="">All Months</option>
+                    {% for m in month_list %}
+                        <option value="{{ m.num }}" {% if m.num == selected_month %}selected{% endif %}>
+                            {{ m.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="vr"></div> <div class="d-flex align-items-center">
+                <label class="me-2 text-muted small fw-bold">Year:</label>
+                <select name="year" class="form-select form-select-sm border-0 bg-light fw-bold" onchange="this.form.submit()" style="cursor: pointer;">
+                    {% for y in available_years %}
+                        <option value="{{ y }}" {% if y == selected_year %}selected{% endif %}>{{ y }}</option>
+                    {% endfor %}
+                </select>
+            </div>
         </form>
     </div>
 
@@ -25,52 +46,34 @@
         <div class="col-md-3">
             <div class="card shadow-sm border-0 border-start border-4 border-primary h-100">
                 <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <p class="text-muted small mb-1 text-uppercase fw-bold">Total Orders</p>
-                            <h4 class="mb-0 fw-bold text-primary">{{ total_order }}</h4>
-                        </div>
-                        <div class="bg-primary bg-opacity-10 p-3 rounded-circle text-primary"><i class="fas fa-shopping-cart fa-lg"></i></div>
-                    </div>
+                    <p class="text-muted small mb-1 text-uppercase fw-bold">Total Orders</p>
+                    <h4 class="mb-0 fw-bold text-primary">{{ total_order }}</h4>
                 </div>
             </div>
         </div>
         <div class="col-md-3">
             <div class="card shadow-sm border-0 border-start border-4 border-success h-100">
                 <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <p class="text-muted small mb-1 text-uppercase fw-bold">Total Income (Deal)</p>
-                            <h4 class="mb-0 fw-bold text-success">Rp {{ total_income|intcomma }}</h4>
-                        </div>
-                        <div class="bg-success bg-opacity-10 p-3 rounded-circle text-success"><i class="fas fa-money-bill-wave fa-lg"></i></div>
-                    </div>
+                    <p class="text-muted small mb-1 text-uppercase fw-bold">Total Income (Deal)</p>
+                    <h4 class="mb-0 fw-bold text-success">Rp {{ total_income|intcomma }}</h4>
                 </div>
             </div>
         </div>
         <div class="col-md-3">
-            <div class="card shadow-sm border-0 border-start border-4 border-warning h-100">
+            <div class="card shadow-sm border-0 border-start border-4 border-danger h-100">
                 <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <p class="text-muted small mb-1 text-uppercase fw-bold">Customers</p>
-                            <h4 class="mb-0 fw-bold text-warning">{{ total_customer }}</h4>
-                        </div>
-                        <div class="bg-warning bg-opacity-10 p-3 rounded-circle text-warning"><i class="fas fa-users fa-lg"></i></div>
-                    </div>
+                    <p class="text-muted small mb-1 text-uppercase fw-bold">Sell Orders (In)</p>
+                    {% with total_sell=0 %}
+                        <h4 class="mb-0 fw-bold text-danger">Check Chart 👇</h4>
+                    {% endwith %}
                 </div>
             </div>
         </div>
         <div class="col-md-3">
             <div class="card shadow-sm border-0 border-start border-4 border-secondary h-100">
                 <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <p class="text-muted small mb-1 text-uppercase fw-bold">Cars Available</p>
-                            <h4 class="mb-0 fw-bold text-secondary">{{ total_cars }}</h4>
-                        </div>
-                        <div class="bg-secondary bg-opacity-10 p-3 rounded-circle text-secondary"><i class="fas fa-car fa-lg"></i></div>
-                    </div>
+                    <p class="text-muted small mb-1 text-uppercase fw-bold">Total Cars Stock</p>
+                    <h4 class="mb-0 fw-bold text-secondary">{{ total_cars }}</h4>
                 </div>
             </div>
         </div>
@@ -79,12 +82,15 @@
     <div class="row mb-4">
         <div class="col-12">
             <div class="card shadow-sm border-0">
-                <div class="card-header bg-white py-3">
-                    <h5 class="m-0 fw-bold text-dark"><i class="fas fa-chart-line me-2 text-primary"></i> Monthly Sales Trend</h5>
+                <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                    <h5 class="m-0 fw-bold text-dark"><i class="fas fa-chart-line me-2 text-primary"></i> Sales & Acquisition Trend</h5>
+                    <span class="badge bg-light text-dark border">
+                        {% if selected_month %}Daily Breakdown{% else %}Monthly Breakdown{% endif %}
+                    </span>
                 </div>
                 <div class="card-body">
-                    <div style="height: 300px;">
-                        <canvas id="orderChart"></canvas>
+                    <div style="height: 350px;">
+                        <canvas id="trendChart"></canvas>
                     </div>
                 </div>
             </div>
@@ -96,11 +102,11 @@
         <div class="col-md-6">
             <div class="card shadow-sm border-0 h-100">
                 <div class="card-header bg-white py-3">
-                    <h5 class="m-0 fw-bold text-dark"><i class="fas fa-car me-2 text-secondary"></i> Inventory by Brand (Top 10)</h5>
+                    <h5 class="m-0 fw-bold text-dark"><i class="fas fa-trophy me-2 text-warning"></i> Best Selling Brands</h5>
                 </div>
                 <div class="card-body">
                     <div style="height: 250px;">
-                        <canvas id="brandChart"></canvas>
+                        <canvas id="salesBrandChart"></canvas>
                     </div>
                 </div>
             </div>
@@ -109,7 +115,7 @@
         <div class="col-md-6">
             <div class="card shadow-sm border-0 h-100">
                 <div class="card-header bg-white py-3">
-                    <h5 class="m-0 fw-bold text-dark"><i class="fas fa-filter me-2 text-warning"></i> Customer Status Funnel</h5>
+                    <h5 class="m-0 fw-bold text-dark"><i class="fas fa-users me-2 text-info"></i> Customer Status Funnel</h5>
                 </div>
                 <div class="card-body">
                     <div style="height: 250px; width: 100%; display: flex; justify-content: center;">
@@ -127,55 +133,71 @@
 <script>
 document.addEventListener("DOMContentLoaded", function() {
     
-    // --- 1. Sales Trend Chart (Line) ---
-    const ctxOrder = document.getElementById('orderChart').getContext('2d');
-    new Chart(ctxOrder, {
+    // --- 1. DYNAMIC TREND CHART (Multi-Line) ---
+    const ctxTrend = document.getElementById('trendChart').getContext('2d');
+    new Chart(ctxTrend, {
         type: 'line',
         data: {
-            labels: [{% for data in order_per_month %}"{{ data.month|date:'M' }}",{% endfor %}],
-            datasets: [{
-                label: 'Sales Orders',
-                data: [{% for data in order_per_month %}{{ data.total }},{% endfor %}],
-                backgroundColor: 'rgba(13, 110, 253, 0.1)',
-                borderColor: '#0d6efd',
-                borderWidth: 2,
-                tension: 0.4,
-                fill: true
-            }]
+            // Label Waktu (Dinamis: Tanggal 1-31 atau Bulan Jan-Dec)
+            labels: [{% for data in trend_data %}"{{ data.period|date:date_format_code }}",{% endfor %}],
+            datasets: [
+                {
+                    label: 'Total Orders (All Types)',
+                    data: [{% for data in trend_data %}{{ data.total_all }},{% endfor %}],
+                    borderColor: '#0d6efd', // Biru
+                    backgroundColor: 'rgba(13, 110, 253, 0.1)',
+                    borderWidth: 3,
+                    tension: 0.3,
+                    fill: true
+                },
+                {
+                    label: 'Sell Orders (Incoming Cars)',
+                    data: [{% for data in trend_data %}{{ data.total_sell }},{% endfor %}],
+                    borderColor: '#dc3545', // Merah
+                    backgroundColor: 'rgba(220, 53, 69, 0.0)', // Transparan
+                    borderWidth: 2,
+                    borderDash: [5, 5], // Garis putus-putus untuk membedakan
+                    tension: 0.3,
+                    pointStyle: 'rectRot'
+                }
+            ]
         },
         options: {
             responsive: true,
             maintainAspectRatio: false,
+            interaction: {
+                mode: 'index',
+                intersect: false,
+            },
             scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } }
         }
     });
 
-    // --- 2. Car Brand Chart (Bar) ---
-    const ctxBrand = document.getElementById('brandChart').getContext('2d');
+    // --- 2. TOP SELLING BRANDS (Bar Chart) ---
+    const ctxBrand = document.getElementById('salesBrandChart').getContext('2d');
     new Chart(ctxBrand, {
         type: 'bar',
         data: {
-            labels: [{% for car in car_brand_data %}"{{ car.merek }}",{% endfor %}],
+            labels: [{% for item in top_selling_brands %}"{{ item.showroom_car__merek }}",{% endfor %}],
             datasets: [{
-                label: 'Total Units',
-                data: [{% for car in car_brand_data %}{{ car.total }},{% endfor %}],
+                label: 'Units Sold/Ordered',
+                data: [{% for item in top_selling_brands %}{{ item.total_sold }},{% endfor %}],
                 backgroundColor: [
-                    '#6610f2', '#6f42c1', '#d63384', '#dc3545', 
-                    '#fd7e14', '#ffc107', '#198754', '#20c997', '#0dcaf0'
+                    '#ffc107', '#fd7e14', '#20c997', '#0dcaf0', '#6610f2'
                 ],
-                borderRadius: 4
+                borderRadius: 5
             }]
         },
         options: {
             responsive: true,
             maintainAspectRatio: false,
-            indexAxis: 'y', // Membuat bar chart jadi horizontal agar nama merek terbaca jelas
+            indexAxis: 'y', // Horizontal Bar
             scales: { x: { beginAtZero: true, ticks: { stepSize: 1 } } },
             plugins: { legend: { display: false } }
         }
     });
 
-    // --- 3. Customer Status Chart (Doughnut) ---
+    // --- 3. CUSTOMER STATUS (Doughnut) ---
     const ctxCustomer = document.getElementById('customerChart').getContext('2d');
     new Chart(ctxCustomer, {
         type: 'doughnut',
@@ -183,26 +205,17 @@ document.addEventListener("DOMContentLoaded", function() {
             labels: [{% for c in customer_status_data %}"{{ c.status|title }}",{% endfor %}],
             datasets: [{
                 data: [{% for c in customer_status_data %}{{ c.total }},{% endfor %}],
-                backgroundColor: [
-                    '#198754', // Deal (Hijau)
-                    '#ffc107', // Negotiating (Kuning)
-                    '#dc3545', // Uncontacted (Merah)
-                    '#6c757d', // Others (Abu)
-                    '#0dcaf0'
-                ],
+                backgroundColor: ['#198754', '#ffc107', '#dc3545', '#6c757d', '#0dcaf0'],
                 borderWidth: 0
             }]
         },
         options: {
             responsive: true,
             maintainAspectRatio: false,
-            cutout: '60%', // Lubang tengah donat
-            plugins: {
-                legend: { position: 'right' }
-            }
+            cutout: '70%',
+            plugins: { legend: { position: 'right' } }
         }
     });
-
 });
 </script>
 
