@@ -11,9 +11,10 @@ from customer.models import Customer
 from django.db.models import Sum, Count
 from django.core.paginator import Paginator
 from activity_log.utils import log_activity
-from django.db.models.functions import ExtractYear, TruncMonth
+from django.db.models import Count, Sum, Case, When, IntegerField
+from django.db.models.functions import ExtractYear, TruncMonth, TruncDay
 from django.utils import timezone
-import datetime
+import calendar
 
 
 import logging
@@ -49,79 +50,105 @@ def dashboard_of_dashboard(request):
     if not request.user.is_authenticated:
         return redirect("demo_login")
 
-    # 1. Ambil Tahun Saat Ini
-    current_year = timezone.now().year
-
-    # 2. Ambil Daftar Tahun yang Tersedia di Database (Untuk opsi Dropdown)
-    # Ini akan menghasilkan list seperti [2026, 2025, 2024]
-    available_years = Order.objects.annotate(
-        year=ExtractYear('created_at')
-    ).values_list('year', flat=True).distinct().order_by('-year')
-
-    # Jika database kosong, setidaknya sediakan tahun sekarang
-    if not available_years:
-        available_years = [current_year]
-
-    # 3. Tangkap Pilihan User dari URL (misal: ?year=2024)
-    selected_year = request.GET.get('year')
+    # --- 1. SETUP FILTER TAHUN & BULAN ---
+    current_date = timezone.now()
+    current_year = current_date.year
     
-    # Validasi: Jika user tidak memilih (None) atau input aneh, pakai tahun sekarang
+    # Ambil list tahun dari database
+    available_years = Order.objects.annotate(year=ExtractYear('created_at')).values_list('year', flat=True).distinct().order_by('-year')
+    if not available_years: available_years = [current_year]
+    
+    # Tangkap Input Filter
+    selected_year = request.GET.get('year')
+    selected_month = request.GET.get('month') # Input baru (1-12 atau None)
+
+    # Validasi Tahun
     try:
         selected_year = int(selected_year)
     except (ValueError, TypeError):
         selected_year = current_year
 
-    # ================= QUERY DATA (DIFILTER TAHUN) =================
-    
-    # Filter global untuk tahun ini
-    orders_in_year = Order.objects.filter(created_at__year=selected_year)
+    # Validasi Bulan
+    try:
+        selected_month = int(selected_month)
+        if selected_month < 1 or selected_month > 12: raise ValueError
+    except (ValueError, TypeError):
+        selected_month = None # Artinya "All Months"
 
-    total_order = orders_in_year.count()
+    # --- 2. QUERY BASE (Dasar Data) ---
+    # Filter global berdasarkan tahun yang dipilih
+    orders_query = Order.objects.filter(created_at__year=selected_year)
     
-    # Income dihitung HANYA jika status Deal (Best Practice)
-    total_income = orders_in_year.filter(customer__status='deal').aggregate(
-        total=Sum("showroom_car__harga")
-    )["total"] or 0
+    # Jika bulan dipilih, persempit scope data
+    if selected_month:
+        orders_query = orders_query.filter(created_at__month=selected_month)
 
-    # Grafik Bulanan (Perbaikan Logika: Pakai TruncMonth agar akurat)
-    order_per_month = (
-        orders_in_year
-        .annotate(month=TruncMonth('created_at'))
-        .values('month')
-        .annotate(total=Count('id'))
-        .order_by('month')
+    # --- 3. METRIK UTAMA (KARTU ATAS) ---
+    total_order = orders_query.count()
+    
+    # Total Income (Hanya yang status Deal)
+    total_income = orders_query.filter(customer__status='deal').aggregate(total=Sum("showroom_car__harga"))["total"] or 0
+    
+    total_customers = Customer.objects.count() # Total database (tidak terpengaruh filter waktu)
+    total_cars = Cars.objects.count() # Stok saat ini
+
+    # --- 4. DATA GRAFIK TREN (DINAMIS: HARIAN vs BULANAN) ---
+    # Kita siapkan 'Trend Line' untuk Total Order DAN 'Sell' Order
+    
+    if selected_month:
+        # LOGIKA HARIAN (Jika bulan dipilih)
+        trunc_func = TruncDay('created_at')
+        date_format_code = 'd' # Nanti di JS jadi tanggal 1, 2, 3...
+    else:
+        # LOGIKA BULANAN (Jika setahun penuh)
+        trunc_func = TruncMonth('created_at')
+        date_format_code = 'M' # Nanti di JS jadi Jan, Feb, Mar...
+
+    trend_data = (
+        orders_query
+        .annotate(period=trunc_func)
+        .values('period')
+        .annotate(
+            total_all=Count('id'),
+            # Hitung khusus yang tipe 'sell' (Customer Jual Mobil)
+            total_sell=Count(Case(When(offer_type__iexact='sell', then=1), output_field=IntegerField()))
+        )
+        .order_by('period')
     )
 
-    # Data lain yang tidak perlu filter tahun (Total Customer & Total Mobil)
-    total_customers = Customer.objects.count()
-    total_cars = Cars.objects.count()
+    # --- 5. DATA MOBIL TERLARIS (SALES BY BRAND) ---
+    # Menghitung merek apa yang paling banyak ada di tabel Order (Terjual/Dipesan)
+    top_selling_brands = (
+        orders_query
+        .values('showroom_car__merek') # Group by Merek Mobil
+        .annotate(total_sold=Count('id'))
+        .order_by('-total_sold')[:10] # Ambil Top 10
+    )
 
-    # === TAMBAHAN BARU: DATA CHART MOBIL & CUSTOMER ===
-    
-    # 1. Grafik Stok Mobil per Merek (Top 10)
-    # Contoh hasil: [{'merek': 'Toyota', 'total': 5}, {'merek': 'Honda', 'total': 3}]
-    car_brand_data = Cars.objects.values('merek') \
-        .annotate(total=Count('id')) \
-        .order_by('-total')[:10]
+    # --- 6. DATA CUSTOMER FUNNEL ---
+    customer_status_data = Customer.objects.values('status').annotate(total=Count('id')).order_by('status')
 
-    # 2. Grafik Status Customer (Funnel)
-    # Contoh hasil: [{'status': 'deal', 'total': 10}, {'status': 'uncontacted', 'total': 5}]
-    customer_status_data = Customer.objects.values('status') \
-        .annotate(total=Count('id')) \
-        .order_by('status')
+    # List Nama Bulan untuk Dropdown
+    month_list = []
+    for i in range(1, 13):
+        month_list.append({'num': i, 'name': calendar.month_name[i]})
 
     context = {
         'total_order': total_order,
         'total_customer': total_customers,
         'total_cars': total_cars,
         'total_income': total_income,
-        'order_per_month': order_per_month,
-        'available_years': available_years,
-        'selected_year': selected_year,
         
-        # Kirim data baru ke HTML
-        'car_brand_data': car_brand_data,
+        # Data Grafik & Filter
+        'trend_data': trend_data,
+        'top_selling_brands': top_selling_brands,
         'customer_status_data': customer_status_data,
+        
+        'available_years': available_years,
+        'month_list': month_list,
+        'selected_year': selected_year,
+        'selected_month': selected_month,
+        'date_format_code': date_format_code, # Kirim format tanggal ke HTML
     }
 
     return render(request, 'demo/chart_dashboard.html', context)
