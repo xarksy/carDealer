@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -23,9 +24,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-_(p!c4ia$&q-0m$9!*3!_@6)^$izh++p^zj3c=k-i15!7jwtf#'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = []
+DEBUG = False  # Ubah jadi False saat sudah siap live
+ALLOWED_HOSTS = ['*'] # Nanti kita ubah ke domain PythonAnywhere
 
 
 # Application definition
@@ -126,6 +126,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = 'static/'
+# Folder tempat mengumpulkan semua file static saat deploy
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 STATICFILES_DIRS = [BASE_DIR / "static"]  # optional: if you keep custom static files inside /static/
 
@@ -174,4 +176,4 @@ CORS_ALLOW_ALL_ORIGINS = True
 MEDIA_URL = '/media/'
 
 # Folder fisik di komputer tempat gambar disimpan
-MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
