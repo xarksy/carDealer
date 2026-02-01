@@ -1,4 +1,4 @@
-/* static/cars/css/style.css */
+/* static/cars/css/style1.css */
 
 /* --- General --- */
 html { scroll-behavior: smooth; }
@@ -37,9 +37,10 @@ body {
 
 /* Wrapper Gambar agar seragam */
 .car-img-wrapper {
-    height: 100%; /* Menyesuaikan container */
+    height: 100%; 
     overflow: hidden;
     position: relative;
+    min-height: 250px; /* Menjaga tinggi minimal gambar */
 }
 
 .car-img-wrapper img {
@@ -60,7 +61,7 @@ body {
     color: #28a745;
 }
 
-/* Link Wrapper agar seluruh kartu bisa diklik tapi teks tetap rapi */
+/* Link Wrapper */
 a.card-link-wrapper {
     text-decoration: none;
     color: inherit;
@@ -70,7 +71,7 @@ a.card-link-wrapper {
 .admin-delete-btn {
     position: absolute;
     top: 10px;
-    left: 10px; /* Saya pindah ke Kiri agar tidak tabrakan dengan WA */
+    left: 10px; 
     z-index: 30;
     background: white;
     border-radius: 50%;
@@ -92,9 +93,19 @@ a.card-link-wrapper {
     padding-bottom: 40px;
 }
 
-/* =========================================
-   BARU: Tombol WhatsApp Overlay (Melayang)
-   ========================================= */
+/* Styling Input Form agar lebih rapi & konsisten */
+.form-control {
+    border-radius: 8px;
+    padding: 10px 15px;
+    font-size: 0.95rem;
+    border: 1px solid #ced4da;
+}
+.form-control:focus {
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.15);
+    border-color: #80bdff;
+}
+
+/* --- Tombol WhatsApp Overlay --- */
 .btn-wa-overlay {
     position: absolute;
     top: 10px;
@@ -108,11 +119,11 @@ a.card-link-wrapper {
     align-items: center;
     justify-content: center;
     font-size: 24px;
-    z-index: 20; /* Agar di atas gambar/carousel */
+    z-index: 20; 
     box-shadow: 0 2px 8px rgba(0,0,0,0.3);
     transition: all 0.3s ease;
     border: 2px solid white;
-    text-decoration: none; /* Hilangkan garis bawah link */
+    text-decoration: none; 
 }
 
 .btn-wa-overlay:hover {
@@ -121,4 +132,55 @@ a.card-link-wrapper {
     transform: scale(1.1);
     text-decoration: none;
     cursor: pointer;
+}
+
+/* =========================================
+   MEDIA QUERIES (RESPONSIVE FIXES)
+   ========================================= */
+
+/* Tampilan Desktop (Layar Besar) */
+@media (min-width: 992px) {
+    /* Garis pemisah vertikal hanya muncul di desktop */
+    .border-md-right {
+        border-right: 1px solid #dee2e6;
+    }
+}
+
+/* Tampilan Mobile (Layar Kecil < 992px) */
+@media (max-width: 991.98px) {
+    
+    /* 1. Perbaikan Navbar Mobile */
+    .navbar-collapse {
+        background-color: #ffffff;
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        margin-top: 10px;
+    }
+
+    .navbar-collapse .ml-auto {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .navbar-collapse span {
+        margin-bottom: 10px !important;
+        margin-right: 0 !important;
+        font-weight: bold;
+    }
+
+    .navbar-collapse .btn {
+        width: 100%;
+        margin-bottom: 10px;
+        margin-right: 0 !important;
+    }
+
+    /* 2. Perbaikan Layout Form */
+    .border-md-right {
+        border-right: none; /* Hilangkan garis vertikal */
+        border-bottom: 1px solid #dee2e6; /* Ganti jadi garis horizontal */
+        padding-bottom: 20px;
+        margin-bottom: 20px;
+    }
 }
