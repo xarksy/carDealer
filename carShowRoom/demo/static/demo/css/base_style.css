@@ -21,17 +21,19 @@ body.no-sidebar .main-container {
     background: #212529;
     color: white;
     margin-top: 56px;
-    position: fixed; 
+    position: fixed;
     
-    /* --- TAMBAHKAN DUA BARIS INI --- */
+    /* Posisi Default Desktop */
     left: 0;
     top: 0;
-    /* ------------------------------ */
     
     height: 100vh;
     overflow-y: auto;
     z-index: 1000;
     box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+
+    /* TAMBAHAN: Transisi halus saat sidebar muncul/hilang */
+    transition: all 0.3s ease-in-out;
 }
 
 .sidebar a {
@@ -52,10 +54,13 @@ body.no-sidebar .main-container {
 /* Main Container Adjustment */
 .main-container {
     margin-top: 70px; /* Jarak dari Navbar */
-    margin-left: 220px; /* Jarak dari Sidebar (PENTING AGAR TIDAK TERTUTUP) */
+    margin-left: 220px; /* Default Desktop */
     flex: 1;
     width: 100%;
     padding: 20px 30px;
+    
+    /* TAMBAHAN: Transisi margin saat sidebar hilang */
+    transition: all 0.3s ease-in-out;
 }
 
 /* --- DASHBOARD FORM STYLES --- */
@@ -84,4 +89,45 @@ body.no-sidebar .main-container {
 }
 .image-upload-wrapper:hover {
     border-color: #0d6efd;
+}
+
+/* =========================================
+   BAGIAN BARU: MOBILE RESPONSIVE (MEDIA QUERY)
+   ========================================= */
+@media (max-width: 991.98px) {
+    /* 1. Sembunyikan Sidebar ke kiri layar (-220px) */
+    .sidebar {
+        left: -220px; 
+    }
+
+    /* 2. Class ini akan ditambahkan via Javascript saat tombol menu ditekan */
+    .sidebar.active {
+        left: 0; /* Munculkan sidebar */
+        box-shadow: 5px 0 15px rgba(0,0,0,0.3);
+    }
+
+    /* 3. Konten Utama menjadi Full Width (margin-left: 0) */
+    .main-container {
+        margin-left: 0;
+        padding: 20px 15px; /* Padding lebih kecil agar muat di HP */
+    }
+
+    /* 4. Overlay Gelap (Background redup saat sidebar muncul) */
+    .sidebar-overlay {
+        display: none; /* Default sembunyi */
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 900; /* Di bawah sidebar (1000) tapi di atas konten */
+        opacity: 0;
+        transition: opacity 0.3s ease-in-out;
+    }
+    
+    .sidebar-overlay.active {
+        display: block;
+        opacity: 1;
+    }
 }
