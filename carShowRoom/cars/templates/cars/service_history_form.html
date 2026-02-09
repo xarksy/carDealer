@@ -1,40 +1,104 @@
-{% extends "cars/car_form_demo.html" %}
+{% extends 'demo/base.html' %}
+{% load static %}
+{% load humanize %}
 
-{% block title %}
-<title>Service Mobil</title>
-{% endblock title %}
+{% block content %}
+<div class="container-fluid mt-4 mb-5">
 
-{% block title_body %}
-{%if car.nama %}
-
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <h1>{{car.nama}} - Data Service Mobil</h1>
-        
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'carList' %}">Home</a>
-                </li>
-            </ul>
-        </div>
-    
-{% else %}
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <h1>Data Service Mobil</h1>
-        
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'carList' %}">Home</a>
-                </li>
-            </ul>
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+        <div>
+            <h3 class="fw-bold text-dark mb-0">
+                <i class="fas fa-tools me-2 text-info"></i>
+                {% if car %}
+                    Service: {{ car.nama }}
+                {% else %}
+                    Data Service Mobil
+                {% endif %}
+            </h3>
+            <p class="text-muted small mb-0 mt-1">Catat riwayat perbaikan dan perawatan mobil.</p>
         </div>
         
-{% endif %}
-{% endblock title_body %}
+        <a href="{% url 'demo_carlist_dashboard' %}" class="btn btn-outline-secondary btn-sm">
+            <i class="fas fa-arrow-left me-1"></i> Kembali
+        </a>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-8">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-white py-3 border-bottom">
+                    <h6 class="mb-0 fw-bold text-primary">
+                        <i class="fas fa-file-invoice me-2"></i>Formulir Service
+                    </h6>
+                </div>
+                
+                <div class="card-body p-4">
+                    <form method="POST" enctype="multipart/form-data" novalidate>
+                        {% csrf_token %}
+
+                        {% if form.non_field_errors %}
+                        <div class="alert alert-danger shadow-sm border-0 border-start border-4 border-danger">
+                            <i class="fas fa-exclamation-triangle me-2"></i> {{ form.non_field_errors }}
+                        </div>
+                        {% endif %}
+
+                        <div class="row g-4">
+                            {% for field in form %}
+                                <div class="col-12">
+                                    <label class="form-label fw-bold small text-muted mb-1">
+                                        {{ field.label }}
+                                    </label>
+                                    
+                                    {{ field }}
+                                    
+                                    {% if field.help_text %}
+                                        <div class="form-text small text-muted">{{ field.help_text }}</div>
+                                    {% endif %}
+                                    
+                                    {% if field.errors %}
+                                        <div class="text-danger small mt-1 fw-bold">
+                                            <i class="fas fa-exclamation-circle me-1"></i> {{ field.errors.0 }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            {% endfor %}
+                        </div>
+
+                        <hr class="my-4">
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a href="{% url 'demo_carlist_dashboard' %}" class="btn btn-outline-secondary px-4">
+                                Batal
+                            </a>
+                            <button type="submit" class="btn btn-primary fw-bold px-4 shadow-sm">
+                                <i class="fas fa-save me-2"></i>Simpan Riwayat
+                            </button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Cari semua input, select, dan textarea
+        var inputs = document.querySelectorAll('input, select, textarea');
+        
+        inputs.forEach(function(input) {
+            // Tambahkan class 'form-control' kecuali untuk checkbox/radio
+            if (input.type !== 'checkbox' && input.type !== 'radio' && input.type !== 'hidden') {
+                input.classList.add('form-control');
+            }
+            // Khusus Checkbox
+            else if (input.type === 'checkbox') {
+                input.classList.add('form-check-input');
+            }
+        });
+    });
+</script>
+
+{% endblock %}
