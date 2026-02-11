@@ -1,16 +1,95 @@
 {% extends 'demo/base.html' %}
-{% block content %}
-<div class="text-center">
-  <h2 class="mb-3">Choose a Demo Role</h2>
-  <form method="post" class="d-inline">
-    {% csrf_token %}
-    <button type="submit" name="role" value="admin" class="btn btn-primary m-1">Login as Admin</button>
-    <button type="submit" name="role" value="sales" class="btn btn-warning m-1">Login as Salesperson</button>
-  </form>
+{% load static %}
 
-  <div class="mt-3">
-    <a href="{% url 'carList' %}" class="btn btn-success m-1">Homepage</a>
-  </div>
+{% block content %}
+<div class="container d-flex flex-column justify-content-center align-items-center min-vh-100 py-5">
+    
+    <div class="text-center mb-5">
+        <h1 class="display-5 fw-bold text-dark">
+            <i class="fas fa-car-side text-primary me-2"></i>Car Showroom
+        </h1>
+        <p class="lead text-muted">Silakan pilih peran Anda untuk masuk ke sistem demo.</p>
+    </div>
+
+    <form method="post" class="w-100" style="max-width: 800px;">
+        {% csrf_token %}
+        
+        <div class="row g-4 justify-content-center">
+            
+            <div class="col-12 col-md-5">
+                <button type="submit" name="role" value="admin" class="card h-100 w-100 shadow-sm border-0 role-card text-start btn btn-light p-0">
+                    <div class="card-body p-4 d-flex flex-column align-items-center text-center">
+                        <div class="icon-box bg-primary bg-opacity-10 text-primary rounded-circle mb-3 p-3">
+                            <i class="fas fa-user-shield fa-3x"></i>
+                        </div>
+                        <h4 class="fw-bold text-dark">Login as Admin</h4>
+                        <p class="text-muted small mb-0">
+                            Akses penuh ke Dashboard, Manajemen User, Log Aktivitas, dan Edit Data.
+                        </p>
+                    </div>
+                    <div class="card-footer bg-primary text-white text-center w-100 py-2 border-0 fw-bold">
+                        Masuk sebagai Admin <i class="fas fa-arrow-right ms-2"></i>
+                    </div>
+                </button>
+            </div>
+
+            <div class="col-12 col-md-5">
+                <button type="submit" name="role" value="sales" class="card h-100 w-100 shadow-sm border-0 role-card text-start btn btn-light p-0">
+                    <div class="card-body p-4 d-flex flex-column align-items-center text-center">
+                        <div class="icon-box bg-warning bg-opacity-10 text-warning rounded-circle mb-3 p-3">
+                            <i class="fas fa-user-tie fa-3x"></i>
+                        </div>
+                        <h4 class="fw-bold text-dark">Login as Sales</h4>
+                        <p class="text-muted small mb-0">
+                            Fokus pada penjualan, update status customer, dan melihat stok mobil.
+                        </p>
+                    </div>
+                    <div class="card-footer bg-warning text-dark text-center w-100 py-2 border-0 fw-bold">
+                        Masuk sebagai Sales <i class="fas fa-arrow-right ms-2"></i>
+                    </div>
+                </button>
+            </div>
+
+        </div>
+    </form>
+
+    <div class="mt-5 text-center">
+        <p class="text-muted mb-2">Bukan staff internal?</p>
+        <a href="{% url 'carList' %}" class="btn btn-outline-secondary rounded-pill px-4">
+            <i class="fas fa-home me-2"></i>Kembali ke Halaman Utama
+        </a>
+    </div>
 
 </div>
+
+<style>
+    /* Efek Hover pada Card */
+    .role-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        cursor: pointer;
+        text-decoration: none !important; /* Hapus garis bawah link/button */
+    }
+    
+    .role-card:hover {
+        transform: translateY(-5px); /* Naik sedikit saat dihover */
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+        background-color: #fff !important; /* Pastikan background putih */
+        border: 1px solid #dee2e6 !important;
+    }
+
+    /* Icon Box Bulat */
+    .icon-box {
+        width: 80px;
+        height: 80px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* Pastikan button tidak terlihat seperti tombol standar Bootstrap */
+    button.role-card:focus {
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.25);
+    }
+</style>
 {% endblock %}
