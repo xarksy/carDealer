@@ -46,8 +46,10 @@ def carList(request):
         customer_form = CustomerForm()
         trade_form = TradeinForm()
 
+    cars_data = Cars.objects.order_by('-id').filter(status='available')
+
     context = {
-        'cars' : Cars.objects.all(),
+        'cars' : cars_data,
         "customer_form": customer_form,
         "trade_form": trade_form,
     }

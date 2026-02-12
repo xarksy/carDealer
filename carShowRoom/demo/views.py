@@ -160,6 +160,9 @@ def demo_carlist_dashboard(request):
 
     # 1. Mulai dengan mengambil SEMUA data
     cars_data = Cars.objects.all()
+    # KODE BARU (Filter status):
+    # Hanya ambil mobil yang statusnya bukan 'sold'
+    # cars_data = Cars.objects.order_by('-id').filter(status='available')
 
     # ================= LOGIKA FILTERING (PENYARINGAN) =================
     

@@ -39,6 +39,13 @@ def placing_order_view(request):
                     trade_in_car=trade_in_car
                 )
                 order.save()
+
+                # === TAMBAHKAN KODE INI ===
+                # Update status mobil menjadi Sold atau Booked
+                if car:
+                    car.status = 'sold' # Pastikan field 'status' ada di models.py app Cars
+                    car.save()
+                # ==========================
                 
                 # 2. TAMBAHKAN PESAN SUKSES DI SINI
                 messages.success(request, "Data sudah disimpan, tim kami segera menghubungi anda.")
@@ -60,6 +67,13 @@ def placing_order_view(request):
                     showroom_car=car
                 )
                 order.save()
+
+                # === TAMBAHKAN KODE INI ===
+                # Update status mobil menjadi Sold atau Booked
+                if car:
+                    car.status = 'sold' # Pastikan field 'status' ada di models.py app Cars
+                    car.save()
+                # ==========================
 
                 # 3. TAMBAHKAN PESAN SUKSES DI SINI
                 messages.success(request, "Data sudah disimpan, tim kami segera menghubungi anda.")
