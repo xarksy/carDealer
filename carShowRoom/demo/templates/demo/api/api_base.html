@@ -1,50 +1,32 @@
-{% extends 'demo/base.html' %}
-{% load static %}
-
-{% block content %}
-<div class="container-fluid mt-4 mb-5">
-
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <div>
-            <h3 class="fw-bold text-dark m-0">
-                <i class="fas fa-network-wired me-2 text-primary"></i>API Playground
-            </h3>
-            <p class="text-muted small mb-0 mt-1">Uji coba endpoint API secara langsung.</p>
-        </div>
+<div class="container-fluid mt-4 mb-5"> <div class="text-center mb-4">
+        <h3 class="fw-bold text-dark"><i class="fas fa-network-wired me-2 text-primary"></i>API Playground</h3>
+        <p class="text-muted small">
+            Dapatkan token di tab <strong>Auth</strong>, lalu tes endpoint Customers, Cars, dan Orders.
+        </p>
     </div>
 
     <div id="tokenCard" class="card shadow-sm border-0 mb-4 border-start border-4 border-primary">
-        <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
-            <h6 class="mb-0 fw-bold text-primary"><i class="fas fa-key me-2"></i>Active Session Token</h6>
-            <span id="tokenStatusBadge" class="badge bg-secondary">Not Authenticated</span>
-        </div>
         <div class="card-body bg-light">
-            
             <div class="row g-3">
                 <div class="col-12">
-                    <label class="small fw-bold text-muted mb-1">Access Token (Bearer)</label>
-                    <div class="position-relative">
-                        <code id="activeToken" class="d-block p-3 rounded bg-white border text-break" style="max-height: 100px; overflow-y: auto; font-size: 0.8rem; color: #d63384;">
-                            No access token generated yet. Go to 'Auth' tab to login.
-                        </code>
-                        <button onclick="copyToClipboard('activeToken')" class="btn btn-sm btn-light position-absolute top-0 end-0 m-1 border" title="Copy Token">
-                            <i class="fas fa-copy"></i>
-                        </button>
-                    </div>
+                    <strong class="small text-muted text-uppercase">Access Token:</strong>
+                    <code id="activeToken" class="d-block p-2 mt-1 rounded bg-white border text-break" 
+                          style="max-height: 100px; overflow-y: auto; font-size: 0.8rem; color: #d63384;">
+                        No access token
+                    </code>
                 </div>
 
                 <div class="col-12">
-                    <label class="small fw-bold text-muted mb-1">Refresh Token</label>
-                    <div class="position-relative">
-                        <code id="refreshTokenDisplay" class="d-block p-3 rounded bg-white border text-break" style="max-height: 80px; overflow-y: auto; font-size: 0.8rem; color: #198754;">
-                            No refresh token.
-                        </code>
-                    </div>
+                    <strong class="small text-muted text-uppercase">Refresh Token:</strong>
+                    <code id="refreshTokenDisplay" class="d-block p-2 mt-1 rounded bg-white border text-break" 
+                          style="max-height: 80px; overflow-y: auto; font-size: 0.8rem; color: #198754;">
+                        No refresh token
+                    </code>
                 </div>
             </div>
 
-            <div id="tokenRefreshedBadge" class="alert alert-success mt-3 py-2 px-3 small d-none align-items-center">
-                <i class="fas fa-check-circle me-2"></i> Token berhasil diperbarui otomatis!
+            <div id="tokenRefreshedBadge" class="alert alert-success mt-2 py-1 px-2 small d-none">
+                <i class="fas fa-check-circle me-1"></i> Token Refreshed!
             </div>
         </div>
     </div>
@@ -54,34 +36,33 @@
             <ul class="nav nav-tabs card-header-tabs m-0 flex-nowrap overflow-auto" id="apiTab" role="tablist" style="white-space: nowrap;">
                 
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link active py-3 px-4 border-top-0 border-start-0" id="auth-tab" data-bs-toggle="tab" data-bs-target="#auth" type="button" role="tab">
-                        <i class="fas fa-user-lock me-2 text-danger"></i>Auth
+                    <button class="nav-link active py-3 px-4 border-top-0 border-start-0 text-dark" id="auth-tab" data-bs-toggle="tab" data-bs-target="#auth" type="button" role="tab">
+                        <i class="fas fa-key me-2 text-danger"></i>Auth
                     </button>
                 </li>
 
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link py-3 px-4 border-top-0" id="customers-tab" data-bs-toggle="tab" data-bs-target="#customers" type="button" role="tab">
+                    <button class="nav-link py-3 px-4 border-top-0 text-dark" id="customers-tab" data-bs-toggle="tab" data-bs-target="#customers" type="button" role="tab">
                         <i class="fas fa-users me-2 text-success"></i>Customers
                     </button>
                 </li>
 
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link py-3 px-4 border-top-0" id="cars-tab" data-bs-toggle="tab" data-bs-target="#cars" type="button" role="tab">
+                    <button class="nav-link py-3 px-4 border-top-0 text-dark" id="cars-tab" data-bs-toggle="tab" data-bs-target="#cars" type="button" role="tab">
                         <i class="fas fa-car me-2 text-primary"></i>Cars
                     </button>
                 </li>
 
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link py-3 px-4 border-top-0" id="orders-tab" data-bs-toggle="tab" data-bs-target="#orders" type="button" role="tab">
+                    <button class="nav-link py-3 px-4 border-top-0 text-dark" id="orders-tab" data-bs-toggle="tab" data-bs-target="#orders" type="button" role="tab">
                         <i class="fas fa-shopping-cart me-2 text-warning"></i>Orders
                     </button>
                 </li>
             </ul>
         </div>
 
-        <div class="card-body p-4">
+        <div class="card-body p-3 p-md-4">
             <div class="tab-content">
-
                 <div class="tab-pane fade show active" id="auth" role="tabpanel">
                     {% include "demo/api/api_auth.html" %}
                 </div>
@@ -97,47 +78,19 @@
                 <div class="tab-pane fade" id="orders" role="tabpanel">
                     {% include "demo/api/api_orders.html" %}
                 </div>
-
             </div>
         </div>
     </div>
+    
+    {% include "demo/api/api_modals.html" %}
 
 </div>
 
-<script>
-    function copyToClipboard(elementId) {
-        var copyText = document.getElementById(elementId).innerText;
-        navigator.clipboard.writeText(copyText).then(function() {
-            alert("Token copied to clipboard!");
-        }, function(err) {
-            console.error('Could not copy text: ', err);
-        });
-    }
-
-    // Logic untuk styling Tab aktif agar lebih terlihat
-    document.addEventListener("DOMContentLoaded", function() {
-        var triggerTabList = [].slice.call(document.querySelectorAll('#apiTab button'))
-        triggerTabList.forEach(function (triggerEl) {
-            triggerEl.addEventListener('click', function (event) {
-                // Reset semua icon warna
-                document.querySelectorAll('#apiTab .nav-link').forEach(el => el.classList.remove('fw-bold'));
-                // Bold yang aktif
-                event.target.classList.add('fw-bold');
-            })
-        })
-    });
-</script>
-
 <style>
-    /* Sembunyikan scrollbar tapi tetap bisa discroll */
-    .nav-tabs::-webkit-scrollbar { 
-        height: 0px;
-        background: transparent; 
-    }
-    .nav-tabs {
-        -ms-overflow-style: none;  /* IE and Edge */
-        scrollbar-width: none;  /* Firefox */
-    }
+    .nav-tabs::-webkit-scrollbar { height: 0px; background: transparent; }
+    .nav-tabs { -ms-overflow-style: none; scrollbar-width: none; }
+    .nav-link.active { font-weight: bold; border-bottom: 3px solid #0d6efd !important; }
 </style>
 
-{% endblock %}
+<!-- Shared Scripts -->
+{% include "demo/api/api_scripts.html" %}
