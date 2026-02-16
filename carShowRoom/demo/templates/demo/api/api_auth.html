@@ -1,91 +1,61 @@
-<div class="row">
+<div class="row g-4">
 
-    <!-- Login Panel -->
-    <div class="col-md-6">
+    <div class="col-12 col-md-6">
 
-        <div class="card mb-3">
-            <div class="card-header">JWT Login (POST /api/token/)</div>
-
+        <div class="card shadow-sm border-0 mb-4">
+            <div class="card-header bg-white fw-bold text-primary">JWT Login (POST /api/token/)</div>
             <div class="card-body">
-
                 <form id="loginForm" onsubmit="event.preventDefault(); obtainToken();">
-
-                    <div class="mb-2">
-                        <label class="form-label">Username</label>
-                        <input class="form-control" id="loginUsername" required />
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-muted">Username</label>
+                        <input class="form-control" id="loginUsername" required placeholder="admin" />
                     </div>
-
-                    <div class="mb-2">
-                        <label class="form-label">Password</label>
-                        <input class="form-control" id="loginPassword" type="password" required />
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-muted">Password</label>
+                        <input class="form-control" id="loginPassword" type="password" required placeholder="password" />
                     </div>
-
-                    <button class="btn btn-primary">Get Token</button>
-
-                    {% comment %} <button class="btn btn-outline-secondary ms-2"
-                            type="button"
-                            onclick="useDemoToken()">
-                        Use Demo Token
-                    </button> {% endcomment %}
-
-                    <small class="form-text text-muted mt-2">
-                        Use your actual user credentials to obtain a valid JWT token.
-                    </small>
+                    <div class="d-grid">
+                        <button class="btn btn-primary fw-bold">Get Token</button>
+                    </div>
                 </form>
-
             </div>
         </div>
 
-        <!-- Refresh -->
-        <div class="card">
-            <div class="card-header">
-                Token Refresh (POST /api/token/refresh/)
-            </div>
-
+        <div class="card shadow-sm border-0 mb-4">
+            <div class="card-header bg-white fw-bold text-success">Token Refresh</div>
             <div class="card-body">
-
                 <form id="refreshForm" onsubmit="event.preventDefault(); refreshToken();">
-
-                    <div class="mb-2">
-                        <label class="form-label">Refresh Token</label>
-                        <input class="form-control" id="refreshTokenInput" />
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-muted">Refresh Token</label>
+                        <input class="form-control" id="refreshTokenInput" placeholder="Paste refresh token..." />
                     </div>
-
-                    <button class="btn btn-secondary">Refresh</button>
-
+                    <div class="d-grid">
+                        <button class="btn btn-success text-white fw-bold">Refresh Session</button>
+                    </div>
                 </form>
-
-                <small class="text-muted">
-                    Use your refresh token to obtain a new access token.
-                </small>
-
             </div>
         </div>
 
-        <!-- Get Profile -->
-        <div class="card mt-3">
-            <div class="card-header">GET /api/user/profile/</div>
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-white fw-bold text-info">GET /api/user/profile/</div>
             <div class="card-body">
-                <button class="btn btn-info" onclick="getProfile()">
-                    Get User Profile
-                </button>
-                <small class="text-muted d-block mt-2">
-                    Requires valid JWT token.
-                </small>
+                <div class="d-grid">
+                    <button class="btn btn-info text-white fw-bold" onclick="getProfile()">
+                        <i class="fas fa-user me-2"></i>Get User Profile
+                    </button>
+                </div>
             </div>
         </div>
-
 
     </div>
 
-    <!-- Live Response Panel -->
-    <div class="col-md-6">
-        <div class="card h-100">
-            <div class="card-header">Auth — Live Response</div>
-            <div class="card-body">
-                <pre id="authResponse"
-                    class="bg-dark text-white p-3"
-                    style="min-height:200px">Use the buttons to test authentication endpoints.
+    <div class="col-12 col-md-6">
+        <div class="card h-100 shadow-sm border-0">
+            <div class="card-header bg-dark text-white fw-bold">Auth — Live Response</div>
+            <div class="card-body bg-dark p-0">
+                <pre id="authResponse" class="text-success p-3 m-0 font-monospace" 
+                     style="min-height:300px; white-space: pre-wrap; word-wrap: break-word; font-size: 0.8rem;">
+Waiting for action...
                 </pre>
             </div>
         </div>    
