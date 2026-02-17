@@ -1,109 +1,75 @@
-<div class="row">
+<div class="row g-4">
 
-    <!-- LEFT: Actions -->
-    <div class="col-md-6">
+    <div class="col-12 col-md-6">
 
-        <!-- GET /api/customers/ -->
-        <div class="card mb-3">
-            <div class="card-header">GET /api/customers/</div>
+        <div class="card shadow-sm border-0 mb-4">
+            <div class="card-header bg-white fw-bold text-primary">GET /api/customers/</div>
             <div class="card-body">
-                <p>Retrieve a list of all customers (requires JWT token).</p>
-
-                <button class="btn btn-primary"
-                        onclick="tryApi('GET','/api/customers/')">
-                    Try GET /api/customers/
-                </button>
-
-                <button class="btn btn-outline-secondary ms-2"
-                        onclick="getCustomersIds()">
-                    Quick Fetch IDs
-                </button>
-            </div>
-        </div>
-
-        <!-- POST /api/customers/ -->
-        <div class="card mb-3">
-            <div class="card-header">POST /api/customers/ &mdash; Create Customer</div>
-
-            <div class="card-body">
-
-                <form id="createCustomerForm"
-                      onsubmit="event.preventDefault(); createCustomer();">
-
-                    <div class="mb-2">
-                        <label class="form-label">Name</label>
-                        <input id="cust_name" class="form-control" required />
-                    </div>
-
-                    <div class="mb-2">
-                        <label class="form-label">Address</label>
-                        <textarea id="cust_address" class="form-control" rows="2"></textarea>
-                    </div>
-
-                    <div class="mb-2">
-                        <label class="form-label">Email</label>
-                        <input id="cust_email" class="form-control" type="email" />
-                    </div>
-
-                    <div class="mb-2">
-                        <label class="form-label">Phone</label>
-                        <input id="cust_phone" class="form-control" />
-                    </div>
-
-                    <button class="btn btn-success">Create Customer</button>
-
-                </form>
-
-            </div>
-        </div>
-
-        <!-- GET /api/customers/<id>/  AND  /sales-stats/ -->
-        <div class="card">
-            <div class="card-header">
-                Customer Detail & Sales Stats
-            </div>
-
-            <div class="card-body">
-
-                <div class="mb-2">
-                    <label class="form-label">Customer ID</label>
-                    <input id="cust_detail_id"
-                           class="form-control"
-                           placeholder="e.g. 1" />
+                <div class="d-flex flex-wrap gap-2">
+                    <button class="btn btn-primary btn-sm flex-grow-1" onclick="tryApi('GET','/api/customers/')">
+                        List All
+                    </button>
+                    <button class="btn btn-outline-secondary btn-sm flex-grow-1" onclick="getCustomersIds()">
+                        Fetch IDs Only
+                    </button>
                 </div>
+            </div>
+        </div>
 
-                <div class="d-flex">
-                    <button class="btn btn-primary"
-                            onclick="tryApiWithId('GET','/api/customers/', cust_detail_id.value)">
-                        Get Detail
+        <div class="card shadow-sm border-0 mb-4">
+            <div class="card-header bg-white fw-bold text-success">POST Create Customer</div>
+            <div class="card-body">
+                <form id="createCustomerForm" onsubmit="event.preventDefault(); createCustomer();">
+                    <div class="mb-2">
+                        <label class="form-label small fw-bold text-muted">Name</label>
+                        <input id="cust_name" class="form-control" required placeholder="John Doe" />
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label small fw-bold text-muted">Address</label>
+                        <textarea id="cust_address" class="form-control" rows="2" placeholder="Alamat..."></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-muted">Phone</label>
+                        <input id="cust_phone" class="form-control" required placeholder="0812..." />
+                    </div>
+                    <div class="d-grid">
+                        <button class="btn btn-success text-white fw-bold">Create Customer</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-white fw-bold text-warning">Actions by ID</div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <label class="form-label small fw-bold text-muted">Customer ID</label>
+                    <input id="cust_detail_id" class="form-control" placeholder="e.g. 1" />
+                </div>
+                <div class="d-flex flex-wrap gap-2">
+                    <button class="btn btn-primary btn-sm flex-grow-1" onclick="tryApiWithId('GET','/api/customers/', cust_detail_id.value)">
+                        Detail
                     </button>
-
-                    <button class="btn btn-outline-info ms-2"
-                            onclick="tryApiWithId('GET','/api/customers/', cust_detail_id.value, '/sales-stats/')">
-                        Sales Stats
+                    <button class="btn btn-outline-info btn-sm flex-grow-1" onclick="tryApiWithId('GET','/api/customers/', cust_detail_id.value, '/sales-stats/')">
+                        Stats
                     </button>
-
-                    <button class="btn btn-outline-danger ms-2"
-                            onclick="tryApiWithId('DELETE','/api/customers/', cust_detail_id.value)">
+                    <button class="btn btn-outline-danger btn-sm flex-grow-1" onclick="tryApiWithId('DELETE','/api/customers/', cust_detail_id.value)">
                         Delete
                     </button>
                 </div>
-
             </div>
         </div>
 
     </div>
 
-    <!-- RIGHT: Response Panel -->
-    <div class="col-md-6">
+    <div class="col-12 col-md-6">
         <div id="customersResponseContainer">
-            <div class="card">
-                <div class="card-header">Customers — Live Response</div>
-                <div class="card-body">
-                    <pre id="customersResponse"
-                         class="bg-dark text-white p-3"
-                         style="min-height:300px; max-height: 720px; overflow-y: auto;">
-Use the buttons on the left to test the Customers API.
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-header bg-dark text-white fw-bold">Customers — Live Response</div>
+                <div class="card-body bg-dark p-0">
+                    <pre id="customersResponse" class="text-white p-3 m-0 font-monospace"
+                         style="min-height:300px; max-height: 720px; overflow-y: auto; white-space: pre-wrap; word-wrap: break-word; font-size: 0.8rem;">
+Waiting for request...
                     </pre>
                 </div>
             </div>
