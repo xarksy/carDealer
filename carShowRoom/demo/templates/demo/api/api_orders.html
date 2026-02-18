@@ -1,120 +1,85 @@
-<div class="row">
+<div class="row g-4">
 
-    <!-- LEFT SIDE: Actions -->
-    <div class="col-md-6">
+    <div class="col-12 col-md-6">
 
-        <!-- GET /api/orders/ -->
-        <div class="card mb-3">
-            <div class="card-header">GET /api/orders/</div>
+        <div class="card shadow-sm border-0 mb-4">
+            <div class="card-header bg-white fw-bold text-primary">GET /api/orders/</div>
             <div class="card-body">
-                <p>Retrieve all orders (authentication required).</p>
-
-                <button class="btn btn-primary"
-                        onclick="tryApi('GET','/api/orders/')">
-                    Try GET /api/orders/
-                </button>
-
-                <button class="btn btn-outline-info ms-2"
-                        onclick="tryApi('GET','/api/orders/sales-report/')">
-                    Sales Report
-                </button>
-            </div>
-        </div>
-
-        <!-- POST /api/orders/ -->
-        <div class="card mb-3">
-            <div class="card-header">
-                POST /api/orders/ &mdash; Create Order
-            </div>
-
-            <div class="card-body">
-
-                <form id="createOrderForm"
-                      onsubmit="event.preventDefault(); createOrder();">
-
-                    <div class="mb-2">
-                        <label class="form-label">Customer ID</label>
-                        <input id="order_customer"
-                               class="form-control"
-                               required />
-                    </div>
-
-                    <div class="mb-2">
-                        <label class="form-label">
-                            Items (JSON array of {"product":1,"quantity":1,"price":10000})
-                        </label>
-                        <textarea id="order_items"
-                                  class="form-control"
-                                  rows="3">[
-  { "product": 1, "quantity": 1, "price": 100000 }
-]</textarea>
-                    </div>
-
-                    <div class="mb-2">
-                        <label class="form-label">Total</label>
-                        <input id="order_total"
-                               class="form-control"
-                               type="number"
-                               step="0.01" />
-                    </div>
-
-                    <button class="btn btn-success">Create Order</button>
-
-                </form>
-
-            </div>
-        </div>
-
-        <!-- GET/PUT/DELETE /api/orders/<id>/ -->
-        <div class="card">
-            <div class="card-header">
-                Order Detail (GET / PUT / DELETE)
-            </div>
-
-            <div class="card-body">
-
-                <div class="mb-2">
-                    <label class="form-label">Order ID</label>
-                    <input id="order_detail_id"
-                           class="form-control"
-                           placeholder="e.g. 1" />
-                </div>
-
-                <div class="d-flex">
-                    <!-- GET -->
-                    <button class="btn btn-primary"
-                            onclick="tryApiWithId('GET','/api/orders/', order_detail_id.value)">
-                        Get Detail
+                <div class="d-flex flex-wrap gap-2">
+                    <button class="btn btn-primary btn-sm flex-grow-1" onclick="tryApi('GET','/api/orders/')">
+                        List All
                     </button>
+                    <button class="btn btn-outline-info btn-sm flex-grow-1" onclick="tryApi('GET','/api/orders/sales-report/')">
+                        Sales Report
+                    </button>
+                </div>
+            </div>
+        </div>
 
-                    <!-- PUT -->
-                    <button class="btn btn-outline-warning ms-2"
-                            onclick="openEditModalFor('/api/orders/', order_detail_id.value)">
+        <div class="card shadow-sm border-0 mb-4">
+            <div class="card-header bg-white fw-bold text-success">POST Create Order</div>
+            <div class="card-body">
+                <form id="createOrderForm" onsubmit="event.preventDefault(); createOrder();">
+                    <div class="mb-2">
+                        <label class="form-label small fw-bold text-muted">Customer ID</label>
+                        <input id="order_customer" class="form-control form-control-sm" required />
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label small fw-bold text-muted">Showroom Car ID</label>
+                        <input id="order_car" class="form-control form-control-sm" placeholder="Optional" />
+                    </div>
+                    <div class="row g-2 mb-3">
+                        <div class="col-6">
+                            <label class="form-label small fw-bold text-muted">Type</label>
+                            <select id="order_type" class="form-select form-select-sm">
+                                <option value="BUY">BUY</option>
+                                <option value="SELL">SELL</option>
+                                <option value="TRADE">TRADE</option>
+                            </select>
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label small fw-bold text-muted">Price</label>
+                            <input id="order_price" type="number" class="form-control form-control-sm" />
+                        </div>
+                    </div>
+                    <div class="d-grid">
+                        <button class="btn btn-success text-white fw-bold btn-sm">Create Order</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-white fw-bold text-warning">Actions by ID</div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <label class="form-label small fw-bold text-muted">Order ID</label>
+                    <input id="order_detail_id" class="form-control" placeholder="e.g. 10" />
+                </div>
+                <div class="d-flex flex-wrap gap-2">
+                    <button class="btn btn-primary btn-sm flex-grow-1" onclick="tryApiWithId('GET','/api/orders/', order_detail_id.value)">
+                        Detail
+                    </button>
+                    <button class="btn btn-outline-warning btn-sm flex-grow-1" onclick="openEditModalFor('/api/orders/', order_detail_id.value)">
                         Edit (PUT)
                     </button>
-
-                    <!-- DELETE -->
-                    <button class="btn btn-outline-danger ms-2"
-                            onclick="tryApiWithId('DELETE','/api/orders/', order_detail_id.value)">
+                    <button class="btn btn-outline-danger btn-sm flex-grow-1" onclick="tryApiWithId('DELETE','/api/orders/', order_detail_id.value)">
                         Delete
                     </button>
                 </div>
-
             </div>
         </div>
 
     </div>
 
-    <!-- RIGHT SIDE: Response Panel -->
-    <div class="col-md-6">
+    <div class="col-12 col-md-6">
         <div id="ordersResponseContainer">
-            <div class="card">
-                <div class="card-header">Orders — Live Response</div>
-                <div class="card-body">
-                    <pre id="ordersResponse"
-                         class="bg-dark text-white p-3"
-                         style="min-height:300px; max-height: 700px; overflow-y: auto;">
-Use the buttons on the left to test the Orders API.
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-header bg-dark text-white fw-bold">Orders — Live Response</div>
+                <div class="card-body bg-dark p-0">
+                    <pre id="ordersResponse" class="text-white p-3 m-0 font-monospace"
+                         style="min-height:300px; max-height: 700px; overflow-y: auto; white-space: pre-wrap; word-wrap: break-word; font-size: 0.8rem;">
+Waiting for request...
                     </pre>
                 </div>
             </div>
