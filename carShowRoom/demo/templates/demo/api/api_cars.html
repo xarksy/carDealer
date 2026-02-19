@@ -1,169 +1,83 @@
-<div class="row">
+<div class="row g-4">
 
-    <!-- LEFT SIDE: Actions -->
-    <div class="col-md-6">
+    <div class="col-12 col-md-6">
 
-        <!-- GET /api/cars/ -->
-        <div class="card mb-3">
-            <div class="card-header">GET /api/cars/ (Public)</div>
+        <div class="card shadow-sm border-0 mb-4">
+            <div class="card-header bg-white fw-bold text-primary">GET /api/cars/</div>
             <div class="card-body">
-                <p>Fetch all cars (authentication required).</p>
-
-                <button class="btn btn-primary"
-                        onclick="tryApi('GET','/api/cars/')">
-                    Try GET /api/cars/
-                </button>
-
-                <button class="btn btn-outline-success ms-2"
-                        onclick="tryApi('GET','/api/cars/available/')">
-                    Available Cars
-                </button>
-            </div>
-        </div>
-
-        <!-- POST /api/cars/ -->
-        <div class="card mb-3">
-            <div class="card-header">POST /api/cars/ &mdash; Create Car</div>
-
-            <div class="card-body">
-
-                <form id="createCarForm" onsubmit="event.preventDefault(); createCar();">
-    
-                    <h6 class="text-primary">Info Utama</h6>
-                    <div class="row">
-                        <div class="col-md-6 mb-2">
-                            <label class="form-label">Nama Mobil (Nama)</label>
-                            <input id="car_nama" class="form-control" placeholder="Toyota Avanza G" required />
-                        </div>
-                        <div class="col-md-6 mb-2">
-                            <label class="form-label">Merek (Brand)</label>
-                            <input id="car_merek" class="form-control" placeholder="Toyota" required />
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-6 mb-2">
-                            <label class="form-label">Model</label>
-                            <input id="car_model" class="form-control" placeholder="MPV / SUV" required />
-                        </div>
-                        <div class="col-md-6 mb-2">
-                            <label class="form-label">Tahun</label>
-                            <input id="car_tahun" type="number" class="form-control" required />
-                        </div>
-                    </div>
-
-                    <div class="mb-2">
-                        <label class="form-label">Harga (Rp)</label>
-                        <input id="car_harga" type="number" class="form-control" required />
-                    </div>
-
-                    <h6 class="text-primary mt-3">Spesifikasi</h6>
-                    
-                    <div class="row">
-                        <div class="col-md-6 mb-2">
-                            <label class="form-label">Kilometer</label>
-                            <input id="car_kilometer" type="number" class="form-control" placeholder="0" required />
-                        </div>
-                        
-                        <div class="col-md-6 mb-2">
-                            <label class="form-label">Transmisi</label>
-                            <select id="car_transmisi" class="form-control">
-                                <option value="manual">Manual</option>
-                                <option value="auto">Otomatis</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-6 mb-2">
-                            <label class="form-label">Bahan Bakar</label>
-                            <select id="car_bbm" class="form-control">
-                                <option value="bensin">Bensin</option>
-                                <option value="diesel">Diesel</option>
-                                <option value="elektrik">Elektrik</option>
-                            </select>
-                        </div>
-                        <div class="col-md-6 mb-2">
-                            <label class="form-label">Kapasitas Mesin</label>
-                            <input id="car_mesin" class="form-control" placeholder="1500cc" required />
-                        </div>
-                    </div>
-
-                    <div class="mb-2">
-                        <label class="form-label">Tempat Duduk (Seats)</label>
-                        <input id="car_seats" type="number" class="form-control" placeholder="7" required />
-                    </div>
-
-                    <div class="mb-2">
-                        <label class="form-label">Deskripsi Lengkap</label>
-                        <textarea id="car_desc" class="form-control" rows="2" placeholder="Kondisi mobil sangat mulus..."></textarea>
-                    </div>
-
-                    <div class="mb-2">
-                        <label class="form-label">Status</label>
-                        <select id="car_status" class="form-control">
-                            <option value="available">Available</option>
-                            <option value="sold">Sold</option>
-                            <option value="booked">Booked</option>
-                        </select>
-                    </div>
-
-                    <button class="btn btn-success w-100 mt-2">Create Car</button>
-                </form>
-
-            </div>
-        </div>
-
-        <!-- GET/PUT/DELETE /api/cars/<id>/ -->
-        <div class="card">
-            <div class="card-header">
-                Car Detail (GET / PUT / DELETE)
-            </div>
-
-            <div class="card-body">
-
-                <div class="mb-2">
-                    <label class="form-label">Car ID</label>
-                    <input id="car_detail_id"
-                           class="form-control"
-                           placeholder="e.g. 1" />
-                </div>
-
-                <div class="d-flex">
-                    <!-- GET -->
-                    <button class="btn btn-primary"
-                            onclick="tryApiWithId('GET','/api/cars/', car_detail_id.value)">
-                        Get Detail
+                <div class="d-flex flex-wrap gap-2">
+                    <button class="btn btn-primary btn-sm flex-grow-1" onclick="tryApi('GET','/api/cars/')">
+                        List All
                     </button>
+                    <button class="btn btn-outline-success btn-sm flex-grow-1" onclick="tryApi('GET','/api/cars/available/')">
+                        Available Only
+                    </button>
+                </div>
+            </div>
+        </div>
 
-                    <!-- PUT -->
-                    <button class="btn btn-outline-warning ms-2"
-                            onclick="openEditModalFor('/api/cars/', car_detail_id.value)">
+        <div class="card shadow-sm border-0 mb-4">
+            <div class="card-header bg-white fw-bold text-success">POST Create Car</div>
+            <div class="card-body">
+                <form id="createCarForm" onsubmit="event.preventDefault(); createCar();">
+                    <div class="row g-2 mb-2">
+                        <div class="col-6">
+                            <label class="form-label small fw-bold text-muted">Nama</label>
+                            <input id="car_nama" class="form-control form-control-sm" required />
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label small fw-bold text-muted">Brand</label>
+                            <input id="car_brand" class="form-control form-control-sm" required />
+                        </div>
+                    </div>
+                    <div class="row g-2 mb-3">
+                        <div class="col-6">
+                            <label class="form-label small fw-bold text-muted">Tahun</label>
+                            <input id="car_year" type="number" class="form-control form-control-sm" required />
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label small fw-bold text-muted">Harga</label>
+                            <input id="car_price" type="number" class="form-control form-control-sm" required />
+                        </div>
+                    </div>
+                    <div class="d-grid">
+                        <button class="btn btn-success text-white fw-bold btn-sm">Create Car</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-white fw-bold text-warning">Actions by ID</div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <label class="form-label small fw-bold text-muted">Car ID</label>
+                    <input id="car_detail_id" class="form-control" placeholder="e.g. 5" />
+                </div>
+                <div class="d-flex flex-wrap gap-2">
+                    <button class="btn btn-primary btn-sm flex-grow-1" onclick="tryApiWithId('GET','/api/cars/', car_detail_id.value)">
+                        Detail
+                    </button>
+                    <button class="btn btn-outline-warning btn-sm flex-grow-1" onclick="openEditModalFor('/api/cars/', car_detail_id.value)">
                         Edit (PUT)
                     </button>
-
-                    <!-- DELETE -->
-                    <button class="btn btn-outline-danger ms-2"
-                            onclick="tryApiWithId('DELETE','/api/cars/', car_detail_id.value)">
+                    <button class="btn btn-outline-danger btn-sm flex-grow-1" onclick="tryApiWithId('DELETE','/api/cars/', car_detail_id.value)">
                         Delete
                     </button>
                 </div>
-
             </div>
         </div>
 
     </div>
 
-    <!-- RIGHT SIDE: Response Panel -->
-    <div class="col-md-6">
+    <div class="col-12 col-md-6">
         <div id="carsResponseContainer">
-            <div class="card">
-                <div class="card-header">Cars — Live Response</div>
-                <div class="card-body">
-                    <pre id="carsResponse"
-                         class="bg-dark text-white p-3"
-                         style="min-height:300px; max-height: 1110px; overflow-y: auto;">
-Use the buttons on the left to test the Cars API.
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-header bg-dark text-white fw-bold">Cars — Live Response</div>
+                <div class="card-body bg-dark p-0">
+                    <pre id="carsResponse" class="text-white p-3 m-0 font-monospace"
+                         style="min-height:300px; max-height: 800px; overflow-y: auto; white-space: pre-wrap; word-wrap: break-word; font-size: 0.8rem;">
+Waiting for request...
                     </pre>
                 </div>
             </div>
