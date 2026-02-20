@@ -32,3 +32,27 @@ class Order(models.Model):
     def __str__(self):
         return f"{self.offer_type} - {self.customer.name}"
 
+
+
+# --- TAMBAHKAN KODE INI DI BARIS PALING BAWAH ---
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
+@receiver(post_save, sender=Customer)
+def update_car_status_on_deal(sender, instance, created, **kwargs):
+    """
+    Fungsi ini akan otomatis berjalan setiap kali data Customer disimpan (di-update).
+    Jika statusnya berubah menjadi 'deal', maka mobil yang terkait akan otomatis 'booked'.
+    """
+    if instance.status == 'deal':
+        # Cari semua order yang terkait dengan customer ini
+        # (Menggunakan related_name='orders' yang sudah Anda buat di Order model)
+        customer_orders = instance.orders.all()
+        
+        for order in customer_orders:
+            # Pastikan order ini memiliki mobil showroom yang dituju
+            if order.showroom_car:
+                # Cek jika statusnya masih available agar tidak menimpa status 'sold'
+                if order.showroom_car.status == 'available':
+                    order.showroom_car.status = 'booked'  # Ubah status mobil
+                    order.showroom_car.save()             # Simpan perubahan mobil
