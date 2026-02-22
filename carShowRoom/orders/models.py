@@ -34,25 +34,36 @@ class Order(models.Model):
 
 
 
-# --- TAMBAHKAN KODE INI DI BARIS PALING BAWAH ---
+# --- UPDATE KODE INI DI BARIS PALING BAWAH orders/models.py ---
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 @receiver(post_save, sender=Customer)
-def update_car_status_on_deal(sender, instance, created, **kwargs):
+def update_car_status_on_customer_status_change(sender, instance, created, **kwargs):
     """
-    Fungsi ini akan otomatis berjalan setiap kali data Customer disimpan (di-update).
-    Jika statusnya berubah menjadi 'deal', maka mobil yang terkait akan otomatis 'booked'.
+    Fungsi ini berjalan otomatis setiap data Customer di-update.
+    - Jika 'deal' -> Mobil jadi 'booked'
+    - Jika 'not_deal' atau 'rna' -> Mobil kembali 'available'
     """
-    if instance.status == 'deal':
-        # Cari semua order yang terkait dengan customer ini
-        # (Menggunakan related_name='orders' yang sudah Anda buat di Order model)
-        customer_orders = instance.orders.all()
+    # Ambil semua order yang terkait dengan customer ini
+    customer_orders = instance.orders.all()
+    
+    for order in customer_orders:
+        car = order.showroom_car
         
-        for order in customer_orders:
-            # Pastikan order ini memiliki mobil showroom yang dituju
-            if order.showroom_car:
-                # Cek jika statusnya masih available agar tidak menimpa status 'sold'
-                if order.showroom_car.status == 'available':
-                    order.showroom_car.status = 'booked'  # Ubah status mobil
-                    order.showroom_car.save()             # Simpan perubahan mobil
+        # Pastikan customer ini mengincar mobil showroom tertentu
+        if car:
+            # SKENARIO 1: Customer Deal
+            if instance.status == 'deal':
+                # Hanya ubah jika mobil masih available
+                if car.status == 'available':
+                    car.status = 'booked'
+                    car.save()
+            
+            # SKENARIO 2: Customer Batal (Not Deal / RNA)
+            elif instance.status in ['not_deal', 'rna']:
+                # Hanya kembalikan ke available jika statusnya sedang 'booked'
+                # (Penting: agar tidak merubah status mobil yang ternyata sudah 'sold')
+                if car.status == 'booked':
+                    car.status = 'available'
+                    car.save()
