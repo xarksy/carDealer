@@ -59,13 +59,30 @@ def carList(request):
 # ====================== CRUD CAR
 @admin_required
 def create_car(request):
-
     if request.method == 'POST':
         form = CarsForm(request.POST, request.FILES)
-        if form.is_valid():
-            created_car = form.save()
+        
+        # --- TAMBAHAN MULTIPLE UPLOAD ---
+        gallery_images = request.FILES.getlist('gallery_images')
+        main_index = int(request.POST.get('main_image_index', 0))
+        # --------------------------------
 
-            # === TAMBAHKAN INI SETELAH SAVE ===
+        if form.is_valid():
+            created_car = form.save(commit=False) # Tahan dulu, jangan disave ke DB
+            
+            # Set gambar utama jika ada yang diupload
+            if gallery_images and main_index < len(gallery_images):
+                created_car.gambar = gallery_images[main_index]
+            
+            created_car.save() # Sekarang simpan ke DB
+
+            # Simpan sisa gambar ke galeri (CarImage)
+            if gallery_images:
+                for i, img in enumerate(gallery_images):
+                    if i != main_index:
+                        CarImage.objects.create(mobil=created_car, image=img)
+
+            # === LOGGING (Asli milik Anda) ===
             log_activity(
                 user=request.user, 
                 action='CREATE', 
@@ -95,10 +112,28 @@ def updateCar(request, car_id):
     car = get_object_or_404(Cars, id=car_id)
     if request.method == 'POST':
         form = CarsForm(request.POST, request.FILES, instance=car)
-        if form.is_valid():
-            updated_car = form.save()
+        
+        # --- TAMBAHAN MULTIPLE UPLOAD ---
+        gallery_images = request.FILES.getlist('gallery_images')
+        main_index = int(request.POST.get('main_image_index', 0))
+        # --------------------------------
 
-            # === TAMBAHKAN INI SETELAH SAVE ===
+        if form.is_valid():
+            updated_car = form.save(commit=False)
+
+            # Timpa gambar utama HANYA jika ada gambar baru yang diupload
+            if gallery_images and main_index < len(gallery_images):
+                updated_car.gambar = gallery_images[main_index]
+            
+            updated_car.save()
+
+            # Tambahkan gambar baru ke galeri (CarImage) jika ada
+            if gallery_images:
+                for i, img in enumerate(gallery_images):
+                    if i != main_index:
+                        CarImage.objects.create(mobil=updated_car, image=img)
+
+            # === LOGGING (Asli milik Anda) ===
             log_activity(
                 user=request.user, 
                 action='UPDATE', 
@@ -115,7 +150,8 @@ def updateCar(request, car_id):
         form = CarsForm(instance=car)
     
     context = {
-        'form': form
+        'form': form,
+        'car': car # Lempar object car agar bisa mengecek gambar lama di template HTML
     }
 
     return render(request, 'cars/car_form.html',context=context)
